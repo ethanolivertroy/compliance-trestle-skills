@@ -1,0 +1,13 @@
+{
+  "input": "examples/legacy-ssp-to-oscal/input/sample-ssp.md",
+  "input_file": "sample-ssp.md",
+  "input_sha256": "sha256:653e4b20614160bc82dcb02b47ac9ed3be70353b518cfa8cdb061cc7e3357768",
+  "extractor": "copy-markdown",
+  "extracted_markdown": "examples/legacy-ssp-to-oscal/workspace/extracted/extracted.md",
+  "source_map": "examples/legacy-ssp-to-oscal/workspace/extracted/source-map.csv",
+  "sections_json": "examples/legacy-ssp-to-oscal/workspace/extracted/sections.json",
+  "metadata_json": "examples/legacy-ssp-to-oscal/workspace/extracted/extracted-metadata.json",
+  "bytes": 1874,
+  "lines": 37,
+  "generated_at": "2026-05-01T02:43:21.394Z"
+}

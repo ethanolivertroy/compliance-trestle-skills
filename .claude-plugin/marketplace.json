@@ -1,0 +1,40 @@
+{
+  "name": "compliance-trestle-suite",
+  "owner": {
+    "name": "Compliance Trestle Community",
+    "url": "https://oscal-compass.dev/compliance-trestle"
+  },
+  "metadata": {
+    "description": "Compliance Trestle and OSCAL agent skills plus document transformation workflows.",
+    "version": "0.1.0",
+    "pluginRoot": "."
+  },
+  "plugins": [
+    {
+      "name": "compliance-trestle",
+      "source": ".",
+      "description": "Manage OSCAL compliance packages using Compliance Trestle.",
+      "version": "0.1.0"
+    },
+    {
+      "name": "oscal-document-workbench",
+      "source": "./plugins/document-transform/oscal-document-workbench",
+      "description": "Convert legacy SSP/PDF/DOCX/Markdown source material into traceable OSCAL workspaces.",
+      "version": "0.1.0",
+      "commands": [
+        "ingest-ssp",
+        "extract-legacy-doc",
+        "build-trestle-workspace",
+        "validate-oscal-package",
+        "update-ssp-from-evidence"
+      ],
+      "category": "workflow",
+      "tags": [
+        "oscal",
+        "ssp",
+        "compliance-trestle",
+        "document-transformation"
+      ]
+    }
+  ]
+}

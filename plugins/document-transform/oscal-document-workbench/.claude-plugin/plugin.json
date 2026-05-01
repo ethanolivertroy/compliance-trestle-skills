@@ -1,0 +1,9 @@
+{
+  "name": "oscal-document-workbench",
+  "version": "0.1.0",
+  "description": "Convert legacy SSP/PDF/DOCX source material into traceable, validated OSCAL workspaces using Compliance Trestle and OSCAL CLI.",
+  "author": { "name": "Compliance Trestle Community Contributors" },
+  "license": "MIT",
+  "repository": "https://github.com/oscal-compass/compliance-trestle-skills",
+  "keywords": ["oscal", "ssp", "compliance-trestle", "document-transformation", "grc", "agent-skills"]
+}

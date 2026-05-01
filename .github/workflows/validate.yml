@@ -1,0 +1,27 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate agent skills
+        run: npm run test:agent-skills
+      - name: Validate agent adapters
+        run: npm run test:agent-adapters
+      - name: Validate OSCAL Document Workbench
+        run: npm run test:oscal-document-workbench
+      - name: Validate Trestle integration docs
+        run: npm run test:trestle-integration
+      - name: Validate review workflow
+        run: npm run test:oscal-review-workflow
+      - name: Check whitespace
+        run: git diff --check

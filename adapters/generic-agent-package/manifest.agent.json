@@ -1,0 +1,31 @@
+{
+  "name": "compliance-trestle-toolkit",
+  "version": "0.1.0",
+  "description": "Agent-portable GRC, Compliance Trestle, and OSCAL document engineering package.",
+  "instructions": [
+    "../../AGENTS.md",
+    "../../docs/AGENT-COMPATIBILITY.md"
+  ],
+  "skills": [
+    "../../agent-skills/oscal-document-engineering/SKILL.md",
+    "../../agent-skills/compliance-trestle-engineering/SKILL.md"
+  ],
+  "prompts": [
+    "prompts/import-legacy-ssp.md",
+    "prompts/review-oscal-mappings.md",
+    "prompts/validate-oscal-package.md"
+  ],
+  "tools": [
+    "../../plugins/document-transform/oscal-document-workbench/scripts/extract-legacy-doc.sh",
+    "../../plugins/document-transform/oscal-document-workbench/scripts/bootstrap-trestle-workspace.sh",
+    "../../plugins/document-transform/oscal-document-workbench/scripts/build-review-queue.sh",
+    "../../plugins/document-transform/oscal-document-workbench/scripts/validate-oscal-package.sh",
+    "../../scripts/trestle-workflow.sh"
+  ],
+  "guardrails": [
+    "preserve source traceability",
+    "mark uncertain mappings as needs_review",
+    "do not claim schema-valid OSCAL proves compliance effectiveness",
+    "do not commit real SSPs, secrets, or customer evidence"
+  ]
+}

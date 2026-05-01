@@ -1,0 +1,8 @@
+{
+  "file": "examples/legacy-ssp-to-oscal/workspace/extracted/source-map.csv",
+  "total": 3,
+  "counts": {
+    "mapped": 2,
+    "needs_review": 1
+  }
+}

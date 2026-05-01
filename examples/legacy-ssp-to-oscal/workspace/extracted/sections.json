@@ -1,0 +1,112 @@
+{
+  "sections": [
+    {
+      "heading": "Acme Analytics Platform System Security Plan",
+      "level": 1,
+      "start_line": 1,
+      "end_line": 6,
+      "text_sha256": "sha256:58c87cd38d23dc86a659e485bad1803be1ef90eadc66559f5ff773ff9caa2d4b",
+      "excerpt": "Version: 0.3 synthetic example\nSystem Owner: Jane Example, Director of Platform Security\nInformation System Security Officer: Pat Example",
+      "source_id": "SRC-001",
+      "source_file": "sample-ssp.md",
+      "status": "pending",
+      "oscal_target": ""
+    },
+    {
+      "heading": "System Description",
+      "level": 2,
+      "start_line": 7,
+      "end_line": 10,
+      "text_sha256": "sha256:84d1fd3461847c6ccf44791dd05b8b9e5a268717eba31d126bdf669a9cb18a0b",
+      "excerpt": "Acme Analytics Platform is a synthetic multi-tenant analytics service used for demonstration. The system processes test telemetry, generated customer-like records, and operational logs. No real customer data is included in this example.",
+      "source_id": "SRC-002",
+      "source_file": "sample-ssp.md",
+      "status": "pending",
+      "oscal_target": ""
+    },
+    {
+      "heading": "Boundary",
+      "level": 2,
+      "start_line": 11,
+      "end_line": 14,
+      "text_sha256": "sha256:d49f2f9c109f2c550857cf6e4b6b2fecf50768f9a30d752fab69eccd9e362fbf",
+      "excerpt": "The authorization boundary includes the web application, API service, worker service, PostgreSQL database, object storage bucket, CI/CD repository, and cloud logging project. Corporate identity provider and external ticketing system are inh",
+      "source_id": "SRC-003",
+      "source_file": "sample-ssp.md",
+      "status": "pending",
+      "oscal_target": ""
+    },
+    {
+      "heading": "Users",
+      "level": 2,
+      "start_line": 15,
+      "end_line": 18,
+      "text_sha256": "sha256:41bf9f005fb28e220451e78a48728a5bdb6d436e55b8f2463d2c8f603b63e329",
+      "excerpt": "The system has three user groups: platform administrators, tenant administrators, and read-only analysts.",
+      "source_id": "SRC-004",
+      "source_file": "sample-ssp.md",
+      "status": "pending",
+      "oscal_target": ""
+    },
+    {
+      "heading": "AC-2 Account Management",
+      "level": 2,
+      "start_line": 19,
+      "end_line": 22,
+      "text_sha256": "sha256:a7042e07024494fab6560409b6ebd196a02cf454864d390c8253f8db14e81796",
+      "excerpt": "User accounts are provisioned through the corporate identity provider. Administrative access requires approval in the ticketing system. Accounts are reviewed quarterly by the system owner and disabled after termination notifications.",
+      "source_id": "SRC-005",
+      "source_file": "sample-ssp.md",
+      "status": "pending",
+      "oscal_target": ""
+    },
+    {
+      "heading": "IA-2 Identification and Authentication",
+      "level": 2,
+      "start_line": 23,
+      "end_line": 26,
+      "text_sha256": "sha256:440aadff88deea4a89f1900572723153386b9be26ea3fbdfc7cfd20b7d538a73",
+      "excerpt": "All interactive users authenticate with SSO and phishing-resistant MFA where available. Service accounts use short-lived workload identity tokens.",
+      "source_id": "SRC-006",
+      "source_file": "sample-ssp.md",
+      "status": "pending",
+      "oscal_target": ""
+    },
+    {
+      "heading": "SC-13 Cryptographic Protection",
+      "level": 2,
+      "start_line": 27,
+      "end_line": 30,
+      "text_sha256": "sha256:3395d2b26ec1a1fba087293786c9fc91e6e64588b73f8fb8934802c78e6789d3",
+      "excerpt": "Data in transit uses TLS 1.2 or higher. Data at rest is encrypted with cloud-managed keys. The team plans to evaluate customer-managed keys in the next release.",
+      "source_id": "SRC-007",
+      "source_file": "sample-ssp.md",
+      "status": "pending",
+      "oscal_target": ""
+    },
+    {
+      "heading": "AU-2 Event Logging",
+      "level": 2,
+      "start_line": 31,
+      "end_line": 34,
+      "text_sha256": "sha256:9bc706f76e48dcbc7284f150305ac1f848cbf8637bf9d8641d7cb19c59119ce5",
+      "excerpt": "The application logs authentication events, administrative actions, configuration changes, and data export requests. Logs are forwarded to the central security logging project.",
+      "source_id": "SRC-008",
+      "source_file": "sample-ssp.md",
+      "status": "pending",
+      "oscal_target": ""
+    },
+    {
+      "heading": "Open Items",
+      "level": 2,
+      "start_line": 35,
+      "end_line": 37,
+      "text_sha256": "sha256:d293ff665a4865dcf2af9112e631d3e21212787928e6822ce79e1d9a3e044b16",
+      "excerpt": "The original SSP did not include a current network diagram. The system owner must provide a reviewed diagram before authorization package submission.",
+      "source_id": "SRC-009",
+      "source_file": "sample-ssp.md",
+      "status": "pending",
+      "oscal_target": ""
+    }
+  ]
+}

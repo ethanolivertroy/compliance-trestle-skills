@@ -1,0 +1,29 @@
+{
+  "name": "compliance-trestle-agent-skills",
+  "version": "0.1.0",
+  "description": "Portable GRC and OSCAL engineering skills for coding agents.",
+  "skills": [
+    {
+      "name": "oscal-document-engineering",
+      "path": "./oscal-document-engineering",
+      "description": "Convert, validate, and maintain OSCAL documents from legacy source material.",
+      "tags": [
+        "oscal",
+        "ssp",
+        "compliance-trestle",
+        "document-transformation"
+      ]
+    },
+    {
+      "name": "compliance-trestle-engineering",
+      "path": "./compliance-trestle-engineering",
+      "description": "Operate Compliance Trestle workspaces for source-traceable OSCAL catalogs, profiles, component definitions, SSPs, markdown assembly, and validation.",
+      "tags": [
+        "compliance-trestle",
+        "oscal",
+        "ssp",
+        "workspace-lifecycle"
+      ]
+    }
+  ]
+}

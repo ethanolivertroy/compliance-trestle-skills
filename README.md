@@ -129,6 +129,26 @@ The plugin includes event hooks that activate automatically:
 | **Validation Reminder** | PostToolUse (Bash) | After `trestle assemble`, `trestle import`, `trestle merge`, `trestle create`, or `trestle split`, provides contextual guidance |
 | **OSCAL Edit Warning** | PreToolUse (Write/Edit) | Warns when directly editing OSCAL JSON/YAML files (should use authoring workflow) |
 
+## Portable Agent Support
+
+This repo also includes agent-portable instructions for Codex, Gemini CLI, OpenCode, Cursor, Windsurf, and generic desktop agents:
+
+- `AGENTS.md`, `GEMINI.md`, `OPENCODE.md`
+- `agent-skills/` portable Compliance Trestle and OSCAL document engineering skills
+- `adapters/generic-agent-package/` prompts and manifest for generic agent harnesses
+- `docs/AGENT-COMPATIBILITY.md` and `docs/PORTABLE-SKILLS.md`
+
+## OSCAL Document Workbench
+
+The migrated OSCAL Document Workbench lives at `plugins/document-transform/oscal-document-workbench/`. It provides command docs, scripts, templates, examples, and review workflow guidance for converting legacy SSP/PDF/DOCX/Markdown/TXT source material into source-traceable Compliance Trestle workspaces.
+
+Start with:
+
+- `docs/OSCAL-DOCUMENT-WORKBENCH.md`
+- `docs/OSCAL-REVIEW-WORKFLOW.md`
+- `docs/tutorials/legacy-ssp-to-oscal-with-agent.md`
+- `examples/legacy-ssp-to-oscal/`
+
 ## Configuration
 
 Per-project settings are stored in `.claude/compliance-trestle.local.md` (gitignored by default).

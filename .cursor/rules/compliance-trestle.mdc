@@ -1,0 +1,10 @@
+---
+description: Compliance Trestle repository rules
+alwaysApply: true
+---
+
+Read `AGENTS.md` before modifying this repository. This project is an agent-portable Compliance Trestle and OSCAL engineering toolkit; Claude Code plugins are one adapter, not the only runtime.
+
+For legacy SSP/PDF/DOCX to OSCAL work, use `agent-skills/oscal-document-engineering/SKILL.md`. Preserve source traceability for every mapped OSCAL field, mark uncertain content as `needs_review`, and validate structurally before claiming success.
+
+Do not copy licensed framework text, commit sensitive customer evidence, or invent compliance facts.

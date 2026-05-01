@@ -1,0 +1,4 @@
+source_id,source_file,page_or_section,heading,extracted_text_hash,oscal_target,status,notes
+DOC-001,sample-ssp.md,System Description,System Description,,system-characteristics.description,mapped,Synthetic example
+DOC-002,sample-ssp.md,AC-2,AC-2 Account Management,,control-implementation.ac-2,mapped,Synthetic example
+DOC-003,sample-ssp.md,Open Items,Open Items,,back-matter.resources,needs_review,Network diagram missing

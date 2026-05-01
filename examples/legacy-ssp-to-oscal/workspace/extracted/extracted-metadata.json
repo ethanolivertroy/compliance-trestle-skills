@@ -1,0 +1,14 @@
+{
+  "input_file": "sample-ssp.md",
+  "input_sha256": "sha256:653e4b20614160bc82dcb02b47ac9ed3be70353b518cfa8cdb061cc7e3357768",
+  "extractor": "copy-markdown",
+  "section_count": 9,
+  "line_count": 37,
+  "generated_outputs": [
+    "extracted.md",
+    "source-map.csv",
+    "sections.json",
+    "extracted-metadata.json",
+    "extract-manifest.json"
+  ]
+}

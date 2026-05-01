@@ -1,0 +1,2 @@
+source_id,control_id,statement_id,oscal_target,status,confidence,reviewer_decision,reviewer_notes
+SRC-001,AC-2,,system-security-plan.control-implementation.implemented-requirements,needs_review,low,,

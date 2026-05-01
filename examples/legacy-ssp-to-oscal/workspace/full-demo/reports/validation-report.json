@@ -1,0 +1,10 @@
+{
+  "target": "examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace",
+  "status": "partial",
+  "validators": [
+    "trestle:not_found"
+  ],
+  "errors": [],
+  "generated_at": "2026-05-01T02:46:38.600Z",
+  "note": "Structural validation only; not an audit opinion."
+}
