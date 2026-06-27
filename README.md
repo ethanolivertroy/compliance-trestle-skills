@@ -133,9 +133,10 @@ The plugin includes event hooks that activate automatically:
 
 This repo also includes agent-portable instructions for Codex, Gemini CLI, OpenCode, Cursor, Windsurf, and generic desktop agents:
 
-- `AGENTS.md`, `GEMINI.md`, `OPENCODE.md`
+- `AGENTS.md`, `CURSOR.md`, `GEMINI.md`, `OPENCODE.md`
+- `.cursor/skills/` native Cursor project skills (for example `/import-legacy-ssp`)
 - `agent-skills/` portable Compliance Trestle and OSCAL document engineering skills
-- `adapters/generic-agent-package/` prompts and manifest for generic agent harnesses
+- `adapters/cursor/` and `adapters/generic-agent-package/` harness-specific docs and prompts
 - `docs/AGENT-COMPATIBILITY.md` and `docs/PORTABLE-SKILLS.md`
 
 ## OSCAL Document Workbench

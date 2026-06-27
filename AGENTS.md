@@ -51,10 +51,13 @@ Run these from the repository root:
 ```bash
 npm run test:agent-skills
 npm run test:agent-adapters
+npm run test:cursor-support
 npm run test:oscal-document-workbench
 npm run test:trestle-integration
 npm run test:oscal-review-workflow
 ```
+
+Cursor users should also read `CURSOR.md` and use native project skills under `.cursor/skills/`.
 
 Validate JSON manually:
 

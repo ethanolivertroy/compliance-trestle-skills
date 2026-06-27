@@ -9,7 +9,8 @@
     "test:oscal-document-workbench": "bash tests/validate-oscal-document-workbench.sh",
     "test:trestle-integration": "bash tests/validate-trestle-integration.sh",
     "test:oscal-review-workflow": "bash tests/validate-oscal-review-workflow.sh",
-    "test": "npm run test:agent-skills && npm run test:agent-adapters && npm run test:oscal-document-workbench && npm run test:trestle-integration && npm run test:oscal-review-workflow"
+    "test:cursor-support": "bash tests/validate-cursor-support.sh",
+    "test": "npm run test:agent-skills && npm run test:agent-adapters && npm run test:cursor-support && npm run test:oscal-document-workbench && npm run test:trestle-integration && npm run test:oscal-review-workflow"
   },
   "keywords": [
     "compliance-trestle",
