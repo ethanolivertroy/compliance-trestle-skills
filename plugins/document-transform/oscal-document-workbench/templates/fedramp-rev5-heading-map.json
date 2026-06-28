@@ -1,0 +1,57 @@
+{
+  "source": "FedRAMP Rev 5 SSP template section structure",
+  "reference_url": "https://www.fedramp.gov/rev5/documents-templates/",
+  "oscal_automation_url": "https://github.com/GSA/fedramp-automation",
+  "note": "Heading-to-OSCAL mapping patterns only. Do not embed licensed NIST 800-53 or FedRAMP baseline control text.",
+  "section_rules": [
+    {
+      "pattern": "system description|information system description",
+      "oscal_target": "system-security-plan.system-characteristics.description",
+      "default_status": "mapped",
+      "fedramp_template_section": "System Description"
+    },
+    {
+      "pattern": "system boundaries|authorization boundary|^boundary$",
+      "oscal_target": "system-security-plan.system-characteristics.authorization-boundary.description",
+      "default_status": "mapped",
+      "fedramp_template_section": "System Boundaries"
+    },
+    {
+      "pattern": "system environment|operating environment|deployment model",
+      "oscal_target": "system-security-plan.system-characteristics.security-sensitivity-level",
+      "default_status": "needs_review",
+      "fedramp_template_section": "System Environment"
+    },
+    {
+      "pattern": "roles and responsibilities|system personnel|points of contact",
+      "oscal_target": "system-security-plan.metadata.party",
+      "default_status": "needs_review",
+      "fedramp_template_section": "Roles and Responsibilities"
+    },
+    {
+      "pattern": "^users$|user groups|user types",
+      "oscal_target": "system-security-plan.system-characteristics.system-information",
+      "default_status": "needs_review",
+      "fedramp_template_section": "System Users"
+    },
+    {
+      "pattern": "inventory|system inventory|hardware inventory|software inventory",
+      "oscal_target": "system-security-plan.system-implementation.inventory-items",
+      "default_status": "needs_review",
+      "fedramp_template_section": "Inventory"
+    },
+    {
+      "pattern": "open items|gaps|attachments|network diagram|architecture diagram",
+      "oscal_target": "system-security-plan.back-matter.resources",
+      "default_status": "needs_review",
+      "fedramp_template_section": "Attachments / Open Items"
+    },
+    {
+      "pattern": "leveraged authorizations|inherited controls|common controls",
+      "oscal_target": "system-security-plan.system-implementation.leveraged-authorizations",
+      "default_status": "needs_review",
+      "fedramp_template_section": "Leveraged Authorizations"
+    }
+  ],
+  "control_heading_pattern": "^([A-Za-z]{2,3}-\\d+(?:\\.\\d+)?)"
+}

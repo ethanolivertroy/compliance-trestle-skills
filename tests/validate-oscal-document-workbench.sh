@@ -20,6 +20,7 @@ required_commands=(
 required_scripts=(
   extract-legacy-doc.sh
   bootstrap-trestle-workspace.sh
+  draft-ssp-from-extraction.sh
   validate-oscal-package.sh
   summarize-source-map.js
 )
@@ -60,6 +61,7 @@ for script in "${required_scripts[@]}"; do
     *.js) node --check "$file" ;;
   esac
 done
+python3 -m py_compile "$plugin_root/scripts/draft-ssp-from-extraction.py"
 
 skill="$plugin_root/skills/oscal-document-workbench-expert/SKILL.md"
 grep -q '^name:' "$skill" || { echo "skill missing name" >&2; exit 1; }
@@ -72,5 +74,8 @@ grep -q '^source_id,source_file,page_or_section,heading,extracted_text_hash,osca
   echo "source-map template header is incorrect" >&2
   exit 1
 }
+
+[[ -f "$plugin_root/templates/fedramp-rev5-heading-map.json" ]] || { echo "missing FedRAMP heading map template" >&2; exit 1; }
+grep -q 'draft-ssp-from-extraction' "$plugin_root/commands/ingest-ssp.md" || { echo "ingest-ssp must document draft script" >&2; exit 1; }
 
 echo "OSCAL Document Workbench plugin surface is valid."

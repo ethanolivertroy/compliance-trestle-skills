@@ -52,6 +52,7 @@ Run these from the repository root:
 npm run test:agent-skills
 npm run test:agent-adapters
 npm run test:oscal-document-workbench
+npm run test:draft-ssp
 npm run test:trestle-integration
 npm run test:oscal-review-workflow
 ```

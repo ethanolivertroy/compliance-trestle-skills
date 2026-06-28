@@ -38,14 +38,43 @@ run_validator() {
   return 1
 }
 
+find_trestle_root() {
+  local path="$1"
+  if [[ -f "$path" ]]; then
+    path="$(dirname "$path")"
+  fi
+  path="$(cd "$path" && pwd)"
+  while [[ "$path" != "/" ]]; do
+    if [[ -d "$path/.trestle" ]]; then
+      printf '%s\n' "$path"
+      return 0
+    fi
+    path="$(dirname "$path")"
+  done
+  return 1
+}
+
 if command -v trestle >/dev/null 2>&1; then
-  if [[ -f "$TARGET" ]]; then
-    run_validator "trestle validate" trestle validate -f "$TARGET" || true
+  if [[ -d "$TARGET/.trestle" ]]; then
+    run_validator "trestle validate -a" bash -c "cd \"$(cd "$TARGET" && pwd)\" && trestle validate -a" || true
+  elif [[ -f "$TARGET" ]]; then
+    trestle_root="$(find_trestle_root "$TARGET" || true)"
+    if [[ -n "$trestle_root" ]]; then
+      rel_target="${TARGET#"$trestle_root"/}"
+      run_validator "trestle validate" bash -c "cd \"$(cd "$trestle_root" && pwd)\" && trestle validate -f \"$rel_target\"" || true
+    else
+      run_validator "trestle validate" trestle validate -f "$TARGET" || true
+    fi
   else
-    # Trestle validates files, not arbitrary dirs. Validate discovered JSON/YAML/XML OSCAL-like files.
     while IFS= read -r file; do
       [[ -n "$file" ]] || continue
-      run_validator "trestle validate:$file" trestle validate -f "$file" || true
+      trestle_root="$(find_trestle_root "$file" || true)"
+      if [[ -n "$trestle_root" ]]; then
+        rel_target="${file#"$trestle_root"/}"
+        run_validator "trestle validate:$rel_target" bash -c "cd \"$(cd "$trestle_root" && pwd)\" && trestle validate -f \"$rel_target\"" || true
+      else
+        run_validator "trestle validate:$file" trestle validate -f "$file" || true
+      fi
     done < <(find "$TARGET" -type f \( -name '*.json' -o -name '*.yaml' -o -name '*.yml' -o -name '*.xml' \) | sort)
   fi
 else
