@@ -13,6 +13,7 @@ required_commands=(
   ingest-ssp
   extract-legacy-doc
   build-trestle-workspace
+  fetch-oscal-baseline
   validate-oscal-package
   update-ssp-from-evidence
 )
@@ -20,6 +21,7 @@ required_commands=(
 required_scripts=(
   extract-legacy-doc.sh
   bootstrap-trestle-workspace.sh
+  fetch-oscal-baseline.sh
   draft-ssp-from-extraction.sh
   validate-oscal-package.sh
   summarize-source-map.js

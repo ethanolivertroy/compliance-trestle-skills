@@ -54,6 +54,13 @@ def parse_args() -> argparse.Namespace:
         help="Profile label recorded in reports (default: fedramp-moderate)",
     )
     parser.add_argument(
+        "--baseline-profile",
+        help=(
+            "Existing trestle profile alias to import from (e.g. fedramp-rev5-moderate "
+            "created by fetch-oscal-baseline.sh). When set, no stub catalog/profile is generated."
+        ),
+    )
+    parser.add_argument(
         "--templates-dir",
         help="Directory containing fedramp-rev5-heading-map.json (default: plugin templates/)",
     )
@@ -403,10 +410,12 @@ def write_draft_summary(report_path: Path, plan: DraftPlan, ssp_path: Path, vali
                 f"- Mapped sections: {mapped}",
                 f"- needs_review sections: {review}",
                 f"- Control IDs drafted: {', '.join(plan.control_ids) if plan.control_ids else '(none)'}",
+                f"- Import profile: trestle://profiles/{plan.profile_alias}/profile.json",
                 f"- Validation status: {validation_status}",
                 "",
                 "This draft uses FedRAMP Rev 5 SSP heading conventions for structure mapping only.",
-                "Replace catalog stubs with authoritative FedRAMP/NIST OSCAL content before authorization use.",
+                "If drafted without --baseline-profile, replace catalog stubs with authoritative",
+                "FedRAMP/NIST OSCAL content (fetch-oscal-baseline.sh) before authorization use.",
                 "Schema-valid OSCAL does not prove compliance effectiveness.",
                 "",
             ]
@@ -451,24 +460,37 @@ def main() -> int:
         plan.ssp_alias = slugify(args.ssp_name)
     plan.profile_label = args.profile_label
 
+    baseline_profile = args.baseline_profile
+    if baseline_profile:
+        baseline_path = trestle_root / "profiles" / baseline_profile / "profile.json"
+        if not baseline_path.exists():
+            sys.stderr.write(
+                f"draft-ssp-from-extraction: baseline profile '{baseline_profile}' not found at {baseline_path}.\n"
+                "Run fetch-oscal-baseline.sh first, or omit --baseline-profile to generate stubs.\n"
+            )
+            return 2
+        plan.profile_alias = baseline_profile
+        plan.profile_label = baseline_profile
+
     if args.overwrite:
-        for model_type, alias in (
-            ("catalog", plan.catalog_alias),
-            ("profile", plan.profile_alias),
-            ("system-security-plan", plan.ssp_alias),
-        ):
+        aliases = [("system-security-plan", plan.ssp_alias)]
+        if not baseline_profile:
+            aliases += [("catalog", plan.catalog_alias), ("profile", plan.profile_alias)]
+        for model_type, alias in aliases:
             remove_model(trestle_root, model_type, alias)
 
-    run_trestle(trestle_root, "create", "-t", "catalog", "-o", plan.catalog_alias)
-    run_trestle(trestle_root, "create", "-t", "profile", "-o", plan.profile_alias)
+    if not baseline_profile:
+        run_trestle(trestle_root, "create", "-t", "catalog", "-o", plan.catalog_alias)
+        run_trestle(trestle_root, "create", "-t", "profile", "-o", plan.profile_alias)
     run_trestle(trestle_root, "create", "-t", "system-security-plan", "-o", plan.ssp_alias)
 
-    catalog_path = trestle_root / "catalogs" / plan.catalog_alias / "catalog.json"
-    profile_path = trestle_root / "profiles" / plan.profile_alias / "profile.json"
     ssp_path = trestle_root / "system-security-plans" / plan.ssp_alias / "system-security-plan.json"
 
-    patch_catalog(catalog_path, plan, plan.sections)
-    patch_profile(profile_path, plan)
+    if not baseline_profile:
+        catalog_path = trestle_root / "catalogs" / plan.catalog_alias / "catalog.json"
+        profile_path = trestle_root / "profiles" / plan.profile_alias / "profile.json"
+        patch_catalog(catalog_path, plan, plan.sections)
+        patch_profile(profile_path, plan)
     patch_ssp(ssp_path, plan, plan.sections)
     write_source_map(source_map_path, sections, plan.sections, basename)
 

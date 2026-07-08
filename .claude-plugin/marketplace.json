@@ -25,6 +25,7 @@
         "ingest-ssp",
         "extract-legacy-doc",
         "build-trestle-workspace",
+        "fetch-oscal-baseline",
         "validate-oscal-package",
         "update-ssp-from-evidence"
       ],

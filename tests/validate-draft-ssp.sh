@@ -8,16 +8,22 @@ cd "$repo_root"
 plugin_root="plugins/document-transform/oscal-document-workbench"
 script_sh="$plugin_root/scripts/draft-ssp-from-extraction.sh"
 script_py="$plugin_root/scripts/draft-ssp-from-extraction.py"
+baseline_sh="$plugin_root/scripts/fetch-oscal-baseline.sh"
 map_json="$plugin_root/templates/fedramp-rev5-heading-map.json"
 map_md="$plugin_root/templates/fedramp-rev5-ssp-section-map.md"
 
-for file in "$script_sh" "$script_py" "$map_json" "$map_md"; do
+for file in "$script_sh" "$script_py" "$baseline_sh" "$map_json" "$map_md"; do
   [[ -f "$file" ]] || { echo "missing $file" >&2; exit 1; }
 done
 
 [[ -x "$script_sh" ]] || { echo "script is not executable: $script_sh" >&2; exit 1; }
+[[ -x "$baseline_sh" ]] || { echo "script is not executable: $baseline_sh" >&2; exit 1; }
 bash -n "$script_sh"
+bash -n "$baseline_sh"
 python3 -m py_compile "$script_py"
+grep -q 'baseline-profile' "$script_sh" || { echo "draft script must support --baseline-profile" >&2; exit 1; }
+grep -q 'fedramp-resources' "$baseline_sh" || { echo "baseline script must reference FedRAMP OSCAL source" >&2; exit 1; }
+[[ -f "$plugin_root/commands/fetch-oscal-baseline.md" ]] || { echo "missing fetch-oscal-baseline command doc" >&2; exit 1; }
 
 grep -q 'fedramp.gov/rev5/documents-templates' "$map_json" || { echo "heading map must reference FedRAMP templates URL" >&2; exit 1; }
 grep -q 'needs_review' "$map_md" || { echo "section map must mention needs_review" >&2; exit 1; }
