@@ -12,8 +12,14 @@ Run the end-to-end legacy SSP import process: extract source material, create so
 ```bash
 bash plugins/document-transform/oscal-document-workbench/scripts/extract-legacy-doc.sh <input> --output <workspace>/extracted
 bash plugins/document-transform/oscal-document-workbench/scripts/bootstrap-trestle-workspace.sh <workspace> [--profile <name>]
+bash plugins/document-transform/oscal-document-workbench/scripts/fetch-oscal-baseline.sh <workspace>/trestle-workspace --baseline moderate
+bash plugins/document-transform/oscal-document-workbench/scripts/draft-ssp-from-extraction.sh <workspace> --baseline-profile fedramp-rev5-moderate [--overwrite]
 bash plugins/document-transform/oscal-document-workbench/scripts/validate-oscal-package.sh <workspace>/trestle-workspace --output <workspace>/reports/validation-report.json
 ```
+
+Draft generation uses FedRAMP Rev 5 SSP heading conventions from `templates/fedramp-rev5-heading-map.json`. See `templates/fedramp-rev5-ssp-section-map.md` and https://www.fedramp.gov/rev5/documents-templates/ for the human template reference.
+
+The `fetch-oscal-baseline.sh` step imports the real NIST 800-53 Rev 5 catalog and FedRAMP Rev 5 baseline profile so the drafted SSP references authoritative content. Omit it (and `--baseline-profile`) to generate offline stub models instead; stubs must be replaced before authorization use.
 
 ## Arguments
 
@@ -33,6 +39,7 @@ Expected outputs may include:
 - `source-map.csv`
 - `extract-manifest.json`
 - `trestle-workspace/`
+- `reports/draft-summary.md`
 - `reports/import-summary.md`
 - `reports/validation-report.json`
 - `reports/unmapped-items.md`

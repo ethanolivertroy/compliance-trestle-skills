@@ -13,12 +13,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Compliance Trestle
+        run: pip install compliance-trestle
       - name: Validate agent skills
         run: npm run test:agent-skills
       - name: Validate agent adapters
         run: npm run test:agent-adapters
       - name: Validate OSCAL Document Workbench
         run: npm run test:oscal-document-workbench
+      - name: Validate draft SSP pipeline
+        run: npm run test:draft-ssp
       - name: Validate Trestle integration docs
         run: npm run test:trestle-integration
       - name: Validate review workflow

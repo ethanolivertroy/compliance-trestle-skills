@@ -18,7 +18,16 @@ bash plugins/document-transform/oscal-document-workbench/scripts/bootstrap-trest
   --profile synthetic-nist-800-53-demo \
   --oscal-version 1.1.3
 
-cp "$example_root/input/source-map.csv" "$workspace/extracted/source-map.csv"
+if command -v trestle >/dev/null 2>&1; then
+  bash plugins/document-transform/oscal-document-workbench/scripts/draft-ssp-from-extraction.sh \
+    "$workspace" \
+    --profile-label synthetic-nist-800-53-demo \
+    --overwrite
+else
+  cp "$example_root/input/source-map.csv" "$workspace/extracted/source-map.csv"
+  echo "Compliance Trestle not installed; copied static source-map.csv instead of drafting SSP." >&2
+fi
+
 node plugins/document-transform/oscal-document-workbench/scripts/summarize-source-map.js \
   "$workspace/extracted/source-map.csv" > "$workspace/reports/source-map-summary.json" || true
 
