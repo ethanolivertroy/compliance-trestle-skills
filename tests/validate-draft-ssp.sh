@@ -25,6 +25,67 @@ grep -q 'baseline-profile' "$script_sh" || { echo "draft script must support --b
 grep -q 'fedramp-resources' "$baseline_sh" || { echo "baseline script must reference FedRAMP OSCAL source" >&2; exit 1; }
 [[ -f "$plugin_root/commands/fetch-oscal-baseline.md" ]] || { echo "missing fetch-oscal-baseline command doc" >&2; exit 1; }
 
+# Regression checks against real FedRAMP legacy template headings
+# (headings from the legacy FedRAMP SSP template and Appendix A at
+# https://www.fedramp.gov/legacy/, mirrored in FedRAMP/docs-legacy on GitHub).
+python3 - "$plugin_root" <<'PY'
+import importlib.util
+import json
+import re
+import sys
+from pathlib import Path
+
+plugin_root = Path(sys.argv[1])
+spec = importlib.util.spec_from_file_location(
+    "draft_ssp", plugin_root / "scripts" / "draft-ssp-from-extraction.py"
+)
+mod = importlib.util.module_from_spec(spec)
+sys.modules["draft_ssp"] = mod
+spec.loader.exec_module(mod)
+
+# Control ID normalization must match OSCAL catalog IDs
+cases = {
+    "AC-2": "ac-2",
+    "AC-2(1)": "ac-2.1",
+    "AC-2(12)": "ac-2.12",
+    "SC-13": "sc-13",
+    "IA-5.1": "ia-5.1",
+}
+for raw, expected in cases.items():
+    got = mod.normalize_control_id(raw.lower())
+    assert got == expected, f"normalize_control_id({raw}) = {got}, expected {expected}"
+
+# Real Appendix A heading style must be detected as a control heading
+appendix_headings = [
+    "AC-1 Policy and Procedures (L)(M)(H)",
+    "AC-2(12) Account Monitoring for Atypical Usage (M)(H)",
+    "SC-13 Cryptographic Protection (L)(M)(H)",
+]
+for heading in appendix_headings:
+    assert mod.CONTROL_HEADING_RE.match(heading), f"control heading not detected: {heading}"
+
+# Real legacy SSP template section headings must all match a mapping rule
+rules = json.loads((plugin_root / "templates" / "fedramp-rev5-heading-map.json").read_text())
+patterns = [re.compile(r["pattern"], re.IGNORECASE) for r in rules["section_rules"]]
+template_headings = [
+    "Introduction",
+    "Purpose",
+    "System Information",
+    "System Owner",
+    "Assignment of Security Responsibility",
+    "Leveraged FedRAMP-Authorized Services",
+    "External Systems and Services Not Having FedRAMP Authorization",
+    "Illustrated Architecture",
+    "Narrative",
+    "Services, Ports, and Protocols",
+    "Separation of Duties",
+    "SSP Appendices List",
+]
+unmatched = [h for h in template_headings if not any(p.search(h) for p in patterns)]
+assert not unmatched, f"legacy FedRAMP template headings without mapping rules: {unmatched}"
+print("FedRAMP legacy template heading regression checks passed.")
+PY
+
 grep -q 'fedramp.gov/rev5/documents-templates' "$map_json" || { echo "heading map must reference FedRAMP templates URL" >&2; exit 1; }
 grep -q 'needs_review' "$map_md" || { echo "section map must mention needs_review" >&2; exit 1; }
 grep -q 'draft-ssp-from-extraction' "$plugin_root/commands/ingest-ssp.md" || { echo "ingest-ssp must document draft script" >&2; exit 1; }

@@ -5,16 +5,16 @@
   "note": "Heading-to-OSCAL mapping patterns only. Do not embed licensed NIST 800-53 or FedRAMP baseline control text.",
   "section_rules": [
     {
-      "pattern": "system description|information system description",
+      "pattern": "system description|information system description|system information",
       "oscal_target": "system-security-plan.system-characteristics.description",
       "default_status": "mapped",
-      "fedramp_template_section": "System Description"
+      "fedramp_template_section": "System Information"
     },
     {
-      "pattern": "system boundaries|authorization boundary|^boundary$",
+      "pattern": "system boundaries|authorization boundary|^boundary$|illustrated architecture|^narrative$",
       "oscal_target": "system-security-plan.system-characteristics.authorization-boundary.description",
       "default_status": "mapped",
-      "fedramp_template_section": "System Boundaries"
+      "fedramp_template_section": "Illustrated Architecture and Narratives"
     },
     {
       "pattern": "system environment|operating environment|deployment model",
@@ -23,10 +23,10 @@
       "fedramp_template_section": "System Environment"
     },
     {
-      "pattern": "roles and responsibilities|system personnel|points of contact",
+      "pattern": "roles and responsibilities|system personnel|points of contact|system owner|assignment of security responsibility",
       "oscal_target": "system-security-plan.metadata.party",
       "default_status": "needs_review",
-      "fedramp_template_section": "Roles and Responsibilities"
+      "fedramp_template_section": "System Owner / Assignment of Security Responsibility"
     },
     {
       "pattern": "^users$|user groups|user types",
@@ -41,16 +41,46 @@
       "fedramp_template_section": "Inventory"
     },
     {
-      "pattern": "open items|gaps|attachments|network diagram|architecture diagram",
-      "oscal_target": "system-security-plan.back-matter.resources",
+      "pattern": "services, ports, and protocols|ports, protocols",
+      "oscal_target": "system-security-plan.system-implementation.components",
       "default_status": "needs_review",
-      "fedramp_template_section": "Attachments / Open Items"
+      "fedramp_template_section": "Services, Ports, and Protocols"
     },
     {
-      "pattern": "leveraged authorizations|inherited controls|common controls",
+      "pattern": "cryptographic modules|data at rest|data in transit",
+      "oscal_target": "system-security-plan.system-implementation.components",
+      "default_status": "needs_review",
+      "fedramp_template_section": "Cryptographic Modules"
+    },
+    {
+      "pattern": "separation of duties",
+      "oscal_target": "system-security-plan.control-implementation.implemented-requirements.ac-5",
+      "default_status": "needs_review",
+      "fedramp_template_section": "Separation of Duties"
+    },
+    {
+      "pattern": "external systems and services|interconnections|external services",
+      "oscal_target": "system-security-plan.system-implementation.components",
+      "default_status": "needs_review",
+      "fedramp_template_section": "External Systems and Services Not Having FedRAMP Authorization"
+    },
+    {
+      "pattern": "open items|gaps|attachments|network diagram|architecture diagram|appendices list",
+      "oscal_target": "system-security-plan.back-matter.resources",
+      "default_status": "needs_review",
+      "fedramp_template_section": "Attachments / Appendices"
+    },
+    {
+      "pattern": "leveraged authorizations|leveraged fedramp|inherited controls|common controls",
       "oscal_target": "system-security-plan.system-implementation.leveraged-authorizations",
       "default_status": "needs_review",
-      "fedramp_template_section": "Leveraged Authorizations"
+      "fedramp_template_section": "Leveraged FedRAMP-Authorized Services"
+    },
+    {
+      "pattern": "^introduction$|^purpose$|^scope$",
+      "oscal_target": "system-security-plan.metadata.remarks",
+      "default_status": "needs_review",
+      "fedramp_template_section": "Introduction / Purpose"
     }
   ],
   "control_heading_pattern": "^([A-Za-z]{2,3}-\\d+(?:\\.\\d+)?)"

@@ -1,8 +1,13 @@
 # FedRAMP Rev 5 SSP section map (structure only)
 
-This file documents how legacy SSP headings — including those from the [FedRAMP Rev 5 documents and templates](https://www.fedramp.gov/rev5/documents-templates/) — map into OSCAL SSP fields during draft generation.
+This file documents how legacy SSP headings map into OSCAL SSP fields during draft generation. The patterns are aligned with the real section headings in the legacy FedRAMP SSP template and Appendix A documents published at [fedramp.gov/legacy](https://www.fedramp.gov/legacy/#all-legacy-assets) (also mirrored in the `FedRAMP/docs-legacy` GitHub repository) and the [FedRAMP Rev 5 documents and templates](https://www.fedramp.gov/rev5/documents-templates/).
 
 Machine-readable rules live in `fedramp-rev5-heading-map.json` and are consumed by `scripts/draft-ssp-from-extraction.py`.
+
+Verified against the real legacy templates:
+
+- `LEGACY_FedRAMP-High-Moderate-Low-LI-SaaS-Baseline-System-Security-Plan-(SSP).docx` — all 14 section headings map to OSCAL targets.
+- `LEGACY SSP-Appendix-A-Moderate-FedRAMP-Security-Controls.docx` — all 323 control headings (including enhancements like `AC-2(12)`) are detected and normalized to OSCAL control IDs (`ac-2.12`), matching the FedRAMP Rev 5 Moderate baseline exactly.
 
 ## FedRAMP template sections → OSCAL targets
 
