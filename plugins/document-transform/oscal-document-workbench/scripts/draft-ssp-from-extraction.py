@@ -83,7 +83,13 @@ def slugify(value: str) -> str:
 
 
 def normalize_control_id(raw: str) -> str:
-    return raw.lower().split("(")[0]
+    """Normalize legacy control IDs to OSCAL form: AC-2(1) -> ac-2.1, AC-2 -> ac-2."""
+    match = re.match(r"([a-z]{2,3})-(\d+)(?:\.(\d+))?(?:\((\d+)\))?", raw.lower())
+    if not match:
+        return raw.lower()
+    family, number, dotted, parenthesized = match.groups()
+    enhancement = dotted or parenthesized
+    return f"{family}-{number}.{enhancement}" if enhancement else f"{family}-{number}"
 
 
 def load_section_rules(templates_dir: Path) -> list[tuple[re.Pattern[str], str, str, str]]:
@@ -323,9 +329,13 @@ def patch_ssp(path: Path, plan: DraftPlan, mappings: list[SectionMapping]) -> No
     component_uuid = component["uuid"]
 
     implemented = []
+    seen_controls: set[str] = set()
     for mapping in mappings:
         if not mapping.control_id or not mapping.excerpt:
             continue
+        if mapping.control_id in seen_controls:
+            continue
+        seen_controls.add(mapping.control_id)
         state = "implemented" if mapping.status == "mapped" else "planned"
         implemented.append(
             {
