@@ -14,6 +14,7 @@ required_commands=(
   extract-legacy-doc
   build-trestle-workspace
   fetch-oscal-baseline
+  ksi-coverage
   validate-oscal-package
   update-ssp-from-evidence
 )
@@ -22,7 +23,9 @@ required_scripts=(
   extract-legacy-doc.sh
   bootstrap-trestle-workspace.sh
   fetch-oscal-baseline.sh
+  fetch-fedramp-2026-rules.sh
   draft-ssp-from-extraction.sh
+  ksi-coverage-report.sh
   validate-oscal-package.sh
   summarize-source-map.js
 )
@@ -64,6 +67,7 @@ for script in "${required_scripts[@]}"; do
   esac
 done
 python3 -m py_compile "$plugin_root/scripts/draft-ssp-from-extraction.py"
+python3 -m py_compile "$plugin_root/scripts/ksi-coverage-report.py"
 
 skill="$plugin_root/skills/oscal-document-workbench-expert/SKILL.md"
 grep -q '^name:' "$skill" || { echo "skill missing name" >&2; exit 1; }

@@ -21,6 +21,13 @@ Draft generation uses FedRAMP Rev 5 SSP heading conventions from `templates/fedr
 
 The `fetch-oscal-baseline.sh` step imports the real NIST 800-53 Rev 5 catalog and FedRAMP Rev 5 baseline profile so the drafted SSP references authoritative content. Omit it (and `--baseline-profile`) to generate offline stub models instead; stubs must be replaced before authorization use.
 
+Optionally cross-reference the drafted SSP against the FedRAMP 20x Key Security Indicators from the 2026 Consolidated Rules:
+
+```bash
+bash plugins/document-transform/oscal-document-workbench/scripts/fetch-fedramp-2026-rules.sh
+bash plugins/document-transform/oscal-document-workbench/scripts/ksi-coverage-report.sh <ssp.json> --output <workspace>/reports/ksi-coverage.md
+```
+
 ## Arguments
 
 - `<input>` — legacy source document path when extraction is required.
