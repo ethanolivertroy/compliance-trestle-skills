@@ -26,6 +26,7 @@
         "extract-legacy-doc",
         "build-trestle-workspace",
         "fetch-oscal-baseline",
+        "ksi-coverage",
         "validate-oscal-package",
         "update-ssp-from-evidence"
       ],

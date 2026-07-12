@@ -102,6 +102,22 @@ if command -v trestle >/dev/null 2>&1; then
   [[ -n "$ssp_file" ]] || { echo "missing drafted SSP JSON" >&2; exit 1; }
   (cd "$workdir/trestle-workspace" && trestle validate -f "$ssp_file") >/dev/null
   echo "Draft SSP integration test passed."
+
+  # KSI coverage integration: skip gracefully when the rules download is unavailable.
+  if bash "$plugin_root/scripts/fetch-fedramp-2026-rules.sh" >/dev/null 2>&1; then
+    bash "$plugin_root/scripts/ksi-coverage-report.sh" "$ssp_file" \
+      --output "$workdir/reports/ksi-coverage.md" \
+      --json-output "$workdir/reports/ksi-coverage.json" >/dev/null
+    [[ -f "$workdir/reports/ksi-coverage.md" ]] || { echo "missing ksi-coverage.md" >&2; exit 1; }
+    python3 -c "
+import json
+report = json.load(open('$workdir/reports/ksi-coverage.json'))
+assert report['totals']['covered'] + report['totals']['partial'] + report['totals']['uncovered'] > 0
+" || { echo "ksi coverage JSON is empty" >&2; exit 1; }
+    echo "KSI coverage integration test passed."
+  else
+    echo "KSI coverage integration skipped (FedRAMP 2026 rules download unavailable)."
+  fi
 else
   echo "Draft SSP static checks passed (Trestle not installed; skipped integration run)."
 fi
