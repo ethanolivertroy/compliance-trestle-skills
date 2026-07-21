@@ -92,6 +92,9 @@ grep -q 'draft-ssp-from-extraction' "$plugin_root/commands/ingest-ssp.md" || { e
 
 if command -v trestle >/dev/null 2>&1; then
   workdir="$(mktemp -d)"
+  # Canonicalize so paths match Trestle's resolved workspace root
+  # (macOS mktemp returns /var/folders/..., a symlink to /private/var/folders/...).
+  workdir="$(cd "$workdir" && pwd -P)"
   trap 'rm -rf "$workdir"' EXIT
   cp examples/legacy-ssp-to-oscal/input/sample-ssp.md "$workdir/input.md"
   bash "$plugin_root/scripts/extract-legacy-doc.sh" "$workdir/input.md" --output "$workdir/extracted"

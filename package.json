@@ -1,6 +1,6 @@
 {
   "name": "compliance-trestle-skills",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Agent-portable Compliance Trestle and OSCAL skills, commands, and document workbench workflows.",
   "scripts": {
