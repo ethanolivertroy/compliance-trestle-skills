@@ -3,7 +3,7 @@
 - System name: Acme Analytics Platform
 - SSP alias: acme-analytics-platform
 - Profile label: fedramp-moderate
-- Draft SSP: `/Users/ethan.troy/Github/compliance-trestle-skills/examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace/system-security-plans/acme-analytics-platform/system-security-plan.json`
+- Draft SSP: `examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace/system-security-plans/acme-analytics-platform/system-security-plan.json`
 - Mapped sections: 6
 - needs_review sections: 3
 - Control IDs drafted: ac-2, au-2, ia-2, sc-13

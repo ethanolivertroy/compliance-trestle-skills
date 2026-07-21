@@ -410,6 +410,11 @@ def write_source_map(source_map: Path, sections: list[dict[str, Any]], mappings:
 def write_draft_summary(report_path: Path, plan: DraftPlan, ssp_path: Path, validation_status: str) -> None:
     mapped = sum(1 for m in plan.sections if m.status == "mapped")
     review = sum(1 for m in plan.sections if m.status == "needs_review")
+    # Keep the summary portable: never embed the machine-specific absolute path.
+    try:
+        ssp_path = ssp_path.resolve().relative_to(Path.cwd().resolve())
+    except ValueError:
+        pass
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(
         "\n".join(

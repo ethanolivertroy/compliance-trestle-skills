@@ -8,6 +8,6 @@
     "oscal-cli validate:examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace/system-security-plans/acme-analytics-platform/system-security-plan.json"
   ],
   "errors": [],
-  "generated_at": "2026-07-21T14:40:17.058Z",
+  "generated_at": "2026-07-21T16:55:45.541Z",
   "note": "Structural validation only; not an audit opinion."
 }

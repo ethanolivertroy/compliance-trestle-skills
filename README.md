@@ -1,12 +1,28 @@
 # Compliance Trestle Plugin for Claude Code
 
-> **Disclaimer:** This is an independent, community-driven project and is not affiliated with, endorsed by, or officially associated with Anthropic or Claude. The author is an independent developer contributing to open source and demonstrating how these tools can be used in real-world workflows. Claude, Anthropic, and any related marks are property of their respective owners.
+> **Disclaimer:** This is an independent, community-driven project and is not affiliated with, endorsed by, or officially associated with Anthropic, Claude, the oscal-compass project, or the CNCF. The author is an independent developer contributing to open source and demonstrating how these tools can be used in real-world workflows. Claude, Anthropic, Compliance Trestle, and any related marks are property of their respective owners.
 
-**v0.1.0**
+**v0.2.2** - see [CHANGELOG.md](CHANGELOG.md) for release history.
 
 Manage OSCAL compliance packages using [Compliance Trestle](https://oscal-compass.dev/compliance-trestle) — a CNCF sandbox project for machine-readable compliance documentation (NIST OSCAL standard).
 
-## What's New in v0.1.0
+## Installation
+
+Claude Code:
+
+```
+/plugin marketplace add ethanolivertroy/compliance-trestle-skills
+```
+
+Any other agent (Cursor, Codex, Gemini CLI, OpenCode, and more - see [docs/AGENT-COMPATIBILITY.md](docs/AGENT-COMPATIBILITY.md)):
+
+```bash
+git clone https://github.com/ethanolivertroy/compliance-trestle-skills.git
+```
+
+Then open the repository and point your agent at `AGENTS.md` and the portable skills in `agent-skills/`.
+
+## Skill highlights
 
 **Skill depth pass** — all 10 skills now include worked examples, troubleshooting tables, and cross-references:
 

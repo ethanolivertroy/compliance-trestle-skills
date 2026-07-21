@@ -4,7 +4,7 @@ This project supports multiple agent harnesses. Claude Code remains a first-clas
 
 | Harness | Native install method | Reads repo instructions from | Skills/plugins | Slash commands | Best old SSP-to-OSCAL workflow | Limitations |
 |---|---|---|---|---|---|---|
-| Claude Code | `/plugin marketplace add oscal-compass/compliance-trestle-skills` | Plugin commands, skills, `AGENTS.md` | Native Claude plugins plus portable skills | Yes | Use the bundled OSCAL Document Workbench commands, docs, and scripts | Claude-specific marketplace format |
+| Claude Code | `/plugin marketplace add ethanolivertroy/compliance-trestle-skills` | Plugin commands, skills, `AGENTS.md` | Native Claude plugins plus portable skills | Yes | Use the bundled OSCAL Document Workbench commands, docs, and scripts | Claude-specific marketplace format |
 | Claude Work/Cowork | Local files/project context | `AGENTS.md`, `agent-skills/`, `docs/` | File-oriented skills/docs | Usually no | Read portable OSCAL skill, operate on workspace files, validate with shell | Depends on file access model |
 | OpenAI Codex CLI | Clone/open repository | `AGENTS.md` | Portable skills | No | Use `agent-skills/oscal-document-engineering` and direct scripts | No Claude plugin install |
 | Codex app | Attach/open repository | `AGENTS.md` | Portable skills as files | No | Same as Codex CLI; keep outputs in workspace | App file permissions may vary |
