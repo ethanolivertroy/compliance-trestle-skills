@@ -106,6 +106,21 @@ if command -v trestle >/dev/null 2>&1; then
   (cd "$workdir/trestle-workspace" && trestle validate -f "$ssp_file") >/dev/null
   echo "Draft SSP integration test passed."
 
+  if command -v oscal-cli >/dev/null 2>&1; then
+    # Constraint validation is disabled because trestle:// hrefs are internal.
+    for oscal_file in \
+      "$ssp_file" \
+      "$(find "$workdir/trestle-workspace/catalogs" -name catalog.json | head -1)" \
+      "$(find "$workdir/trestle-workspace/profiles" -name profile.json | head -1)"; do
+      [[ -n "$oscal_file" ]] || { echo "missing generated OSCAL model file" >&2; exit 1; }
+      oscal-cli validate --disable-constraint-validation --quiet --no-color "$oscal_file" \
+        || { echo "oscal-cli schema validation failed: $oscal_file" >&2; exit 1; }
+    done
+    echo "oscal-cli schema validation passed for drafted catalog, profile, and SSP."
+  else
+    echo "oscal-cli not installed; skipped NIST schema validation."
+  fi
+
   # KSI coverage integration: skip gracefully when the rules download is unavailable.
   if bash "$plugin_root/scripts/fetch-fedramp-2026-rules.sh" >/dev/null 2>&1; then
     bash "$plugin_root/scripts/ksi-coverage-report.sh" "$ssp_file" \

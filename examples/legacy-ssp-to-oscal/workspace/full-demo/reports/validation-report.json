@@ -1,10 +1,13 @@
 {
   "target": "examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace",
-  "status": "partial",
+  "status": "pass",
   "validators": [
-    "trestle:not_found"
+    "trestle validate -a",
+    "oscal-cli validate:examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace/catalogs/acme-analytics-platform-catalog/catalog.json",
+    "oscal-cli validate:examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace/profiles/acme-analytics-platform-profile/profile.json",
+    "oscal-cli validate:examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace/system-security-plans/acme-analytics-platform/system-security-plan.json"
   ],
   "errors": [],
-  "generated_at": "2026-05-01T02:46:38.600Z",
+  "generated_at": "2026-07-21T14:40:17.058Z",
   "note": "Structural validation only; not an audit opinion."
 }

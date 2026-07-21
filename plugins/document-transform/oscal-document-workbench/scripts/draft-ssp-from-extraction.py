@@ -243,13 +243,12 @@ def patch_catalog(path: Path, plan: DraftPlan, mappings: list[SectionMapping]) -
             continue
         title = mapping.heading.split(maxsplit=1)[1] if " " in mapping.heading else mapping.control_id.upper()
         family = mapping.control_id.split("-")[0]
+        # OSCAL requires at least one item when params/props/links are present,
+        # so omit them entirely from draft control stubs.
         controls[mapping.control_id] = {
             "id": mapping.control_id,
             "class": "SP800-53",
             "title": title[:120],
-            "params": [],
-            "props": [],
-            "links": [],
             "parts": [
                 {
                     "id": f"{mapping.control_id.replace('.', '_')}_smt",
@@ -297,7 +296,10 @@ def patch_ssp(path: Path, plan: DraftPlan, mappings: list[SectionMapping]) -> No
     ssp = json.loads(path.read_text(encoding="utf-8"))
     root = ssp["system-security-plan"]
     root["metadata"]["title"] = f"{plan.system_name} System Security Plan"
-    root["metadata"].setdefault("roles", [])
+    # OSCAL requires at least one item when metadata.roles is present, so drop
+    # an empty list instead of emitting schema-invalid JSON.
+    if not root["metadata"].get("roles"):
+        root["metadata"].pop("roles", None)
     root["import-profile"] = {"href": f"trestle://profiles/{plan.profile_alias}/profile.json"}
 
     sc = root["system-characteristics"]
@@ -371,7 +373,8 @@ def patch_ssp(path: Path, plan: DraftPlan, mappings: list[SectionMapping]) -> No
 def write_source_map(source_map: Path, sections: list[dict[str, Any]], mappings: list[SectionMapping], basename: str) -> None:
     mapping_by_id = {m.source_id: m for m in mappings}
     with source_map.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.writer(handle)
+        # LF line endings keep the CSV friendly to git diff --check and POSIX tools.
+        writer = csv.writer(handle, lineterminator="\n")
         writer.writerow(
             [
                 "source_id",

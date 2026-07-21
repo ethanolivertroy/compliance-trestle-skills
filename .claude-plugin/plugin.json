@@ -1,6 +1,6 @@
 {
   "name": "compliance-trestle",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Manage OSCAL compliance packages using Compliance Trestle - a CNCF sandbox project for machine-readable compliance documentation (NIST OSCAL standard)",
   "author": {
     "name": "Compliance Trestle Community"

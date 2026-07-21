@@ -18,9 +18,10 @@ Manage OSCAL compliance packages using [Compliance Trestle](https://oscal-compas
 
 ## Prerequisites
 
-- Python 3.9+
+- Python 3.10-3.12 (Compliance Trestle does not yet support 3.13+)
 - Compliance Trestle installed: `pip install compliance-trestle`
 - A trestle workspace (run `trestle init` or use the `/compliance-trestle:workspace-init` command)
+- Optional: [`oscal-cli`](https://github.com/metaschema-framework/oscal-cli) (requires Java 11+) for independent NIST OSCAL schema validation; `validate-oscal-package.sh` uses it automatically when it is on `PATH`
 
 ## Commands
 

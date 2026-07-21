@@ -19,3 +19,6 @@ __pycache__/
 
 # Node (if MCP servers added later)
 node_modules/
+
+# Regenerated demo Trestle workspace (run examples/legacy-ssp-to-oscal/full-demo.sh)
+examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace/

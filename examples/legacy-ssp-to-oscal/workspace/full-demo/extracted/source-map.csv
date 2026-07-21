@@ -1,10 +1,10 @@
 source_id,source_file,page_or_section,heading,extracted_text_hash,oscal_target,status,notes
-SRC-001,sample-ssp.md,lines 1-6,Acme Analytics Platform System Security Plan,sha256:58c87cd38d23dc86a659e485bad1803be1ef90eadc66559f5ff773ff9caa2d4b,,pending,Review and map to OSCAL target
-SRC-002,sample-ssp.md,lines 7-10,System Description,sha256:84d1fd3461847c6ccf44791dd05b8b9e5a268717eba31d126bdf669a9cb18a0b,,pending,Review and map to OSCAL target
-SRC-003,sample-ssp.md,lines 11-14,Boundary,sha256:d49f2f9c109f2c550857cf6e4b6b2fecf50768f9a30d752fab69eccd9e362fbf,,pending,Review and map to OSCAL target
-SRC-004,sample-ssp.md,lines 15-18,Users,sha256:41bf9f005fb28e220451e78a48728a5bdb6d436e55b8f2463d2c8f603b63e329,,pending,Review and map to OSCAL target
-SRC-005,sample-ssp.md,lines 19-22,AC-2 Account Management,sha256:a7042e07024494fab6560409b6ebd196a02cf454864d390c8253f8db14e81796,,pending,Review and map to OSCAL target
-SRC-006,sample-ssp.md,lines 23-26,IA-2 Identification and Authentication,sha256:440aadff88deea4a89f1900572723153386b9be26ea3fbdfc7cfd20b7d538a73,,pending,Review and map to OSCAL target
-SRC-007,sample-ssp.md,lines 27-30,SC-13 Cryptographic Protection,sha256:3395d2b26ec1a1fba087293786c9fc91e6e64588b73f8fb8934802c78e6789d3,,pending,Review and map to OSCAL target
-SRC-008,sample-ssp.md,lines 31-34,AU-2 Event Logging,sha256:9bc706f76e48dcbc7284f150305ac1f848cbf8637bf9d8641d7cb19c59119ce5,,pending,Review and map to OSCAL target
-SRC-009,sample-ssp.md,lines 35-37,Open Items,sha256:d293ff665a4865dcf2af9112e631d3e21212787928e6822ce79e1d9a3e044b16,,pending,Review and map to OSCAL target
+SRC-001,sample-ssp.md,lines 1-6,Acme Analytics Platform System Security Plan,sha256:58c87cd38d23dc86a659e485bad1803be1ef90eadc66559f5ff773ff9caa2d4b,system-security-plan.metadata.remarks,needs_review,Unmapped legacy heading; review manually
+SRC-002,sample-ssp.md,lines 7-10,System Description,sha256:84d1fd3461847c6ccf44791dd05b8b9e5a268717eba31d126bdf669a9cb18a0b,system-security-plan.system-characteristics.description,mapped,FedRAMP template section: System Information
+SRC-003,sample-ssp.md,lines 11-14,Boundary,sha256:d49f2f9c109f2c550857cf6e4b6b2fecf50768f9a30d752fab69eccd9e362fbf,system-security-plan.system-characteristics.authorization-boundary.description,mapped,FedRAMP template section: Illustrated Architecture and Narratives
+SRC-004,sample-ssp.md,lines 15-18,Users,sha256:41bf9f005fb28e220451e78a48728a5bdb6d436e55b8f2463d2c8f603b63e329,system-security-plan.system-characteristics.system-information,needs_review,FedRAMP template section: System Users
+SRC-005,sample-ssp.md,lines 19-22,AC-2 Account Management,sha256:a7042e07024494fab6560409b6ebd196a02cf454864d390c8253f8db14e81796,system-security-plan.control-implementation.implemented-requirements.ac-2,mapped,Mapped from FedRAMP Appendix A-style control heading
+SRC-006,sample-ssp.md,lines 23-26,IA-2 Identification and Authentication,sha256:440aadff88deea4a89f1900572723153386b9be26ea3fbdfc7cfd20b7d538a73,system-security-plan.control-implementation.implemented-requirements.ia-2,mapped,Mapped from FedRAMP Appendix A-style control heading
+SRC-007,sample-ssp.md,lines 27-30,SC-13 Cryptographic Protection,sha256:3395d2b26ec1a1fba087293786c9fc91e6e64588b73f8fb8934802c78e6789d3,system-security-plan.control-implementation.implemented-requirements.sc-13,mapped,Mapped from FedRAMP Appendix A-style control heading
+SRC-008,sample-ssp.md,lines 31-34,AU-2 Event Logging,sha256:9bc706f76e48dcbc7284f150305ac1f848cbf8637bf9d8641d7cb19c59119ce5,system-security-plan.control-implementation.implemented-requirements.au-2,mapped,Mapped from FedRAMP Appendix A-style control heading
+SRC-009,sample-ssp.md,lines 35-37,Open Items,sha256:d293ff665a4865dcf2af9112e631d3e21212787928e6822ce79e1d9a3e044b16,system-security-plan.back-matter.resources,needs_review,FedRAMP template section: Attachments / Appendices

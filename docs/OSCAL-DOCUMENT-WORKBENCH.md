@@ -38,3 +38,12 @@ FedRAMP is moving away from the legacy Rev 5 document templates toward the machi
 - `ksi-coverage-report.sh` cross-references an OSCAL SSP against the 46 FedRAMP 20x Key Security Indicators and reports which KSIs have documented control coverage.
 
 KSI coverage is documentation evidence only; FedRAMP 20x validates KSIs through assessment and telemetry, not narrative documents.
+
+## Validation layers
+
+`validate-oscal-package.sh` runs every validator it can find and records which ones ran in `validation-report.json`:
+
+- `trestle validate` checks Trestle workspace and model integrity.
+- `oscal-cli validate` (when installed) checks OSCAL JSON against the official NIST schemas. Constraint validation is disabled because Trestle-internal `trestle://` import references are not resolvable outside a Trestle workspace.
+
+Report status is `pass` when all available validators succeed, `partial` when a validator is missing, and `fail` when any validator finds a structural problem.
