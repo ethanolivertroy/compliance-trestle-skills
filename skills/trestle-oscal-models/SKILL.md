@@ -87,6 +87,19 @@ Rules:
 | Assemble | `trestle assemble <type> -n <name>` | Combine split parts to dist/ |
 | Replicate | `trestle replicate <type> -n <name> -o <new>` | Copy/rename model |
 
+### `trestle assemble` vs `trestle author *-assemble`
+
+These are two different commands that are easy to confuse:
+
+| Command | Input | Purpose |
+|---------|-------|---------|
+| `trestle assemble <type> -n <name>` | Split JSON/YAML sub-files | Recombine files created by `trestle split` into a single model in `dist/` |
+| `trestle author <model>-assemble` (e.g., `ssp-assemble`, `catalog-assemble`) | Edited markdown directory | Convert authored markdown back into an OSCAL JSON model |
+
+If you generated markdown with `trestle author ssp-generate`, you must assemble it with
+`trestle author ssp-assemble --markdown <md_dir> --output <ssp_name>`. Running the generic
+`trestle assemble` on that markdown will not work.
+
 ## SSP Special Concepts
 
 - **This System** component: Default component in every SSP (name: "This System")
@@ -151,3 +164,11 @@ This traceability enables automated posture computation: given PVP results, map
 backward through component definitions to determine control-level compliance status.
 
 For full pipeline details, see the **trestle-compliance-pipeline** skill.
+
+## Cross-References
+
+- **trestle-workspace**: Workspace layout and where each model type lives on disk
+- **trestle-authoring-workflow**: The generate → edit → assemble cycle for markdown-based authoring, including the `trestle author *-assemble` commands
+- **trestle-control-implementation**: Writing control responses inside SSP and component-definition markdown
+- **trestle-validation**: Validating models after create, import, split/merge, or assemble operations
+- **trestle-compliance-pipeline**: How the model types flow through an end-to-end compliance automation pipeline

@@ -18,6 +18,9 @@ Execute the full System Security Plan authoring roundtrip workflow.
 
 3. **Pre-check**:
    - Verify profile exists and its imports resolve
+   - Verify the profile file is writable; some import paths create `profile.json`
+     read-only, causing `ssp-generate` to fail with `sed: permission denied`.
+     Fix with `chmod u+w profiles/<profile_name>/profile.json`
    - If compdefs specified, verify they exist in `component-definitions/`
    - List the controls that will be included
 
@@ -25,11 +28,14 @@ Execute the full System Security Plan authoring roundtrip workflow.
    ```
    trestle author ssp-generate --profile <profile_name> --output ssp-markdown [--compdefs <comps>]
    ```
+   Warn the user that a fresh baseline produces many parameter/ODP warnings for
+   values not yet set. These are expected for an unpopulated template, not errors.
 
 5. Show the structure and explain:
    - One file per control with implementation sections
    - "This System" component for overall system responses
    - Named components from component definitions (if provided)
+   - Without compdefs, only "This System" sections appear
    - Each statement part needs a response per component
    - Implementation status must be set per component
 

@@ -20,29 +20,42 @@ Generate System Security Plan (SSP) markdown from a profile and optional compone
 
 3. Ensure the profile's imports resolve correctly (use `trestle href` if needed).
 
-4. Run:
+4. Check the profile file is writable. Some import paths create `profile.json` read-only,
+   which makes `ssp-generate` fail with errors like `sed: permission denied`. Fix with:
+   ```
+   chmod u+w profiles/<profile_name>/profile.json
+   ```
+
+5. Run:
    ```
    trestle author ssp-generate --profile <profile_name> --output <output_dir> [--compdefs <comp1,comp2>]
    ```
 
-5. Show the generated structure:
+   Note: for a fresh baseline (e.g., NIST 800-53 High), expect a long stream of
+   parameter/ODP warnings about values not being set. These are expected for an
+   unpopulated template and are resolved as `ssp-values` are filled in. They do
+   not indicate a failure.
+
+6. Show the generated structure:
    - One markdown file per control
    - Each control has sections per statement part
    - Each part has response sections per component
    - "This System" component is always present
    - Named components come from component definitions
+   - If no `--compdefs` were provided, only "This System" sections appear
 
-6. Explain the markdown structure:
+7. Explain the markdown structure:
    - YAML header: parameters, rules, rule parameters
    - Control statement (read-only)
    - Implementation sections per part per component
    - `#### Implementation Status:` per component
    - `#### Rules:` (read-only, from component definitions)
 
-7. Explain what to edit:
+8. Explain what to edit:
    - Replace `<!-- Add control implementation description here -->` comments with prose
    - Set `ssp-values:` for parameters
    - Set implementation status values
    - Add implementation prose for each component per statement part
 
-8. Next steps: Edit all control responses, then `ssp-assemble`.
+9. Next steps: Edit all control responses, then `ssp-assemble` (the author command,
+   `trestle author ssp-assemble`, not the generic `trestle assemble`).

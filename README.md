@@ -18,7 +18,9 @@ Manage OSCAL compliance packages using [Compliance Trestle](https://oscal-compas
 
 ## Prerequisites
 
-- Python 3.9+
+- Python 3.9+ (3.11 or 3.12 recommended). On Python 3.14+, every trestle command prints a
+  `UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.`
+  This warning is expected and non-blocking, but use 3.11/3.12 for a clean experience.
 - Compliance Trestle installed: `pip install compliance-trestle`
 - A trestle workspace (run `trestle init` or use the `/compliance-trestle:workspace-init` command)
 
