@@ -59,7 +59,8 @@ Claude Code plugins under `plugins/` remain supported. Portable skills are the a
 - Codex/OpenAI coding agents: rely on `AGENTS.md` and `agent-skills/`.
 - Gemini CLI: rely on `GEMINI.md` and `agent-skills/`.
 - OpenCode: rely on `OPENCODE.md` and `agent-skills/`.
-- IDE agents: use `.cursor/rules/`, `.windsurf/rules/`, and the portable skills.
+- Cursor: use `CURSOR.md`, native project skills in `.cursor/skills/`, and the portable skill source in `agent-skills/`.
+- Windsurf and other IDE agents: use harness rules plus the portable skills.
 
 ## Validation
 
