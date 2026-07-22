@@ -1,12 +1,28 @@
 # Compliance Trestle Plugin for Claude Code
 
-> **Disclaimer:** This is an independent, community-driven project and is not affiliated with, endorsed by, or officially associated with Anthropic or Claude. The author is an independent developer contributing to open source and demonstrating how these tools can be used in real-world workflows. Claude, Anthropic, and any related marks are property of their respective owners.
+> **Disclaimer:** This is an independent, community-driven project and is not affiliated with, endorsed by, or officially associated with Anthropic, Claude, the oscal-compass project, or the CNCF. The author is an independent developer contributing to open source and demonstrating how these tools can be used in real-world workflows. Claude, Anthropic, Compliance Trestle, and any related marks are property of their respective owners.
 
-**v0.1.0**
+**v0.2.2** - see [CHANGELOG.md](CHANGELOG.md) for release history.
 
 Manage OSCAL compliance packages using [Compliance Trestle](https://oscal-compass.dev/compliance-trestle) — a CNCF sandbox project for machine-readable compliance documentation (NIST OSCAL standard).
 
-## What's New in v0.1.0
+## Installation
+
+Claude Code:
+
+```
+/plugin marketplace add ethanolivertroy/compliance-trestle-skills
+```
+
+Any other agent (Cursor, Codex, Gemini CLI, OpenCode, and more - see [docs/AGENT-COMPATIBILITY.md](docs/AGENT-COMPATIBILITY.md)):
+
+```bash
+git clone https://github.com/ethanolivertroy/compliance-trestle-skills.git
+```
+
+Then open the repository and point your agent at `AGENTS.md` and the portable skills in `agent-skills/`.
+
+## Skill highlights
 
 **Skill depth pass** — all 10 skills now include worked examples, troubleshooting tables, and cross-references:
 
@@ -18,11 +34,12 @@ Manage OSCAL compliance packages using [Compliance Trestle](https://oscal-compas
 
 ## Prerequisites
 
-- Python 3.9+ (3.11 or 3.12 recommended). On Python 3.14+, every trestle command prints a
-  `UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.`
-  This warning is expected and non-blocking, but use 3.11/3.12 for a clean experience.
+- Python 3.10-3.12 (Compliance Trestle does not yet support 3.13+). If you run on Python 3.14+
+  anyway, every trestle command prints a `UserWarning` about Pydantic V1 compatibility; the
+  warning is expected on unsupported versions, so use 3.11/3.12 for a clean experience.
 - Compliance Trestle installed: `pip install compliance-trestle`
 - A trestle workspace (run `trestle init` or use the `/compliance-trestle:workspace-init` command)
+- Optional: [`oscal-cli`](https://github.com/metaschema-framework/oscal-cli) (requires Java 11+) for independent NIST OSCAL schema validation; `validate-oscal-package.sh` uses it automatically when it is on `PATH`
 
 ## Commands
 
@@ -135,9 +152,10 @@ The plugin includes event hooks that activate automatically:
 
 This repo also includes agent-portable instructions for Codex, Gemini CLI, OpenCode, Cursor, Windsurf, and generic desktop agents:
 
-- `AGENTS.md`, `GEMINI.md`, `OPENCODE.md`
+- `AGENTS.md`, `CURSOR.md`, `GEMINI.md`, `OPENCODE.md`
+- `.cursor/skills/` native Cursor project skills (for example `/import-legacy-ssp`)
 - `agent-skills/` portable Compliance Trestle and OSCAL document engineering skills
-- `adapters/generic-agent-package/` prompts and manifest for generic agent harnesses
+- `adapters/cursor/` and `adapters/generic-agent-package/` harness-specific docs and prompts
 - `docs/AGENT-COMPATIBILITY.md` and `docs/PORTABLE-SKILLS.md`
 
 ## OSCAL Document Workbench

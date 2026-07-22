@@ -11,9 +11,9 @@ allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 
 ## Prerequisites
 
-- Python 3.9+ (3.11 or 3.12 recommended)
+- Python 3.10-3.12 (Compliance Trestle does not yet support 3.13+)
 - On Python 3.14+, every trestle command prints a Pydantic V1 compatibility
-  `UserWarning`. It is expected and non-blocking, but 3.11/3.12 avoids it entirely.
+  `UserWarning`. It is expected on unsupported versions; 3.11/3.12 avoids it entirely.
 - Compliance Trestle installed: `pip install compliance-trestle`
 
 ## Workspace Structure

@@ -155,7 +155,8 @@ Path(sections_json).write_text(json.dumps({'sections':sections}, indent=2)+'\n',
 metadata={'input_file':basename,'input_sha256':'sha256:'+file_hash,'extractor':extractor,'section_count':len(sections),'line_count':len(lines),'generated_outputs':['extracted.md','source-map.csv','sections.json','extracted-metadata.json','extract-manifest.json']}
 Path(metadata_json).write_text(json.dumps(metadata, indent=2)+'\n', encoding='utf-8')
 with open(source_map,'w',newline='',encoding='utf-8') as f:
-    writer=csv.writer(f)
+    # LF line endings keep the CSV friendly to git diff --check and POSIX tools.
+    writer=csv.writer(f, lineterminator='\n')
     writer.writerow(['source_id','source_file','page_or_section','heading','extracted_text_hash','oscal_target','status','notes'])
     for sec in sections:
         writer.writerow([sec['source_id'], basename, f"lines {sec['start_line']}-{sec['end_line']}", sec['heading'], sec['text_sha256'], '', 'pending', 'Review and map to OSCAL target'])

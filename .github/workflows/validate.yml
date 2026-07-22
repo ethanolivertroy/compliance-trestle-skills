@@ -13,12 +13,31 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Compliance Trestle
+        run: pip install compliance-trestle
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install oscal-cli
+        run: |
+          curl -sSL -o /tmp/oscal-cli.zip https://repo1.maven.org/maven2/dev/metaschema/oscal/oscal-cli-enhanced/3.2.0/oscal-cli-enhanced-3.2.0-oscal-cli.zip
+          sudo unzip -qo /tmp/oscal-cli.zip -d /opt/oscal-cli
+          sudo ln -sf /opt/oscal-cli/bin/oscal-cli /usr/local/bin/oscal-cli
+          oscal-cli --version
       - name: Validate agent skills
         run: npm run test:agent-skills
       - name: Validate agent adapters
         run: npm run test:agent-adapters
+      - name: Validate Cursor support
+        run: npm run test:cursor-support
       - name: Validate OSCAL Document Workbench
         run: npm run test:oscal-document-workbench
+      - name: Validate draft SSP pipeline
+        run: npm run test:draft-ssp
       - name: Validate Trestle integration docs
         run: npm run test:trestle-integration
       - name: Validate review workflow

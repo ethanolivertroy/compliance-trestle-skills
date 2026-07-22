@@ -6,7 +6,10 @@ This synthetic example demonstrates the first step of the OSCAL document moderni
 
 ```bash
 bash examples/legacy-ssp-to-oscal/scripts/run-example.sh
+bash examples/legacy-ssp-to-oscal/full-demo.sh
 ```
+
+When Compliance Trestle is installed, the scripts draft a schema-valid OSCAL SSP from extracted legacy sections using FedRAMP Rev 5 heading conventions.
 
 The script extracts `input/sample-ssp.md`, creates a traceability map, bootstraps a Trestle workspace scaffold, and writes reports under `examples/legacy-ssp-to-oscal/workspace/`.
 

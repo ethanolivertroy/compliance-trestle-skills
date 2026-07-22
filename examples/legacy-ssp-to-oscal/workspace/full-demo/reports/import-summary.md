@@ -1,8 +1,8 @@
 # Import Summary
 
-- Workspace: examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace
-- Trestle workspace: examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace/trestle-workspace
-- Status: scaffolded-without-trestle
+- Workspace: examples/legacy-ssp-to-oscal/workspace/full-demo
+- Trestle workspace: examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace
+- Status: initialized-with-trestle
 - Profile: fedramp-moderate
 - OSCAL version: 1.1.3
 

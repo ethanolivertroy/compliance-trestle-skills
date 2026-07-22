@@ -1,0 +1,27 @@
+---
+description: Prefer Trestle markdown roundtrip over direct OSCAL JSON edits
+paths:
+  - "**/catalogs/**/*.json"
+  - "**/catalogs/**/*.yaml"
+  - "**/catalogs/**/*.yml"
+  - "**/profiles/**/*.json"
+  - "**/profiles/**/*.yaml"
+  - "**/profiles/**/*.yml"
+  - "**/component-definitions/**/*.json"
+  - "**/component-definitions/**/*.yaml"
+  - "**/component-definitions/**/*.yml"
+  - "**/system-security-plans/**/*.json"
+  - "**/system-security-plans/**/*.yaml"
+  - "**/system-security-plans/**/*.yml"
+---
+
+Direct edits to OSCAL JSON or YAML in catalogs, profiles, component definitions, or SSP directories bypass Trestle's markdown authoring roundtrip and can cause validation or assembly issues.
+
+Prefer:
+
+1. `trestle author *-generate` to create markdown
+2. Edit markdown with source references
+3. `trestle author *-assemble` to regenerate OSCAL
+4. `trestle validate -a` or `/workspace-validate`
+
+If a direct JSON/YAML edit is intentional, proceed carefully and validate afterward. Assessment plans, assessment results, and POA&M models use the JSON split/merge workflow instead; see `commands/workflow/assessment-roundtrip.md` and `commands/workflow/poam-roundtrip.md`.

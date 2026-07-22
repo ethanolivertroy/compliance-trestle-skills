@@ -7,8 +7,10 @@ cd "$repo_root"
 
 required_files=(
   AGENTS.md
+  CURSOR.md
   GEMINI.md
   OPENCODE.md
+  adapters/cursor/README.md
   .cursor/rules/compliance-trestle.mdc
   .windsurf/rules/compliance-trestle.md
   docs/AGENT-COMPATIBILITY.md
@@ -26,6 +28,9 @@ grep -q 'needs_review' AGENTS.md || { echo "AGENTS.md must require needs_review"
 
 grep -q 'Gemini CLI' GEMINI.md || { echo "GEMINI.md must mention Gemini CLI" >&2; exit 1; }
 grep -q 'OpenCode' OPENCODE.md || { echo "OPENCODE.md must mention OpenCode" >&2; exit 1; }
+grep -q 'Cursor' CURSOR.md || { echo "CURSOR.md must mention Cursor" >&2; exit 1; }
+grep -q '.cursor/skills/' CURSOR.md || { echo "CURSOR.md must document native project skills" >&2; exit 1; }
+grep -q 'Cursor' docs/AGENT-COMPATIBILITY.md || { echo "compatibility doc missing Cursor" >&2; exit 1; }
 grep -q 'Claude Code' docs/AGENT-COMPATIBILITY.md || { echo "compatibility doc missing Claude Code" >&2; exit 1; }
 grep -q 'OpenAI Codex CLI' docs/AGENT-COMPATIBILITY.md || { echo "compatibility doc missing Codex CLI" >&2; exit 1; }
 grep -q 'Gemini CLI' docs/AGENT-COMPATIBILITY.md || { echo "compatibility doc missing Gemini CLI" >&2; exit 1; }

@@ -40,7 +40,14 @@ Produce these artifacts:
 3. Extract text while preserving page numbers, headings, and section identifiers where possible.
 4. Build a source traceability map using `templates/source-traceability-map.csv`.
 5. Initialize or update a Compliance Trestle workspace.
-6. Map document sections to OSCAL SSP structure:
+6. Draft a schema-valid SSP from extracted sections when Trestle is available:
+
+```bash
+bash plugins/document-transform/oscal-document-workbench/scripts/draft-ssp-from-extraction.sh <workspace> --overwrite
+```
+
+Use FedRAMP Rev 5 heading conventions from `plugins/document-transform/oscal-document-workbench/templates/fedramp-rev5-heading-map.json`.
+7. Refine mappings and fill remaining OSCAL SSP structure:
    - metadata
    - parties and roles
    - system characteristics
@@ -48,9 +55,9 @@ Produce these artifacts:
    - control implementation
    - inventory items
    - back matter resources
-7. Validate with Compliance Trestle and OSCAL CLI where available.
-8. Generate summary reports and identify gaps.
-9. Ask the user or system owner to review all `needs_review` items.
+8. Validate with Compliance Trestle and OSCAL CLI where available.
+9. Generate summary reports and identify gaps.
+10. Ask the user or system owner to review all `needs_review` items.
 
 ## Mapping guidance
 

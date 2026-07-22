@@ -1,6 +1,6 @@
 {
   "name": "compliance-trestle-agent-skills",
-  "version": "0.1.0",
+  "version": "0.2.2",
   "description": "Portable GRC and OSCAL engineering skills for coding agents.",
   "skills": [
     {
