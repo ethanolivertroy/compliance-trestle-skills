@@ -74,6 +74,13 @@ Each control statement part gets responses from each component:
 1. **Named Components** (from component-definitions): Have rules, parameters, status
 2. **This System** component: Overall system-level response (always present)
 
+> **First run without component definitions:** If you run `ssp-generate` without
+> `--compdefs` (or before any component-definitions exist in the workspace), the
+> generated markdown will only contain `This System` sections. Named component
+> sections such as `Identity Provider` in the examples below only appear after
+> component definitions are loaded and passed via `--compdefs`. This is expected,
+> not an error.
+
 ### Adding Implementation Prose
 Replace the HTML comment placeholders with actual implementation text:
 ```markdown
@@ -173,6 +180,10 @@ Evidence required to demonstrate implementation.
 7. **Leverage CI/CD**: Use assemble in pipelines to validate changes automatically
 
 ## Worked Example: Writing AC-2 Account Management
+
+This example assumes a component definition providing an `Identity Provider`
+component was passed to `ssp-generate` via `--compdefs`. Without it, only the
+`This System` sections appear.
 
 ### Before: Generated Markdown (Unfilled)
 

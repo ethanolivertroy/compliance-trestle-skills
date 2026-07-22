@@ -15,7 +15,13 @@ allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 ```bash
 trestle validate -a
 ```
-Validates every OSCAL model in the workspace.
+Validates every OSCAL model in the workspace. (`-a` is shorthand for `--all`;
+this skill uses `-a` throughout.)
+
+**What a clean run looks like:** On a freshly initialized workspace with no
+models, `trestle validate -a` finds nothing to validate and exits successfully
+with little or no output. Silence is a pass, not a failure. Once models exist,
+a passing run reports each validated model with no `ERROR` lines and exits 0.
 
 ### Validate by Type
 ```bash
@@ -200,6 +206,11 @@ After using `trestle split`, individual fragment files are not standalone valid 
 4. **Pattern**: The correct workflow is always **split → edit → merge → validate**. Never skip the merge step before validation.
 
 ## CI/CD Validation Patterns
+
+CI/CD integration is optional for initial testing and evaluation. Running
+`trestle validate -a` locally is sufficient while you explore the workflows;
+add the pipeline patterns below once models are under version control and
+changing regularly.
 
 ### GitHub Actions Workflow
 
