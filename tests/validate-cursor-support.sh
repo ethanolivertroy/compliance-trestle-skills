@@ -41,6 +41,8 @@ grep -q 'source traceability' CURSOR.md || { echo "CURSOR.md must require source
 
 grep -q '.cursor/skills/' adapters/cursor/README.md || { echo "Cursor adapter README must mention .cursor/skills/" >&2; exit 1; }
 grep -q '/import-legacy-ssp' adapters/cursor/README.md || { echo "Cursor adapter README must document /import-legacy-ssp" >&2; exit 1; }
+grep -q 'draft-ssp-from-extraction' .cursor/skills/import-legacy-ssp/SKILL.md || { echo "import-legacy-ssp must document draft-ssp-from-extraction" >&2; exit 1; }
+grep -q 'fetch-oscal-baseline' .cursor/skills/import-legacy-ssp/SKILL.md || { echo "import-legacy-ssp must document fetch-oscal-baseline" >&2; exit 1; }
 
 grep -q 'CURSOR.md' .cursor/rules/compliance-trestle.mdc || { echo "Cursor rule must point to CURSOR.md" >&2; exit 1; }
 grep -q '.cursor/skills/' .cursor/rules/compliance-trestle.mdc || { echo "Cursor rule must mention project skills" >&2; exit 1; }

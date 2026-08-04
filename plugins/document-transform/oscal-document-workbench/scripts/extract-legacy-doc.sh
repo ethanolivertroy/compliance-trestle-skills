@@ -10,18 +10,30 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --output) shift; OUTPUT="${1:-}" ;;
     --output=*) OUTPUT="${1#*=}" ;;
-    --help|-h) echo "Usage: $0 <input.{pdf|docx|md|txt}> --output <dir>"; exit 0 ;;
-    --*) echo "[$SOURCE] unknown flag: $1" >&2; exit 2 ;;
-    *) if [[ -z "$INPUT" ]]; then INPUT="$1"; else echo "[$SOURCE] unexpected argument: $1" >&2; exit 2; fi ;;
+    --help|-h) printf 'Usage: %s <input.{pdf|docx|md|txt}> --output <dir>\n' "$0"; exit 0 ;;
+    --*) printf '[%s] unknown flag: %s\n' "$SOURCE" "$1" >&2; exit 2 ;;
+    *) if [[ -z "$INPUT" ]]; then INPUT="$1"; else printf '[%s] unexpected argument: %s\n' "$SOURCE" "$1" >&2; exit 2; fi ;;
   esac
   shift || true
 done
 
 if [[ -z "$INPUT" || -z "$OUTPUT" ]]; then
-  echo "Usage: $0 <input.{pdf|docx|md|txt}> --output <dir>" >&2
+  printf 'Usage: %s <input.{pdf|docx|md|txt}> --output <dir>\n' "$0" >&2
   exit 2
 fi
-[[ -r "$INPUT" ]] || { echo "[$SOURCE] cannot read input '$INPUT'" >&2; exit 2; }
+[[ -r "$INPUT" ]] || { printf '[%s] cannot read input %s\n' "$SOURCE" "$INPUT" >&2; exit 2; }
+command -v python3 >/dev/null 2>&1 || {
+  printf '[%s] python3 is required\n' "$SOURCE" >&2
+  exit 5
+}
+
+file_sha256() {
+  python3 - "$1" <<'PY'
+import hashlib, sys
+from pathlib import Path
+print(hashlib.sha256(Path(sys.argv[1]).read_bytes()).hexdigest())
+PY
+}
 
 mkdir -p "$OUTPUT"
 OUT_MD="$OUTPUT/extracted.md"
@@ -32,7 +44,7 @@ METADATA_JSON="$OUTPUT/extracted-metadata.json"
 BASENAME="$(basename "$INPUT")"
 EXT="${BASENAME##*.}"
 EXT="$(printf '%s' "$EXT" | tr '[:upper:]' '[:lower:]')"
-HASH="$(sha256sum "$INPUT" | awk '{print $1}')"
+HASH="$(file_sha256 "$INPUT")"
 EXTRACTOR=""
 
 case "$EXT" in
@@ -48,7 +60,7 @@ case "$EXT" in
     if command -v pandoc >/dev/null 2>&1; then
       pandoc "$INPUT" -t gfm -o "$OUT_MD"
       EXTRACTOR="pandoc"
-    elif command -v python3 >/dev/null 2>&1 && python3 - <<'PY' >/dev/null 2>&1
+    elif python3 - <<'PY' >/dev/null 2>&1
 import docx
 PY
     then
@@ -86,9 +98,8 @@ EOF
   pdf)
     if command -v pdftotext >/dev/null 2>&1; then
       pdftotext -layout "$INPUT" "$OUT_MD"
-      sed -i "1i# Extracted PDF: $BASENAME\n" "$OUT_MD"
       EXTRACTOR="pdftotext"
-    elif command -v python3 >/dev/null 2>&1 && python3 - <<'PY' >/dev/null 2>&1
+    elif python3 - <<'PY' >/dev/null 2>&1
 import fitz
 PY
     then
@@ -113,14 +124,31 @@ Install one of:
 EOF
       exit 5
     fi
+    if [[ "$EXTRACTOR" == "pdftotext" ]]; then
+      tmp_md="$(mktemp)"
+      { printf '# Extracted PDF: %s\n\n' "$BASENAME"; cat "$OUT_MD"; } > "$tmp_md"
+      mv "$tmp_md" "$OUT_MD"
+    fi
     ;;
-  *) echo "[$SOURCE] unsupported format '.$EXT'. Supported: pdf, docx, md, markdown, txt" >&2; exit 6 ;;
+  *) printf '[%s] unsupported format .%s. Supported: pdf, docx, md, markdown, txt\n' "$SOURCE" "$EXT" >&2; exit 6 ;;
 esac
 
-python3 - "$OUT_MD" "$SOURCE_MAP" "$SECTIONS_JSON" "$METADATA_JSON" "$BASENAME" "$HASH" "$EXTRACTOR" <<'PY'
+python3 - "$OUT_MD" "$SOURCE_MAP" "$SECTIONS_JSON" "$METADATA_JSON" "$MANIFEST" "$INPUT" "$BASENAME" "$HASH" "$EXTRACTOR" <<'PY'
 from pathlib import Path
 import csv, hashlib, json, re, sys
-md_path, source_map, sections_json, metadata_json, basename, file_hash, extractor = sys.argv[1:]
+from datetime import datetime, timezone
+
+(
+    md_path,
+    source_map,
+    sections_json,
+    metadata_json,
+    manifest_path,
+    input_path,
+    basename,
+    file_hash,
+    extractor,
+) = sys.argv[1:]
 text = Path(md_path).read_text(encoding='utf-8', errors='replace')
 lines = text.splitlines()
 sections=[]
@@ -142,7 +170,6 @@ current['end_line']=len(lines)
 current['text_sha256']='sha256:'+hashlib.sha256(body.encode()).hexdigest()
 current['excerpt']=body[:240]
 sections.append(current)
-# ensure at least one section
 if not sections:
     body=text.strip()
     sections=[{'heading':'Document root','level':1,'start_line':1,'end_line':len(lines),'text_sha256':'sha256:'+hashlib.sha256(body.encode()).hexdigest(),'excerpt':body[:240]}]
@@ -155,22 +182,28 @@ Path(sections_json).write_text(json.dumps({'sections':sections}, indent=2)+'\n',
 metadata={'input_file':basename,'input_sha256':'sha256:'+file_hash,'extractor':extractor,'section_count':len(sections),'line_count':len(lines),'generated_outputs':['extracted.md','source-map.csv','sections.json','extracted-metadata.json','extract-manifest.json']}
 Path(metadata_json).write_text(json.dumps(metadata, indent=2)+'\n', encoding='utf-8')
 with open(source_map,'w',newline='',encoding='utf-8') as f:
-    # LF line endings keep the CSV friendly to git diff --check and POSIX tools.
     writer=csv.writer(f, lineterminator='\n')
     writer.writerow(['source_id','source_file','page_or_section','heading','extracted_text_hash','oscal_target','status','notes'])
     for sec in sections:
         writer.writerow([sec['source_id'], basename, f"lines {sec['start_line']}-{sec['end_line']}", sec['heading'], sec['text_sha256'], '', 'pending', 'Review and map to OSCAL target'])
+md_bytes = Path(md_path).stat().st_size
+manifest={
+    'input': input_path,
+    'input_file': basename,
+    'input_sha256': 'sha256:'+file_hash,
+    'extractor': extractor,
+    'extracted_markdown': md_path,
+    'source_map': source_map,
+    'sections_json': sections_json,
+    'metadata_json': metadata_json,
+    'bytes': md_bytes,
+    'lines': len(lines),
+    'generated_at': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+}
+Path(manifest_path).write_text(json.dumps(manifest, indent=2)+'\n', encoding='utf-8')
 PY
 
-BYTES=$(wc -c < "$OUT_MD" | tr -d ' ')
-LINES=$(wc -l < "$OUT_MD" | tr -d ' ')
-node -e '
-const fs=require("fs");
-const manifest={input:process.argv[1],input_file:process.argv[2],input_sha256:"sha256:"+process.argv[3],extractor:process.argv[4],extracted_markdown:process.argv[5],source_map:process.argv[6],sections_json:process.argv[7],metadata_json:process.argv[8],bytes:Number(process.argv[9]),lines:Number(process.argv[10]),generated_at:new Date().toISOString()};
-fs.writeFileSync(process.argv[11], JSON.stringify(manifest,null,2)+"\n");
-' "$INPUT" "$BASENAME" "$HASH" "$EXTRACTOR" "$OUT_MD" "$SOURCE_MAP" "$SECTIONS_JSON" "$METADATA_JSON" "$BYTES" "$LINES" "$MANIFEST"
-
-echo "[$SOURCE] extracted with $EXTRACTOR"
+printf '[%s] extracted with %s\n' "$SOURCE" "$EXTRACTOR"
 printf '  markdown:   %s\n' "$OUT_MD"
 printf '  source map: %s\n' "$SOURCE_MAP"
 printf '  sections:   %s\n' "$SECTIONS_JSON"

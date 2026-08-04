@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Import Legacy SSP
 
-Run the end-to-end legacy SSP import workflow for Cursor.
+Run the full legacy SSP import workflow for Cursor.
 
 ## Before you start
 
@@ -17,37 +17,65 @@ Read:
 - `agent-skills/compliance-trestle-engineering/SKILL.md`
 - `plugins/document-transform/oscal-document-workbench/commands/ingest-ssp.md`
 
+This repository is an OSCAL and Compliance Trestle toolkit.
+FedRAMP Rev 5 heading maps and 20x KSI coverage are optional adapters.
+They are not the default product claim.
+
 ## Steps
 
-1. Confirm source files and the target workspace path, usually `workspaces/<system>-ssp-import/`.
-2. Copy source documents into `input/` without modifying originals.
-3. Extract source text and section structure:
+1. Make sure you know the source files and the target workspace path. Usual path: `workspaces/<system>-ssp-import/`.
+2. Copy source documents into `input/`.
+3. Do not change the original files.
+4. Extract source text and section structure:
 
 ```bash
 bash plugins/document-transform/oscal-document-workbench/scripts/extract-legacy-doc.sh <input> --output <workspace>/extracted
 ```
 
-4. Bootstrap or reuse a Compliance Trestle workspace:
+5. Bootstrap or reuse a Compliance Trestle workspace:
 
 ```bash
 bash plugins/document-transform/oscal-document-workbench/scripts/bootstrap-trestle-workspace.sh <workspace> [--profile <name>]
 ```
 
-5. Map extracted content to OSCAL SSP fields with `source-map.csv` traceability.
-6. Mark uncertain mappings as `needs_review`; do not invent compliance facts.
-7. Build the review queue:
+6. Optionally import a real NIST or FedRAMP baseline when the source is a FedRAMP-style SSP:
+
+```bash
+bash plugins/document-transform/oscal-document-workbench/scripts/fetch-oscal-baseline.sh <workspace>/trestle-workspace --baseline moderate
+```
+
+7. Draft a schema-valid SSP from extracted sections when Trestle is available:
+
+```bash
+bash plugins/document-transform/oscal-document-workbench/scripts/draft-ssp-from-extraction.sh <workspace> [--baseline-profile fedramp-rev5-moderate] [--overwrite]
+```
+
+Omit `--baseline-profile` to make offline stub catalog and profile models.
+Replace stubs before authorization use.
+For non-FedRAMP sources, do not treat the FedRAMP heading map as authoritative.
+Keep unmatched sections `needs_review`.
+
+8. Map remaining content in `source-map.csv`. Mark uncertain mappings as `needs_review`. Do not invent compliance facts.
+9. Build the review queue:
 
 ```bash
 bash plugins/document-transform/oscal-document-workbench/scripts/build-review-queue.sh <workspace>/extracted/source-map.csv --output <workspace>/reports/review-queue.md
 ```
 
-8. Validate the package or document missing tools explicitly:
+10. Validate the package or document missing tools explicitly:
 
 ```bash
 bash plugins/document-transform/oscal-document-workbench/scripts/validate-oscal-package.sh <workspace>/trestle-workspace --output <workspace>/reports/validation-report.json
 ```
 
-9. Produce:
+11. Optionally report FedRAMP 20x KSI documentation coverage:
+
+```bash
+bash plugins/document-transform/oscal-document-workbench/scripts/fetch-fedramp-2026-rules.sh
+bash plugins/document-transform/oscal-document-workbench/scripts/ksi-coverage-report.sh <ssp.json> --output <workspace>/reports/ksi-coverage.md
+```
+
+12. Make:
 
 - `reports/import-summary.md`
 - `reports/validation-report.json`

@@ -1,8 +1,8 @@
 {
   "name": "compliance-trestle-suite",
   "owner": {
-    "name": "ethanolivertroy (independent, not affiliated with oscal-compass or Anthropic)",
-    "url": "https://github.com/ethanolivertroy/compliance-trestle-skills"
+    "name": "oscal-compass-lab contributors (community lab; not the official oscal-compass CNCF project or Anthropic)",
+    "url": "https://github.com/oscal-compass-lab/compliance-trestle-skills"
   },
   "metadata": {
     "description": "Compliance Trestle and OSCAL agent skills plus document transformation workflows.",
@@ -26,6 +26,7 @@
         "extract-legacy-doc",
         "build-trestle-workspace",
         "fetch-oscal-baseline",
+        "draft-ssp-from-extraction",
         "ksi-coverage",
         "validate-oscal-package",
         "update-ssp-from-evidence"

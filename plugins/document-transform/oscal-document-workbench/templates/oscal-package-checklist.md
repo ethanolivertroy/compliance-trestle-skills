@@ -5,8 +5,8 @@
 - [ ] Extracted Markdown reviewed
 - [ ] Source traceability map populated
 - [ ] Trestle workspace initialized
-- [ ] OSCAL SSP fields mapped only from source/evidence/assertions
+- [ ] OSCAL SSP fields mapped only from source, evidence, or assertions
 - [ ] `needs_review` items listed
 - [ ] OSCAL validation run
 - [ ] Import summary created
-- [ ] Human GRC/security owner review complete
+- [ ] Human GRC or security owner review complete

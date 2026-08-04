@@ -1,7 +1,7 @@
 ---
 name: compliance-trestle-engineering
 description: Use Compliance Trestle to manage OSCAL catalogs, profiles, component definitions, SSPs, markdown assembly, validation, and source-traceable updates from legacy compliance documents.
-version: 0.1.0
+version: 0.2.2
 tags:
   - compliance-trestle
   - oscal
@@ -11,19 +11,22 @@ tags:
 
 # Compliance Trestle Engineering
 
-Use this skill when an agent needs to operate a Compliance Trestle workspace, import or validate OSCAL models, assemble markdown, regenerate OSCAL, or turn legacy SSP content into a traceable Trestle-managed workflow.
+Use this skill when an agent must operate a Compliance Trestle workspace.
+Use it to import or validate OSCAL models, assemble markdown, regenerate OSCAL, or turn legacy SSP content into a traceable Trestle-managed workflow.
 
-## Non-negotiable guardrails
+## Required guardrails
 
 - Preserve source traceability for every generated OSCAL field that came from a legacy PDF, DOCX, Markdown, TXT file, interview note, spreadsheet, ticket, or evidence package.
 - Never invent control mappings. If the source does not clearly support a mapping, set status to `needs_review` and explain the uncertainty.
 - Schema-valid OSCAL is not a statement of compliance effectiveness.
-- Keep reviewer-owned decisions in review queues or traceability maps, not hidden in generated prose.
-- Prefer small, reversible Trestle operations over large opaque rewrites.
+- Keep reviewer-owned decisions in review queues or traceability maps.
+- Do not hide reviewer decisions in generated prose.
+- Prefer small, reversible Trestle operations.
+- Do not do large opaque rewrites.
 
 ## Standard workflow
 
-1. Initialize or inspect the workspace.
+1. Start or inspect the workspace.
    - `trestle init`
    - `trestle version`
    - `find . -maxdepth 3 -type d | sort`
@@ -32,11 +35,11 @@ Use this skill when an agent needs to operate a Compliance Trestle workspace, im
    - profiles under `profiles/`
    - component definitions under `component-definitions/`
    - SSPs under `system-security-plans/`
-3. Resolve the applicable profile before writing control implementations.
+3. Resolve the applicable profile before you write control implementations.
 4. Author or update markdown with source references.
 5. Assemble markdown back into OSCAL.
 6. Validate with Compliance Trestle and any available OSCAL validator.
-7. Generate review outputs for `needs_review`, unmapped, or low-confidence items.
+7. Make review outputs for `needs_review`, unmapped, or low-confidence items.
 
 ## Typical commands
 
@@ -45,7 +48,7 @@ Use the wrapper when you want consistent reports:
 ```bash
 bash scripts/trestle-workflow.sh init workspaces/acme/trestle-workspace
 bash scripts/trestle-workflow.sh validate workspaces/acme/trestle-workspace
-bash scripts/trestle-workflow.sh assemble workspaces/acme/trestle-workspace system-security-plans/acme-ssp
+bash scripts/trestle-workflow.sh assemble workspaces/acme/trestle-workspace markdown/system-security-plans/acme-ssp acme-ssp
 bash scripts/trestle-workflow.sh status workspaces/acme/trestle-workspace
 ```
 
@@ -60,12 +63,12 @@ trestle author ssp-assemble -m markdown/system-security-plans/acme-ssp -o system
 
 ## Output expectations
 
-Every Trestle-backed document import should leave behind:
+Every Trestle-backed document import must leave behind:
 
 - `source-map.csv` with source IDs, target OSCAL fields, status, and notes.
-- `reports/import-summary.md` explaining source counts and known gaps.
+- `reports/import-summary.md` that explains source counts and known gaps.
 - `reports/review-queue.md` for `needs_review` and unmapped items.
-- validation output from `trestle validate` or a documented skipped/missing-tool status.
+- validation output from `trestle validate` or a documented skipped or missing-tool status.
 
 See:
 

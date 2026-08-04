@@ -68,21 +68,20 @@ def main() -> int:
     ksi_families = rules.get("KSI", {})
 
     rows = []
-    totals = {"covered": 0, "partial": 0, "uncovered": 0}
+    totals = {"covered": 0, "partial": 0, "uncovered": 0, "not_applicable": 0}
     for family_key, family in sorted(ksi_families.items()):
         for ksi_id, indicator in sorted(family.get("indicators", {}).items()):
             related = [c.lower() for c in indicator.get("controls", [])]
-            if not related:
-                continue
             exact = sorted(c for c in related if c in ssp_controls)
             base_only = sorted(
                 c for c in related if c not in ssp_controls and base_control(c) in ssp_bases
             )
             missing = sorted(c for c in related if c not in ssp_controls and base_control(c) not in ssp_bases)
-            matched = len(exact) + len(base_only)
-            if matched == len(related):
+            if not related:
+                status = "not_applicable"
+            elif len(exact) == len(related):
                 status = "covered"
-            elif matched > 0:
+            elif exact or base_only:
                 status = "partial"
             else:
                 status = "uncovered"
@@ -107,10 +106,12 @@ def main() -> int:
         f"- Rules: {info.get('title', 'FedRAMP Consolidated Rules')} "
         f"version {info.get('version', '?')} (updated {info.get('last_updated', '?')})",
         f"- SSP implemented control IDs: {len(ssp_controls)}",
-        f"- KSIs covered: {totals['covered']} | partial: {totals['partial']} | uncovered: {totals['uncovered']}",
+        f"- KSIs covered: {totals['covered']} | partial: {totals['partial']} | "
+        f"uncovered: {totals['uncovered']} | not applicable: {totals['not_applicable']}",
         "",
-        "Coverage means the SSP documents the KSI's related SP 800-53 controls.",
-        "It is documentation evidence only, not a FedRAMP 20x validation result.",
+        "Coverage means the SSP documents the related SP 800-53 controls for the KSI.",
+        "Coverage is documentation evidence only.",
+        "Coverage is not a FedRAMP 20x validation result.",
         "",
         "| KSI | Name | Status | Matched | Missing controls |",
         "| --- | --- | --- | --- | --- |",
@@ -145,7 +146,7 @@ def main() -> int:
                     "rules_version": info.get("version"),
                     "totals": totals,
                     "indicators": rows,
-                    "note": "Documentation coverage only; not a FedRAMP 20x validation result.",
+                    "note": "Documentation coverage only. Not a FedRAMP 20x validation result.",
                 },
                 indent=2,
             )

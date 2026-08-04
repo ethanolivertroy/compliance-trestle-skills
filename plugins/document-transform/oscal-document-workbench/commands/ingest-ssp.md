@@ -5,7 +5,13 @@ description: Run the end-to-end legacy SSP import process: extract source materi
 
 # /oscal-document-workbench:ingest-ssp
 
-Run the end-to-end legacy SSP import process: extract source material, create source traceability, bootstrap a Trestle workspace, map content, validate OSCAL, and report unmapped items.
+Run the full legacy SSP import process.
+Extract source material.
+Make source traceability.
+Bootstrap a Trestle workspace.
+Map content.
+Validate OSCAL.
+Report unmapped items.
 
 ## How to run
 
@@ -17,11 +23,15 @@ bash plugins/document-transform/oscal-document-workbench/scripts/draft-ssp-from-
 bash plugins/document-transform/oscal-document-workbench/scripts/validate-oscal-package.sh <workspace>/trestle-workspace --output <workspace>/reports/validation-report.json
 ```
 
-Draft generation uses FedRAMP Rev 5 SSP heading conventions from `templates/fedramp-rev5-heading-map.json`. See `templates/fedramp-rev5-ssp-section-map.md` and https://www.fedramp.gov/rev5/documents-templates/ for the human template reference.
+Draft generation uses FedRAMP Rev 5 SSP heading conventions from `templates/fedramp-rev5-heading-map.json`.
+See `templates/fedramp-rev5-ssp-section-map.md` and https://www.fedramp.gov/rev5/documents-templates/ for the human template reference.
 
-The `fetch-oscal-baseline.sh` step imports the real NIST 800-53 Rev 5 catalog and FedRAMP Rev 5 baseline profile so the drafted SSP references authoritative content. Omit it (and `--baseline-profile`) to generate offline stub models instead; stubs must be replaced before authorization use.
+The `fetch-oscal-baseline.sh` step imports the real NIST 800-53 Rev 5 catalog and FedRAMP Rev 5 baseline profile.
+Then the drafted SSP can refer to that content.
+Omit that step and `--baseline-profile` to make offline stub models.
+Replace stubs before authorization use.
 
-Optionally cross-reference the drafted SSP against the FedRAMP 20x Key Security Indicators from the 2026 Consolidated Rules:
+Optionally compare the drafted SSP to the FedRAMP 20x Key Security Indicators from the 2026 Consolidated Rules:
 
 ```bash
 bash plugins/document-transform/oscal-document-workbench/scripts/fetch-fedramp-2026-rules.sh
@@ -30,17 +40,14 @@ bash plugins/document-transform/oscal-document-workbench/scripts/ksi-coverage-re
 
 ## Arguments
 
-- `<input>` — legacy source document path when extraction is required.
-- `<workspace>` — working directory for extracted content, Trestle files, reports, and review artifacts.
-- `<path>` — OSCAL file or package directory to validate.
-- `--output <path>` — output directory or report path depending on the script.
-- `--profile <name>` — optional baseline/profile label such as `fedramp-moderate`.
-- `--oscal-version <version>` — optional OSCAL version note for generated workspace metadata.
-- `--overwrite` — allow replacing an existing generated workspace where supported.
+- `<input>` : legacy source document path when extraction is required
+- `<workspace>` : working directory for extracted content, Trestle files, reports, and review artifacts
+- `--profile <name>` : optional baseline or profile label such as `fedramp-moderate`
+- `--overwrite` : replace an existing generated workspace where the script supports it
 
 ## Outputs
 
-Expected outputs may include:
+Expected outputs can include:
 
 - `extracted.md`
 - `source-map.csv`
@@ -53,15 +60,15 @@ Expected outputs may include:
 
 ## Exit codes
 
-- `0` — success
-- `2` — bad arguments, unreadable input, or unsafe overwrite attempt
-- `3` — validation or transformation failed
-- `5` — required external dependency is missing
-- `6` — unsupported format or structurally invalid OSCAL
+- `0` : success
+- `2` : bad arguments, unreadable input, or unsafe overwrite attempt
+- `3` : validation or transformation failed
+- `5` : required external dependency is missing
+- `6` : unsupported format or structurally invalid OSCAL
 
 ## Safety notes
 
-- Preserve source files unchanged.
+- Keep source files unchanged.
 - Maintain source traceability for every mapped OSCAL field.
 - Mark uncertain mappings as `needs_review`.
 - Do not treat structural validation as an audit opinion.

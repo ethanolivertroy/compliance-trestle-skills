@@ -1,6 +1,6 @@
 {
   "name": "compliance-trestle-toolkit",
-  "version": "0.1.0",
+  "version": "0.2.2",
   "description": "Agent-portable GRC, Compliance Trestle, and OSCAL document engineering package.",
   "instructions": [
     "../../AGENTS.md",
@@ -18,6 +18,10 @@
   "tools": [
     "../../plugins/document-transform/oscal-document-workbench/scripts/extract-legacy-doc.sh",
     "../../plugins/document-transform/oscal-document-workbench/scripts/bootstrap-trestle-workspace.sh",
+    "../../plugins/document-transform/oscal-document-workbench/scripts/fetch-oscal-baseline.sh",
+    "../../plugins/document-transform/oscal-document-workbench/scripts/draft-ssp-from-extraction.sh",
+    "../../plugins/document-transform/oscal-document-workbench/scripts/fetch-fedramp-2026-rules.sh",
+    "../../plugins/document-transform/oscal-document-workbench/scripts/ksi-coverage-report.sh",
     "../../plugins/document-transform/oscal-document-workbench/scripts/build-review-queue.sh",
     "../../plugins/document-transform/oscal-document-workbench/scripts/validate-oscal-package.sh",
     "../../scripts/trestle-workflow.sh"

@@ -8,7 +8,7 @@ Draft:
 
 - Control ID: AC-2
 - OSCAL target: `system-security-plan.control-implementation.implemented-requirements[AC-2]`
-- Statement: User account provisioning is initiated through the ticketing system and requires system owner approval. Privileged account access requires MFA.
+- Statement: User account provisioning starts through the ticketing system and requires system owner approval. Privileged account access requires MFA.
 - Source IDs: SRC-014
 - Status: mapped
 - Confidence: medium

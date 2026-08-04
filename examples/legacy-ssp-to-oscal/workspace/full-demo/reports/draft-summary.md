@@ -10,7 +10,8 @@
 - Import profile: trestle://profiles/acme-analytics-platform-profile/profile.json
 - Validation status: pass
 
-This draft uses FedRAMP Rev 5 SSP heading conventions for structure mapping only.
-If drafted without --baseline-profile, replace catalog stubs with authoritative
-FedRAMP/NIST OSCAL content (fetch-oscal-baseline.sh) before authorization use.
+This draft uses FedRAMP Rev 5 SSP heading conventions.
+Use those conventions for structure mapping only.
+If you drafted this SSP without `--baseline-profile`, replace catalog stubs with authoritative FedRAMP or NIST OSCAL content.
+Run `fetch-oscal-baseline.sh` before you use this SSP for authorization.
 Schema-valid OSCAL does not prove compliance effectiveness.

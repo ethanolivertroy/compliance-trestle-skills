@@ -9,12 +9,12 @@ Assemble edited SSP markdown into an OSCAL System Security Plan JSON file.
 
 ## Steps
 
-1. Verify we are in a trestle workspace.
+1. Check that you are in a trestle workspace.
 
-2. Parse $ARGUMENTS for:
+2. Read $ARGUMENTS for:
    - `markdown_dir` (`--markdown`): SSP markdown directory
-   - `output_ssp` (`--output`): Name for assembled SSP
-   - Optional: `--name`: Source SSP for metadata
+   - `output_ssp` (`--output`): name for the assembled SSP
+   - Optional: `--name`: source SSP for metadata
    - Optional: `--version`, `--regenerate`
 
 3. Run:
@@ -22,12 +22,13 @@ Assemble edited SSP markdown into an OSCAL System Security Plan JSON file.
    trestle author ssp-assemble --markdown <markdown_dir> --output <output_ssp>
    ```
 
-4. This creates an OSCAL SSP containing:
+4. This makes an OSCAL SSP that contains:
    - The resolved profile catalog
    - Implementation responses per component per control
    - Parameters and properties from component definitions
    - Implementation status per component
 
-5. Won't write if content unchanged (prevents false CI/CD triggers).
+5. The command does not write the file when content is unchanged.
+   This stops false CI/CD triggers.
 
-6. Show output location and suggest next steps (validate, distribute, filter).
+6. Show the output location. Suggest next steps: validate, distribute, or filter.

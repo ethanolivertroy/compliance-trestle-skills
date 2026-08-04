@@ -1,9 +1,9 @@
 ---
 name: trestle-workspace
 description: >-
-  Knowledge about Compliance Trestle workspace structure, initialization, and directory conventions.
-  Use when users ask about trestle workspaces, directory layout, .trestle config, model directories,
-  or how to set up and organize an OSCAL compliance workspace.
+  Use this skill for Compliance Trestle workspace structure, init, and directory conventions.
+  Use it for trestle workspaces, directory layout, .trestle config, and model directories.
+  Use it to set up and organize an OSCAL compliance workspace.
 allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 ---
 
@@ -11,14 +11,15 @@ allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 
 ## Prerequisites
 
-- Python 3.10-3.12 (Compliance Trestle does not yet support 3.13+)
-- On Python 3.14+, every trestle command prints a Pydantic V1 compatibility
-  `UserWarning`. It is expected on unsupported versions; 3.11/3.12 avoids it entirely.
-- Compliance Trestle installed: `pip install compliance-trestle`
+- Use Python 3.10-3.12. Compliance Trestle does not support Python 3.13 or later.
+- Python 3.14 and later print a Pydantic V1 `UserWarning` on every trestle command.
+  The warning is expected on unsupported versions. Python 3.11 and 3.12 do not print it.
+- Install Compliance Trestle: `pip install compliance-trestle`
 
 ## Workspace Structure
 
-A trestle workspace is an opinionated directory structure (similar to git) that manages OSCAL compliance documents.
+A trestle workspace is a fixed directory layout for OSCAL compliance documents.
+The layout is similar to a git repository.
 
 ### Core Directories
 
@@ -44,7 +45,8 @@ A trestle workspace is an opinionated directory structure (similar to git) that 
 
 ### Model Instance Layout
 
-Each model instance lives in its own subdirectory:
+Each model instance is in its own subdirectory:
+
 ```
 catalogs/
 └── nist-800-53/
@@ -53,29 +55,30 @@ catalogs/
 
 ## Initialization Modes
 
-`trestle init` creates the workspace. Three modes available:
+Run `trestle init` to create the workspace. Three modes are available:
 
 | Mode | Flag | Creates | Use Case |
 |------|------|---------|----------|
-| Full | `--full` (default) | `.trestle/` + `dist/` + all model dirs | Full functionality: local models, API, governed docs |
+| Full | `--full` (default) | `.trestle/` + `dist/` + all model dirs | All workspace features: local models, API, governed docs |
 | Local | `--local` | `.trestle/` + all model dirs (no `dist/`) | Local OSCAL model management only |
 | GovDocs | `--govdocs` | `.trestle/` only | Document governance only |
 
 ## Key Rules
 
-- File and directory names created by trestle MUST NOT be changed manually
-- Within one model directory, do not mix JSON and YAML formats
-- The `.trestle/` directory contains config files, caches, and templates
-- The `dist/` directory holds assembled/merged output files
-- Model files can be JSON (`.json`) or YAML (`.yaml`, `.yml`)
-- Default format is JSON; YAML is supported on a best-effort basis
+- Do not change file names or directory names that trestle creates.
+- Do not mix JSON and YAML in one model directory.
+- The `.trestle/` directory holds config files, caches, and templates.
+- The `dist/` directory holds assembled and merged output files.
+- Model files can be JSON (`.json`) or YAML (`.yaml`, `.yml`).
+- The default format is JSON. YAML support is limited.
 
 ## Configuration
 
-The workspace config lives at `.trestle/config.ini`. It can store task configurations and other settings used by trestle commands.
+The workspace config is at `.trestle/config.ini`.
+It stores task settings and other settings for trestle commands.
 
 ## Common Operations
 
-- **Check if workspace exists**: Look for `.trestle/` directory
-- **List models**: Check subdirectories of model-type directories (e.g., `catalogs/*/catalog.json`)
-- **Validate workspace**: Run `trestle validate -a` to validate all models
+- **Check if a workspace exists**: Look for the `.trestle/` directory.
+- **List models**: Check subdirectories of model-type directories. Example: `catalogs/*/catalog.json`.
+- **Validate workspace**: Run `trestle validate -a` to validate all models.

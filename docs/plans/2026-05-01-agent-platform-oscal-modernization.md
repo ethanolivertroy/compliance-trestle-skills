@@ -1,5 +1,7 @@
 # Agent Platform + OSCAL Document Modernization Implementation Plan
 
+> Historical plan snapshot from 2026-05-01. Paths such as `plugins/oscal`, `plugins/fedramp-ssp`, `docs/CLAUDE-COWORK.md`, `docs/ARCHITECTURE.md`, and `ROADMAP.md` can be absent now. Use `AGENTS.md`, `docs/OSCAL-DOCUMENT-WORKBENCH.md`, and `docs/AGENT-COMPATIBILITY.md` for the current layout. Do not treat this plan as current product documentation.
+
 > **For Hermes:** Use subagent-driven-development skill to implement this plan task-by-task.
 
 **Goal:** Reposition this repository from a Claude Code-only GRC plugin marketplace into a portable GRC/OSCAL engineering toolkit that works across top coding agents, desktop agent apps, and agent skill/plugin harnesses while making legacy PDF/DOCX SSP-to-OSCAL workflows simple and reliable.

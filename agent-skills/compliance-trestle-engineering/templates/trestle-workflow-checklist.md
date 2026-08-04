@@ -4,8 +4,8 @@
 
 - [ ] Workspace path:
 - [ ] Trestle version recorded:
-- [ ] OSCAL model type(s):
-- [ ] Applicable catalog/profile:
+- [ ] OSCAL model type or types:
+- [ ] Applicable catalog or profile:
 - [ ] Source package location:
 
 ## Source traceability
@@ -18,9 +18,9 @@
 ## Trestle operations
 
 - [ ] Workspace initialized
-- [ ] Catalog/profile/component/SSP files imported or created
+- [ ] Catalog, profile, component, or SSP files imported or created
 - [ ] Markdown authoring surface generated when applicable
-- [ ] OSCAL assembled/regenerated after edits
+- [ ] OSCAL assembled or regenerated after edits
 - [ ] Validation run or missing-tool status documented
 
 ## Review

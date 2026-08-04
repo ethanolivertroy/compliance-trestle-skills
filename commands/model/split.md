@@ -5,30 +5,30 @@ user-invocable: true
 argument-hint: "<file> <element_path>"
 ---
 
-Split an OSCAL model file into smaller sub-component files for easier editing.
+Split an OSCAL model file into smaller sub-component files to make editing easier.
 
 ## Steps
 
-1. Verify we are in a trestle workspace and navigate to the model directory.
+1. Check that you are in a trestle workspace. Go to the model directory.
 
-2. Parse $ARGUMENTS for:
-   - `file` (`-f`): The JSON/YAML file to split
-   - `element_path` (`-e`): The element path(s) to split out (comma-separated)
+2. Read $ARGUMENTS for:
+   - `file` (`-f`): the JSON or YAML file to split
+   - `element_path` (`-e`): the element path or paths to split out (comma-separated)
 
-3. Explain element path syntax:
+3. Tell the user the element path syntax:
    - Use dot notation: `catalog.metadata`, `catalog.groups`
-   - Use `.*` suffix to split array items into individual files: `catalog.groups.*`
-   - Without `.*`, arrays go into a single file: `catalog.groups`
-   - Quote paths containing `*` on Unix shells
+   - Use a `.*` suffix to split array items into individual files: `catalog.groups.*`
+   - Without `.*`, arrays go into one file: `catalog.groups`
+   - Quote paths that contain `*` on Unix shells
 
 4. Run the split command:
    ```
    trestle split -f <file> -e '<element_path>'
    ```
 
-5. Show the resulting directory structure after splitting.
+5. Show the directory structure after the split.
 
-6. Explain:
-   - How split files can be edited independently
-   - Use `trestle merge` to recombine
-   - Use `trestle describe` to inspect split files
+6. Tell the user:
+   - Split files can be edited independently.
+   - Use `trestle merge` to recombine.
+   - Use `trestle describe` to check split files.

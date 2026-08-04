@@ -1,10 +1,10 @@
 ---
 name: trestle-authoring-workflow
 description: >-
-  Knowledge about the Compliance Trestle authoring workflow: the generate-edit-assemble cycle
-  for converting OSCAL documents to markdown and back. Use when users ask about authoring
-  catalogs, profiles, SSPs, or component definitions, editing control markdown, YAML headers,
-  or the roundtrip workflow between JSON and markdown.
+  Use this skill for the Compliance Trestle authoring workflow.
+  The workflow is the generate-edit-assemble cycle that converts OSCAL documents to markdown and back.
+  Use it for authoring catalogs, profiles, SSPs, or component definitions.
+  Use it for editing control markdown, YAML headers, or the roundtrip workflow between JSON and markdown.
 allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 ---
 
@@ -12,13 +12,15 @@ allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 
 ## The Generate-Edit-Assemble Cycle
 
-Trestle's authoring tools convert OSCAL JSON to markdown for human editing, then back to JSON:
+Trestle authoring tools convert OSCAL JSON to markdown for human editing.
+Then they convert markdown back to JSON:
 
 ```
 JSON (OSCAL) → generate → Markdown (edit) → assemble → JSON (OSCAL)
 ```
 
-This cycle is continuous: after initial generation, you repeatedly edit markdown and reassemble.
+This cycle continues.
+After the first generate, edit markdown and assemble again.
 
 ## Author Commands by Model Type
 
@@ -44,11 +46,11 @@ This cycle is continuous: after initial generation, you repeatedly edit markdown
 
 ### Control Markdown File
 Each control gets its own `.md` file with:
-1. **YAML header** - metadata, parameters, properties
-2. **Control title** - `# control-id - [Group Title] Control Title`
-3. **Control Statement** - `## Control Statement` with labeled parts
-4. **Control guidance** - `## Control guidance`
-5. **Additional sections** - Implementation responses, component sections
+1. **YAML header**: metadata, parameters, properties
+2. **Control title**: `# control-id - [Group Title] Control Title`
+3. **Control Statement**: `## Control Statement` with labeled parts
+4. **Control guidance**: `## Control guidance`
+5. **Additional sections**: Implementation responses, component sections
 
 ### YAML Header Tags (x-trestle-*)
 | Tag | Purpose |
@@ -110,30 +112,31 @@ x-trestle-set-params:
 
 ## Implementation Status Values
 Controls track implementation status with these values:
-- `implemented` - Fully implemented
-- `partial` - Partially implemented
-- `planned` - Implementation is planned
-- `alternative` - Alternative implementation
-- `not-applicable` - Control is not applicable
+- `implemented`: Fully implemented
+- `partial`: Partially implemented
+- `planned`: Implementation is planned
+- `alternative`: Alternative implementation
+- `not-applicable`: Control is not applicable
 
 ## Control Origination Values
-- `organization` - Organization-level
-- `system-specific` - System-specific
-- `customer-configured` - Customer configured
-- `customer-provided` - Customer provided
-- `inherited` - Inherited from another system
+- `organization`: Organization-level
+- `system-specific`: System-specific
+- `customer-configured`: Customer configured
+- `customer-provided`: Customer provided
+- `inherited`: Inherited from another system
 
 ## CI/CD Integration
-The authoring tools are designed for CI/CD pipelines:
-- Assemble commands only write output if content changed (prevents unnecessary triggers)
-- `--set-parameters` limits what can change during automated assembly
-- `--required-sections` and `--allowed-sections` enforce document structure
-- Individual control markdown files enable fine-grained git tracking
+Use the authoring tools in CI/CD pipelines:
+- Assemble commands write output only if content changed. This prevents extra triggers.
+- `--set-parameters` limits what can change during automated assembly.
+- `--required-sections` and `--allowed-sections` check document structure.
+- Individual control markdown files support fine-grained git tracking.
 
 ## Multi-Repository Coordination
 
-Large organizations split OSCAL artifacts across multiple Git repositories aligned to
-ownership boundaries. Trestle's authoring tools support this through CI/CD-driven propagation.
+Large organizations split OSCAL artifacts across multiple Git repositories.
+The split follows ownership boundaries.
+Trestle authoring tools support this through CI/CD-driven propagation.
 
 ### Repository Topology
 
@@ -150,18 +153,18 @@ compdef-repo (Vendors / Control Providers)
 ssp-repo (System Owners)
 ```
 
-Each repository contains its own trestle workspace (`.trestle/` directory) and manages
-artifacts independently with its own CI/CD pipeline.
+Each repository contains its own trestle workspace (`.trestle/` directory).
+Each repository manages artifacts independently with its own CI/CD pipeline.
 
 ### Change Propagation Pattern
 
 When an upstream artifact changes:
 
-1. Upstream repo merges markdown edits to main
-2. CI/CD runs `trestle author *-assemble` to rebuild OSCAL JSON
-3. If JSON changed, CI/CD creates a PR in each downstream repository
-4. Downstream owners review the PR, which pulls the updated upstream artifact
-5. On merge, the downstream CI/CD assembles its own artifacts with the new input
+1. Upstream repo merges markdown edits to main.
+2. CI/CD runs `trestle author *-assemble` to rebuild OSCAL JSON.
+3. If JSON changed, CI/CD creates a PR in each downstream repository.
+4. Downstream owners review the PR, which pulls the updated upstream artifact.
+5. On merge, the downstream CI/CD assembles its own artifacts with the new input.
 
 This pattern uses `repository_dispatch` events (GitHub Actions) or cross-project triggers
 (GitLab CI) to connect repositories.
@@ -174,17 +177,18 @@ This pattern uses `repository_dispatch` events (GitHub Actions) or cross-project
 | Ownership | Same team owns all artifacts | Different teams own different artifacts |
 | Release cadence | Artifacts change together | Independent versioning needed |
 | Access control | Same permissions for all | Different access per artifact type |
-| Complexity | Simpler setup and maintenance | Better separation of concerns |
+| Complexity | Simpler setup and maintenance | Clearer ownership split |
 
 **Start with a single repo.** Split when ownership boundaries emerge or when
 independent versioning is required.
 
 ## Two-Phase Component Definition Authoring
 
-Component definitions combine structured rule data with narrative prose. Trestle supports
-a two-phase authoring pattern that uses the best tool for each type of content.
+Component definitions combine structured rule data with narrative prose.
+Trestle supports a two-phase authoring pattern.
+Use the best tool for each type of content.
 
-### Phase 1: Rules via CSV Spreadsheet
+### Phase 1: Rules with CSV Spreadsheet
 
 ```bash
 # CSV contains structured mappings: rules, parameters, control associations
@@ -192,15 +196,16 @@ trestle task csv-to-oscal-cd
 ```
 
 The CSV captures:
-- `Rule_Id`, `Rule_Description` — the technical rule
-- `Control_Id_List` — which regulation controls this rule implements
-- `Parameter_Id`, `Parameter_Value_Alternatives` — configurable parameters
-- `Component_Type` — `Service` (control-to-rule) or `Validation` (rule-to-check)
+- `Rule_Id`, `Rule_Description`: the technical rule
+- `Control_Id_List`: which regulation controls this rule implements
+- `Parameter_Id`, `Parameter_Value_Alternatives`: configurable parameters
+- `Component_Type`: `Service` (control-to-rule) or `Validation` (rule-to-check)
 
-Vendors manage this CSV in spreadsheet tools. It is committed to Git and
-converted to OSCAL JSON via the `csv-to-oscal-cd` task.
+Vendors manage this CSV in spreadsheet tools.
+It is committed to Git.
+The `csv-to-oscal-cd` task converts it to OSCAL JSON.
 
-### Phase 2: Responses via Markdown
+### Phase 2: Responses with Markdown
 
 ```bash
 # Generate markdown from the Phase 1 component definition
@@ -216,32 +221,32 @@ The markdown includes:
 - Read-only rules section (from Phase 1 CSV data)
 - Read-only control description and guidance (from catalog/profile)
 - Editable implementation response sections (prose describing HOW the control is met)
-- Implementation status (`implemented`, `partial`, `planned`, etc.)
+- Implementation status (`implemented`, `partial`, `planned`, and related values)
 
 ### Why Two Phases?
 
-- **Structured data** (rules, parameters, mappings) is best managed in spreadsheets
-- **Narrative prose** (implementation descriptions) is best edited as markdown
-- Different personas may own each phase (security engineers write rules; product owners write prose)
-- Phase 1 can be automated from tooling; Phase 2 requires human judgment
+- **Structured data** (rules, parameters, mappings) is best managed in spreadsheets.
+- **Narrative prose** (implementation descriptions) is best edited as markdown.
+- Different personas can own each phase. Security engineers write rules. Product owners write prose.
+- Phase 1 can be automated from tooling. Phase 2 needs human judgment.
 
 ## Git-Based Authoring Workflow
 
-Trestle's authoring tools are designed for Git-based collaboration with CI/CD automation.
+Trestle authoring tools support Git-based collaboration with CI/CD automation.
 
 ### PR-Based Review Cycle
 
-1. Author edits markdown on a feature branch
-2. Opens a PR for peer review
-3. CI/CD runs `trestle validate` on the PR to catch errors early
-4. Reviewers approve; PR is merged to main
-5. CI/CD on main runs `trestle author *-assemble` to rebuild OSCAL JSON
-6. If JSON changed, CI/CD commits the updated JSON and (optionally) triggers downstream repos
+1. Author edits markdown on a feature branch.
+2. Opens a PR for peer review.
+3. CI/CD runs `trestle validate` on the PR to catch errors early.
+4. Reviewers approve. The PR is merged to main.
+5. CI/CD on main runs `trestle author *-assemble` to rebuild OSCAL JSON.
+6. If JSON changed, CI/CD commits the updated JSON. It can also trigger downstream repos.
 
 ### Conditional Write Behavior
 
-Assemble commands **only write output if content changed**. This prevents:
-- Unnecessary git commits (no-op changes to JSON)
+Assemble commands write output only if content changed. This prevents:
+- Extra git commits (no-op JSON changes)
 - Infinite CI/CD trigger loops between repositories
 - Misleading git history with empty diffs
 
@@ -252,12 +257,13 @@ Assemble commands **only write output if content changed**. This prevents:
 | `main` | Require PR review + CI/CD pass | Artifact owner (per persona) |
 | Feature branches | No protection | Any contributor |
 
-Individual control markdown files enable fine-grained git tracking — reviewers can see
-exactly which controls were modified in a PR diff.
+Individual control markdown files support fine-grained git tracking.
+Reviewers can see which controls changed in a PR diff.
 
 ## Models Without Author Commands
 
-Not all OSCAL models have `trestle author` generate/assemble commands. The following models use a **JSON-based workflow** instead:
+Not all OSCAL models have `trestle author` generate or assemble commands.
+The following models use a **JSON-based workflow** instead:
 
 | Model | `trestle author` Support | Workflow |
 |-------|--------------------------|----------|

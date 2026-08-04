@@ -1,8 +1,4 @@
-# Compliance Trestle Rules (legacy Windsurf path)
-
-Cognition renamed Windsurf to Devin Desktop on 2026-06-02.
-Prefer `.devin/rules/compliance-trestle.md`.
-This file stays as a fallback for older Windsurf installs and Devin Desktop fallback lookup.
+# Compliance Trestle Rules
 
 Read `AGENTS.md` before you edit.
 This repository is an agent-portable Compliance Trestle and OSCAL toolkit.

@@ -18,7 +18,7 @@
     },
     {
       "pattern": "system environment|operating environment|deployment model",
-      "oscal_target": "system-security-plan.system-characteristics.security-sensitivity-level",
+      "oscal_target": "system-security-plan.system-characteristics.network-architecture.description",
       "default_status": "needs_review",
       "fedramp_template_section": "System Environment"
     },
@@ -30,7 +30,7 @@
     },
     {
       "pattern": "^users$|user groups|user types",
-      "oscal_target": "system-security-plan.system-characteristics.system-information",
+      "oscal_target": "system-security-plan.system-implementation.users",
       "default_status": "needs_review",
       "fedramp_template_section": "System Users"
     },

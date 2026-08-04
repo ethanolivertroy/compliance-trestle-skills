@@ -9,19 +9,21 @@ Generate System Security Plan (SSP) markdown from a profile and optional compone
 
 ## Steps
 
-1. Verify we are in a trestle workspace.
+1. Check that you are in a trestle workspace.
 
-2. Parse $ARGUMENTS for:
-   - `profile_name` (`--profile`): Profile defining the control baseline
-   - `output_dir` (`--output`): Markdown output directory
-   - Optional: `--compdefs`: Comma-separated list of component-definition names
+2. Read $ARGUMENTS for:
+   - `profile_name` (`--profile`): profile that defines the control baseline
+   - `output_dir` (`--output`): markdown output directory
+   - Optional: `--compdefs`: comma-separated list of component-definition names
    - Optional: `--yaml`, `--overwrite-header-values`, `--force-overwrite`
-   - Optional: `--include-all-parts`: Include all parts (default: only parts with rules)
+   - Optional: `--include-all-parts`: include all parts (default: only parts with rules)
 
-3. Ensure the profile's imports resolve correctly (use `trestle href` if needed).
+3. Make sure the profile imports resolve correctly. Use `trestle href` if needed.
 
-4. Check the profile file is writable. Some import paths create `profile.json` read-only,
-   which makes `ssp-generate` fail with errors like `sed: permission denied`. Fix with:
+4. Check that the profile file is writable.
+   Some import paths make `profile.json` read-only.
+   Then `ssp-generate` fails with errors such as `sed: permission denied`.
+   Fix with:
    ```
    chmod u+w profiles/<profile_name>/profile.json
    ```
@@ -31,31 +33,33 @@ Generate System Security Plan (SSP) markdown from a profile and optional compone
    trestle author ssp-generate --profile <profile_name> --output <output_dir> [--compdefs <comp1,comp2>]
    ```
 
-   Note: for a fresh baseline (e.g., NIST 800-53 High), expect a long stream of
-   parameter/ODP warnings about values not being set. These are expected for an
-   unpopulated template and are resolved as `ssp-values` are filled in. They do
-   not indicate a failure.
+   Note: for a fresh baseline such as NIST 800-53 High, expect many parameter and ODP warnings.
+   The warnings say values are not set.
+   These warnings are expected for an unpopulated template.
+   They are resolved when `ssp-values` are filled in.
+   They do not mean the command failed.
 
 6. Show the generated structure:
    - One markdown file per control
    - Each control has sections per statement part
    - Each part has response sections per component
-   - "This System" component is always present
+   - The "This System" component is always present
    - Named components come from component definitions
-   - If no `--compdefs` were provided, only "This System" sections appear
+   - If `--compdefs` is not provided, only "This System" sections appear
 
-7. Explain the markdown structure:
+7. Tell the user the markdown structure:
    - YAML header: parameters, rules, rule parameters
    - Control statement (read-only)
    - Implementation sections per part per component
    - `#### Implementation Status:` per component
    - `#### Rules:` (read-only, from component definitions)
 
-8. Explain what to edit:
+8. Tell the user what to edit:
    - Replace `<!-- Add control implementation description here -->` comments with prose
    - Set `ssp-values:` for parameters
    - Set implementation status values
    - Add implementation prose for each component per statement part
 
-9. Next steps: Edit all control responses, then `ssp-assemble` (the author command,
-   `trestle author ssp-assemble`, not the generic `trestle assemble`).
+9. Next steps: edit all control responses, then run `ssp-assemble`.
+   Use the author command `trestle author ssp-assemble`.
+   Do not use the generic `trestle assemble`.

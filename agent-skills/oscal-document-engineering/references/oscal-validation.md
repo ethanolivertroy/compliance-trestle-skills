@@ -1,10 +1,11 @@
 # OSCAL Validation
 
-Validation proves structure and schema conformance. It does not prove the system is compliant or authorized.
+Validation proves structure and schema conformance.
+It does not prove that the system is compliant or authorized.
 
 ## Recommended validation layers
 
-1. JSON/XML/YAML syntax validation.
+1. JSON, XML, or YAML syntax validation.
 2. OSCAL schema validation with `oscal-cli` or equivalent.
 3. Compliance Trestle validation for workspace consistency.
 4. Source traceability review.
@@ -14,20 +15,21 @@ Validation proves structure and schema conformance. It does not prove the system
 
 ```bash
 trestle validate -f <oscal-file>
-trestle validate -f <oscal-file>
+trestle validate -a
+oscal-cli validate --disable-constraint-validation <oscal-file>
 ```
 
 ## Report fields
 
-A validation report should include:
+A validation report must include:
 
-- file validated;
-- validator command;
-- validator version if available;
-- status: pass, fail, partial, or not_run;
-- errors and warnings;
-- validation timestamp;
-- reviewer notes.
+- file validated
+- validator command
+- validator version if available
+- status: pass, fail, partial, or not_run
+- errors and warnings
+- validation timestamp
+- reviewer notes
 
 ## Common failures
 

@@ -5,7 +5,7 @@ Use this template for `implemented-requirements` and control implementation stat
 ## Control implementation draft
 
 - Control ID:
-- Statement/part ID:
+- Statement or part ID:
 - Responsible role:
 - Component UUID or title:
 - Implementation statement:
@@ -19,5 +19,5 @@ Use this template for `implemented-requirements` and control implementation stat
 
 - Use source text to support every implementation claim.
 - If the source only states a policy requirement, do not rewrite it as implemented technical reality unless evidence supports that.
-- If inheritance is implied, record `needs_review` until the provider/component responsibility is modeled.
+- If inheritance is implied, record `needs_review` until the provider or component responsibility is modeled.
 - Schema-valid output does not prove compliance effectiveness.

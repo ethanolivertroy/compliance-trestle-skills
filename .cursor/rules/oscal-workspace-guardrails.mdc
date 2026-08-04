@@ -5,13 +5,14 @@ paths:
   - "examples/legacy-ssp-to-oscal/**"
 ---
 
-When working in an OSCAL import workspace:
+When you work in an OSCAL import workspace:
 
-- Preserve original source files in `input/` unchanged.
-- Maintain `source-map.csv` traceability for every mapped OSCAL field.
-- Mark uncertain mappings as `needs_review`; do not invent system boundaries, control implementations, or authorization conclusions.
+- Keep original source files in `input/` unchanged.
+- Maintain `source-map.csv` source traceability for every mapped OSCAL field.
+- Mark uncertain mappings as `needs_review`.
+- Do not invent system boundaries, control implementations, or authorization conclusions.
 - Do not commit real customer SSPs, credentials, diagrams, or sensitive evidence.
-- Produce import summary, validation report, and unmapped/review-queue artifacts before claiming success.
-- Schema-valid OSCAL is structural validation only, not an audit opinion.
+- Make import summary, validation report, and unmapped or review-queue artifacts before you claim success.
+- Schema-valid OSCAL is structural validation only. It is not an audit opinion.
 
 Use `/import-legacy-ssp` or `agent-skills/oscal-document-engineering/SKILL.md` for the full workflow.

@@ -1,9 +1,9 @@
 ---
 name: trestle-assessment
 description: >-
-  Knowledge about OSCAL assessment plans and assessment results models in Compliance Trestle.
-  Use when users ask about assessment plans, assessment results, security assessments, SAP,
-  SAR, assessment activities, findings, observations, or assessment-related OSCAL models.
+  Use this skill for OSCAL assessment plans and assessment results models in Compliance Trestle.
+  Use it for assessment plans, assessment results, security assessments, SAP, SAR,
+  assessment activities, findings, observations, or assessment-related OSCAL models.
 allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 ---
 
@@ -11,14 +11,15 @@ allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 
 ## Overview
 
-OSCAL defines two assessment-related models:
-- **Assessment Plan (SAP)**: Defines the scope, methodology, and schedule for a security assessment
-- **Assessment Results (SAR)**: Documents the findings, observations, and risks from an assessment
+OSCAL defines two assessment models:
+- **Assessment Plan (SAP)**: This model defines the scope, method, and schedule for a security assessment.
+- **Assessment Results (SAR)**: This model records findings, observations, and risks from an assessment.
 
 ## Assessment Plan (SAP)
 
 ### Purpose
-Defines what will be assessed, how, when, and by whom. Corresponds to a Security Assessment Plan in FedRAMP/NIST terminology.
+The plan defines what you assess, how you assess it, when you assess it, and who assesses it.
+The model matches a Security Assessment Plan in FedRAMP and NIST terms.
 
 ### Key Components
 
@@ -50,9 +51,9 @@ Defines what will be assessed, how, when, and by whom. Corresponds to a Security
 
 | Field | Purpose |
 |-------|---------|
-| `import-ssp` | References the SSP being assessed |
+| `import-ssp` | References the SSP under assessment |
 | `reviewed-controls` | Controls in scope for this assessment |
-| `assessment-subjects` | Systems, components, or inventories being assessed |
+| `assessment-subjects` | Systems, components, or inventories under assessment |
 | `assessment-assets` | Tools and platforms used for assessment |
 | `tasks` | Scheduled assessment activities |
 | `local-definitions.activities` | Assessment activities and their steps |
@@ -68,7 +69,8 @@ assessment-plans/
 ## Assessment Results (SAR)
 
 ### Purpose
-Documents the outcomes of a security assessment, including findings, observations, and risk determinations.
+The results record the outcomes of a security assessment.
+Outcomes include findings, observations, and risk determinations.
 
 ### Key Components
 
@@ -125,7 +127,7 @@ Documents the outcomes of a security assessment, including findings, observation
 | State | Meaning |
 |-------|---------|
 | `satisfied` | Control objective is met |
-| `not-satisfied` | Control objective is not met (generates POA&M entry) |
+| `not-satisfied` | The control objective is not met. Make a POA&M entry |
 
 ### Workspace Location
 ```
@@ -149,7 +151,8 @@ trestle validate -t assessment-results -n my-results
 ```
 
 ### Split and Merge
-Assessment models support split/merge like other OSCAL models:
+Assessment models support split and merge.
+Other OSCAL models also support split and merge:
 ```bash
 trestle split -t assessment-results -n my-results -e 'assessment-results.results'
 trestle merge -t assessment-results -n my-results -e 'results'
@@ -161,20 +164,22 @@ trestle merge -t assessment-results -n my-results -e 'results'
 Catalog → Profile → SSP → Assessment Plan → Assessment Results → POA&M
 ```
 
-- Assessment Plan references an SSP via `import-ssp`
-- Assessment Results reference an Assessment Plan via `import-ap`
-- Findings in Assessment Results feed into POA&M items
-- Controls assessed are selected from the SSP's profile
+- An Assessment Plan references an SSP with `import-ssp`.
+- Assessment Results reference an Assessment Plan with `import-ap`.
+- Findings in Assessment Results feed into POA&M items.
+- Controls assessed are selected from the SSP profile.
 
 ## Important: JSON-Based Workflow
 
-Assessment models do **not** have `trestle author` generate/assemble commands. Unlike catalogs, profiles, component definitions, and SSPs, assessment plans and assessment results use a **JSON-based workflow**:
+Assessment models do not have `trestle author` generate or assemble commands.
+Catalogs, profiles, component definitions, and SSPs use those commands.
+Assessment plans and assessment results use a **JSON-based workflow**:
 
 ```
 create → split → edit JSON → merge → validate
 ```
 
-Direct JSON editing via the split/merge cycle is the correct approach for these models.
+Edit JSON directly with the split and merge cycle. That is the correct approach for these models.
 
 ## Additional Resources
 

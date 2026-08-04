@@ -1,10 +1,15 @@
 # Tutorial: legacy SSP to OSCAL with an agent
 
-This tutorial uses synthetic data only. Do not commit real SSPs, customer evidence, secrets, or authorization artifacts.
+This tutorial uses synthetic data only.
+Do not commit real SSPs, customer evidence, secrets, or authorization artifacts.
 
 ## Goal
 
-Take a legacy Markdown/PDF/DOCX/TXT SSP package, extract it, build a source map, bootstrap a Compliance Trestle workspace, and generate a review queue before relying on generated OSCAL.
+Take a legacy Markdown, PDF, DOCX, or TXT SSP package.
+Extract it.
+Build a source map.
+Bootstrap a Compliance Trestle workspace.
+Make a review queue before you rely on generated OSCAL.
 
 ## Run the demo
 
@@ -29,4 +34,5 @@ Use this repository's AGENTS.md and agent-skills/oscal-document-engineering/SKIL
 
 ## Human review
 
-Before using generated OSCAL for assessment work, review all pending, unmapped, and `needs_review` rows. Require evidence for implementation claims.
+Before you use generated OSCAL for assessment work, review all pending, unmapped, and `needs_review` rows.
+Require evidence for implementation claims.

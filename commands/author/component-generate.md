@@ -9,11 +9,11 @@ Generate editable markdown from an OSCAL component definition.
 
 ## Steps
 
-1. Verify we are in a trestle workspace.
+1. Check that you are in a trestle workspace.
 
-2. Parse $ARGUMENTS for:
-   - `compdef_name` (`--name`): Component definition name
-   - `output_dir` (`--output`): Markdown output directory
+2. Read $ARGUMENTS for:
+   - `compdef_name` (`--name`): component definition name
+   - `output_dir` (`--output`): markdown output directory
    - Optional: `--yaml`, `--overwrite-header-values`, `--force-overwrite`
 
 3. Run:
@@ -23,13 +23,13 @@ Generate editable markdown from an OSCAL component definition.
 
 4. Show the generated structure:
    - Separate directories per component
-   - One markdown file per control within each component directory
+   - One markdown file per control in each component directory
    - YAML headers with rules, parameters, and implementation details
 
-5. Explain what can be edited:
+5. Tell the user what they can edit:
    - Implementation prose per control per component
-   - Parameter values (component-values)
+   - Parameter values (`component-values`)
    - Implementation status
-   - Rules are read-only (come from the component definition)
+   - Rules are read-only. They come from the component definition.
 
-6. Next steps: Edit markdown, then `component-assemble`.
+6. Next steps: edit the markdown, then run `component-assemble`.

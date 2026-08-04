@@ -6,14 +6,15 @@ SOURCE="oscal-document-workbench:bootstrap-trestle-workspace"
 WORKSPACE=""
 PROFILE=""
 OSCAL_VERSION="1.1.3"
+OSCAL_VERSION_SET=0
 OVERWRITE=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --profile) shift; PROFILE="${1:-}" ;;
     --profile=*) PROFILE="${1#*=}" ;;
-    --oscal-version) shift; OSCAL_VERSION="${1:-}" ;;
-    --oscal-version=*) OSCAL_VERSION="${1#*=}" ;;
+    --oscal-version) shift; OSCAL_VERSION="${1:-}"; OSCAL_VERSION_SET=1 ;;
+    --oscal-version=*) OSCAL_VERSION="${1#*=}"; OSCAL_VERSION_SET=1 ;;
     --overwrite) OVERWRITE=1 ;;
     --help|-h) echo "Usage: $0 <workspace> [--profile <name>] [--oscal-version <version>] [--overwrite]"; exit 0 ;;
     --*) echo "[$SOURCE] unknown flag: $1" >&2; exit 2 ;;
@@ -38,11 +39,18 @@ fi
 mkdir -p "$TRESTLE_DIR"
 
 if command -v trestle >/dev/null 2>&1; then
-  (cd "$TRESTLE_DIR" && trestle init >/tmp/trestle-init.out 2>/tmp/trestle-init.err) || {
-    cat /tmp/trestle-init.err >&2
+  init_err="$(mktemp)"
+  if ! (cd "$TRESTLE_DIR" && trestle init >"$init_err" 2>&1); then
+    cat "$init_err" >&2
+    rm -f "$init_err"
     echo "[$SOURCE] trestle init failed" >&2
     exit 3
-  }
+  fi
+  rm -f "$init_err"
+  detected_version="$(trestle version 2>/dev/null | sed -n 's/.*OSCAL version //p' | awk '{print $1}')"
+  if [[ "$OSCAL_VERSION_SET" -eq 0 && -n "$detected_version" ]]; then
+    OSCAL_VERSION="$detected_version"
+  fi
   TRESTLE_STATUS="initialized-with-trestle"
 else
   mkdir -p "$TRESTLE_DIR/system-security-plans" "$TRESTLE_DIR/catalogs" "$TRESTLE_DIR/profiles" "$TRESTLE_DIR/component-definitions"
@@ -56,11 +64,13 @@ Status: $TRESTLE_STATUS
 Profile: ${PROFILE:-not specified}
 OSCAL version target: $OSCAL_VERSION
 
-Use this workspace to author and validate OSCAL. If this was scaffolded without Trestle, install Compliance Trestle and run \`trestle init\` here before full authoring.
+Use this workspace to author and validate OSCAL.
+If this workspace was scaffolded without Trestle, install Compliance Trestle.
+Run \`trestle init\` here before full authoring.
 
 Guardrails:
-- Preserve source traceability.
-- Mark uncertain mappings as needs_review.
+- Keep source traceability.
+- Mark uncertain mappings as \`needs_review\`.
 - Validate before delivery.
 EOF
 
@@ -75,17 +85,17 @@ cat > "$REPORT_DIR/import-summary.md" <<EOF
 
 ## Next steps
 
-1. Review extracted source material.
-2. Populate source traceability map.
-3. Map content into OSCAL SSP structure.
+1. Review the extracted source material.
+2. Make the source traceability map.
+3. Map content to the OSCAL SSP structure.
 4. Run validation.
-5. Resolve needs_review items.
+5. Resolve \`needs_review\` items.
 EOF
 
 cat > "$REPORT_DIR/unmapped-items.md" <<EOF
 # Unmapped Items
 
-Record source sections that could not be confidently mapped to OSCAL.
+Record source sections that have no OSCAL mapping.
 
 | Source ID | Reason | Recommendation | Status |
 |---|---|---|---|

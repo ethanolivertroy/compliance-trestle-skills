@@ -19,11 +19,11 @@ Human-in-the-loop review workflow for source traceability and mapping quality.
 
 1. Load `source-map.csv` and any generated `reports/review-queue.md`.
 2. For each `needs_review` or unmapped row:
-   - confirm the source text supports the OSCAL target;
-   - mark unsupported claims `needs_review` or `reject`;
-   - identify missing evidence;
-   - preserve reviewer notes.
-3. Regenerate or update the review queue:
+   - make sure the source text supports the OSCAL target
+   - mark unsupported claims `needs_review` or `reject`
+   - identify missing evidence
+   - keep reviewer notes
+3. Make or update the review queue:
 
 ```bash
 bash plugins/document-transform/oscal-document-workbench/scripts/build-review-queue.sh <workspace>/extracted/source-map.csv --output <workspace>/reports/review-queue.md
@@ -34,11 +34,21 @@ bash plugins/document-transform/oscal-document-workbench/scripts/build-review-qu
 
 ## Reviewer decisions
 
-Use explicit statuses in the traceability map:
+Use explicit statuses in the traceability map.
+
+Allowed `source-map.csv` statuses:
 
 - `mapped`
 - `needs_review`
 - `unmapped`
 - `reject`
+
+Allowed reviewer decisions in the queue. Keep these separate from mapping status:
+
+- `approve`
+- `remap`
+- `reject`
+- `needs_more_evidence`
+- `defer`
 
 Do not silently rewrite uncertain source statements as implemented technical reality.

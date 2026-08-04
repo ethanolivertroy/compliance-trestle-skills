@@ -9,21 +9,22 @@ Merge split OSCAL sub-component files back into their parent file.
 
 ## Steps
 
-1. Verify we are in a trestle workspace.
+1. Check that you are in a trestle workspace.
 
-2. Parse $ARGUMENTS for:
-   - `element_path` (`-e`): The element path to merge (must have at least 2 elements)
+2. Read $ARGUMENTS for:
+   - `element_path` (`-e`): the element path to merge (must have at least 2 elements)
    - Use `.*` to merge all sub-components: `catalog.*`
 
-3. Navigate to the correct directory (merge is relative to current working directory).
+3. Go to the correct directory. Merge is relative to the working directory.
 
 4. Run the merge command:
    ```
    trestle merge -e '<element_path>'
    ```
 
-5. This recursively merges any split sub-components before merging the target.
+5. The command first merges any split sub-components. Then it merges the target.
 
-6. Show the resulting file structure after merging.
+6. Show the file structure after the merge.
 
-7. Note: The merge command is the reverse of split. It combines files from subdirectories back into the parent JSON/YAML file.
+7. Note: the merge command is the reverse of split.
+   It combines files from subdirectories back into the parent JSON or YAML file.

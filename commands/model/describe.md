@@ -5,15 +5,15 @@ user-invocable: true
 argument-hint: "<file> [element_path]"
 ---
 
-Inspect and describe the structure of an OSCAL model file.
+Show the structure of an OSCAL model file.
 
 ## Steps
 
-1. Verify we are in a trestle workspace.
+1. Check that you are in a trestle workspace.
 
-2. Parse $ARGUMENTS for:
-   - `file` (`-f`): Path to the model file
-   - `element_path` (`-e`): Optional element path to probe deeper
+2. Read $ARGUMENTS for:
+   - `file` (`-f`): path to the model file
+   - `element_path` (`-e`): optional element path for a deeper view
 
 3. Run the describe command:
    ```
@@ -27,9 +27,9 @@ Inspect and describe the structure of an OSCAL model file.
    - For strings: value up to 100 characters
    - For split files: type shows as `stripped.<Type>`
 
-5. Present the output in a readable format.
+5. Show the output in a readable format.
 
 6. Suggest follow-up actions:
-   - Probe deeper with element paths (e.g., `catalog.groups.0.controls.3`)
+   - Look deeper with element paths such as `catalog.groups.0.controls.3`
    - Split large elements for editing
    - Note: wildcards (*) and commas are not supported in describe element paths

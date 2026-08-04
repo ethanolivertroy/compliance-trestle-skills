@@ -9,12 +9,12 @@ Assemble edited component definition markdown into OSCAL JSON.
 
 ## Steps
 
-1. Verify we are in a trestle workspace.
+1. Check that you are in a trestle workspace.
 
-2. Parse $ARGUMENTS for:
-   - `markdown_dir` (`--markdown`): Markdown directory
-   - `output_compdef` (`--output`): Name for assembled component definition
-   - Optional: `--name`: Source component definition
+2. Read $ARGUMENTS for:
+   - `markdown_dir` (`--markdown`): markdown directory
+   - `output_compdef` (`--output`): name for the assembled component definition
+   - Optional: `--name`: source component definition
    - Optional: `--version`, `--regenerate`
 
 3. Run:
@@ -22,6 +22,6 @@ Assemble edited component definition markdown into OSCAL JSON.
    trestle author component-assemble --markdown <markdown_dir> --output <output_compdef>
    ```
 
-4. This assembles all component directories and their control markdown back into a single component-definition JSON.
+4. This assembles all component directories and their control markdown into one component-definition JSON.
 
-5. Show output and suggest next steps.
+5. Show the output. Suggest next steps.

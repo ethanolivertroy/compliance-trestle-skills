@@ -9,19 +9,19 @@ Remove a subcomponent (element) from an OSCAL model file.
 
 ## Steps
 
-1. Verify we are in a trestle workspace.
+1. Check that you are in a trestle workspace.
 
-2. Parse $ARGUMENTS for:
-   - `file` (`-f`): The JSON/YAML file to modify
-   - `element_path` (`-e`): The element path to remove
+2. Read $ARGUMENTS for:
+   - `file` (`-f`): the JSON or YAML file to change
+   - `element_path` (`-e`): the element path to remove
 
-3. Explain element path syntax:
+3. Tell the user the element path syntax:
    - Use dot notation: `catalog.metadata`, `catalog.back-matter`
-   - Removes the specified element and its children from the parent model
-   - Does not support removing individual items from a list — removes the entire list/dict
-   - Does not support wildcard element paths
+   - The command removes the specified element and its children from the parent model.
+   - The command does not remove one item from a list. It removes the full list or dict.
+   - Wildcard element paths are not supported.
 
-4. Show the current state of the element before removal:
+4. Show the element state before removal:
    ```
    trestle describe -f <file> -e <element_path>
    ```
@@ -31,6 +31,6 @@ Remove a subcomponent (element) from an OSCAL model file.
    trestle remove -f <file> -e <element_path>
    ```
 
-6. Confirm the element was removed and show the updated model structure.
+6. Confirm the element was removed. Show the updated model structure.
 
-7. Note: This is the inverse of `trestle add`. The file is modified in-place.
+7. Note: this is the inverse of `trestle add`. The file is changed in place.

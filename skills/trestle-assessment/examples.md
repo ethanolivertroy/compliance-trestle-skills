@@ -1,6 +1,8 @@
-# Assessment Models — Worked Examples
+# Assessment Models: Worked Examples
 
-These walkthroughs demonstrate how to create assessment plans and assessment results using the split/merge JSON workflow. For core reference material, see [SKILL.md](SKILL.md).
+These walkthroughs show how to make assessment plans and assessment results.
+Use the split and merge JSON workflow.
+For core reference material, see [SKILL.md](SKILL.md).
 
 ## Step-by-Step: Creating an Assessment Plan
 
@@ -10,11 +12,12 @@ These walkthroughs demonstrate how to create assessment plans and assessment res
 trestle create -t assessment-plan -o my-assessment
 ```
 
-This creates `assessment-plans/my-assessment/assessment-plan.json` with placeholder fields marked `REPLACE_ME`.
+This command creates `assessment-plans/my-assessment/assessment-plan.json`.
+Placeholder fields are marked `REPLACE_ME`.
 
 ### 2. Split for Editing
 
-Split the model into manageable pieces:
+Split the model into smaller pieces:
 
 ```bash
 cd assessment-plans/my-assessment
@@ -23,18 +26,18 @@ cd assessment-plans/my-assessment
 trestle split -f assessment-plan.json -e 'assessment-plan.import-ssp,assessment-plan.reviewed-controls,assessment-plan.assessment-subjects,assessment-plan.assessment-assets,assessment-plan.tasks,assessment-plan.local-definitions'
 ```
 
-This creates separate JSON files for each section in the model directory.
+This command creates one JSON file for each section in the model directory.
 
 ### 3. Edit Each Section
 
-**import-ssp** — Reference the SSP being assessed:
+**import-ssp**: Reference the SSP under assessment:
 ```json
 {
   "href": "../../system-security-plans/my-ssp/system-security-plan.json"
 }
 ```
 
-**reviewed-controls** — Define which controls are in scope:
+**reviewed-controls**: Define which controls are in scope:
 ```json
 {
   "control-selections": [
@@ -52,7 +55,7 @@ This creates separate JSON files for each section in the model directory.
 }
 ```
 
-**assessment-subjects** — Define what is being assessed:
+**assessment-subjects**: Define what you assess:
 ```json
 [
   {
@@ -63,7 +66,7 @@ This creates separate JSON files for each section in the model directory.
 ]
 ```
 
-**local-definitions.activities** — Define assessment activities:
+**local-definitions.activities**: Define assessment activities:
 ```json
 [
   {
@@ -89,7 +92,7 @@ This creates separate JSON files for each section in the model directory.
 ]
 ```
 
-**assessment-assets** — Document tools and platforms:
+**assessment-assets**: Document tools and platforms:
 ```json
 {
   "assessment-platforms": [
@@ -104,7 +107,7 @@ This creates separate JSON files for each section in the model directory.
 }
 ```
 
-**tasks** — Schedule assessment activities:
+**tasks**: Schedule assessment activities:
 ```json
 [
   {
@@ -163,14 +166,14 @@ trestle split -f assessment-results.json -e 'assessment-results.import-ap,assess
 
 ### 3. Edit Each Section
 
-**import-ap** — Reference the assessment plan:
+**import-ap**: Reference the assessment plan:
 ```json
 {
   "href": "../../assessment-plans/my-assessment/assessment-plan.json"
 }
 ```
 
-**results** — Build result sets with findings, observations, and risks:
+**results**: Build result sets with findings, observations, and risks:
 ```json
 [
   {
@@ -290,7 +293,7 @@ Assessment findings trace back to SSP controls through the `target` field:
 
 | Finding Field | Maps To |
 |---------------|---------|
-| `target.target-id` | Control ID from SSP (e.g., `ac-1`, `sc-7`) |
+| `target.target-id` | Control ID from SSP. Examples: `ac-1`, `sc-7` |
 | `target.type` | Usually `objective-id` for control-level findings |
 | `target.status.state` | `satisfied` or `not-satisfied` |
 | `related-observations[].observation-uuid` | UUID of observation providing evidence |
@@ -303,14 +306,17 @@ SSP Control (ac-1) <- target.target-id
     |
 Finding (uuid: 77777...) <- documents the assessment result
     |
-Observation (uuid: 55555...) <- provides evidence (via related-observations)
+Observation (uuid: 55555...) <- provides evidence (with related-observations)
     |
-Risk (uuid: 66666...) <- characterizes the risk (via related-risks)
+Risk (uuid: 66666...) <- characterizes the risk (with related-risks)
     |
 POA&M Item <- tracks remediation (cross-referenced by observation/risk UUIDs)
 ```
 
-Each UUID creates a traceable chain from the original control requirement through evidence collection to risk management.
+Each UUID builds a traceable chain.
+The chain starts at the control requirement.
+It continues through evidence collection.
+It ends at risk management.
 
 ## Integration with Task System
 

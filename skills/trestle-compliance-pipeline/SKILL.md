@@ -1,23 +1,27 @@
 ---
 name: trestle-compliance-pipeline
 description: >-
-  Knowledge about end-to-end compliance pipelines using Compliance Trestle: GRC personas and artifact
-  ownership, multi-repository coordination, the two-phase component definition authoring pattern,
-  CI/CD pipeline integration, and the Compliance-to-Policy (C2P) bridge. Use when users ask about
-  compliance pipelines, personas, who owns what artifact, multi-repo workflows, component definition
-  dual-mapping (control-to-rule, rule-to-check), CI/CD compliance, C2P, or end-to-end workflow design.
+  Use this skill for end-to-end compliance pipelines with Compliance Trestle.
+  Topics include GRC personas, artifact ownership, multi-repository coordination,
+  two-phase component definition authoring, CI/CD pipeline integration, and the
+  Compliance-to-Policy (C2P) bridge.
+  Use it for compliance pipelines, personas, artifact ownership, multi-repo workflows,
+  component definition dual-mapping (control-to-rule, rule-to-check), C2P, or end-to-end workflow design.
 allowed-tools: Bash, Read, Glob, Grep
 ---
 
 # End-to-End Compliance Pipeline
 
-This skill covers the full compliance pipeline from regulation authoring through assessment results,
-including persona ownership, multi-repository coordination, and the Compliance-to-Policy (C2P) bridge
-between OSCAL artifacts and runtime policy validation.
+This skill describes the full compliance pipeline.
+The pipeline starts with regulation authoring.
+The pipeline ends with assessment results.
+Topics include persona ownership, multi-repository coordination, and the Compliance-to-Policy (C2P) bridge.
+The bridge connects OSCAL artifacts to runtime policy validation.
 
 ## GRC Personas and Artifact Ownership
 
-Each compliance artifact has a primary owner persona and flows downstream to consumers:
+Each compliance artifact has a primary owner persona.
+Artifacts flow downstream to consumers:
 
 | Persona | Primary Artifact | Key Trestle Commands | Downstream Consumer |
 |---------|-----------------|---------------------|-------------------|
@@ -29,14 +33,17 @@ Each compliance artifact has a primary owner persona and flows downstream to con
 | Assessors | Assessment Results | `xccdf-result-to-oscal-ar`, `tanium-result-to-oscal-ar` | CISO, System Owners |
 | Operations | Remediation (POA&M) | `create`, `split`, `merge` (JSON workflow) | Auditors |
 
-**Key principle**: Each persona manages their artifact independently. Artifacts flow downstream
-via Git-based propagation, enabling separation of duties and independent versioning.
+**Key principle**: Each persona manages its artifact independently.
+Artifacts flow downstream through Git-based propagation.
+This supports separation of duties.
+This also supports independent versioning.
 
 ## Per-Persona Authoring Workflows
 
 ### Regulators: Catalog Authoring
 
-Regulators publish security controls as catalogs (e.g., NIST 800-53, PCI-DSS, ISO 27001).
+Regulators publish security controls as catalogs.
+Examples: NIST 800-53, PCI-DSS, ISO 27001.
 
 ```bash
 # Import existing catalog or create new one
@@ -66,15 +73,19 @@ trestle author profile-assemble --markdown md_profiles/my-baseline --output my-b
 trestle task xlsx-to-oscal-profile
 ```
 
-Profiles can import from multiple catalogs and other profiles, creating layered baselines
-(e.g., FedRAMP High inherits from NIST 800-53, adding FedRAMP-specific parameters).
+Profiles can import from more than one catalog.
+Profiles can also import from other profiles.
+This creates layered baselines.
+Example: FedRAMP High inherits from NIST 800-53 and adds FedRAMP-specific parameters.
 
 ### Control Providers: Two-Phase Component Definition
 
 Control Providers (vendors, service providers) declare how their products implement controls.
-This is a **two-phase process** — structured rule data via CSV, then narrative responses via markdown.
+This is a **two-phase process**.
+Phase 1 uses structured rule data in CSV.
+Phase 2 uses narrative responses in markdown.
 
-**Phase 1 — Rules via CSV spreadsheet:**
+**Phase 1: Rules with CSV spreadsheet:**
 ```bash
 # CSV contains: Rule_Id, Rule_Description, Component_Title, Component_Type,
 #               Control_Id_List, Parameter_Id, Parameter_Value_Alternatives, ...
@@ -84,7 +95,7 @@ trestle task csv-to-oscal-cd
 The CSV captures structured mappings: which controls map to which technical rules and parameters.
 Vendors manage this in spreadsheet tools and commit the CSV to Git.
 
-**Phase 2 — Responses via markdown:**
+**Phase 2: Responses with markdown:**
 ```bash
 # Generate markdown from the component definition created in Phase 1
 trestle author component-generate --name my-service --output md_compdefs/my-service
@@ -96,9 +107,11 @@ trestle author component-assemble --markdown md_compdefs/my-service --output my-
 
 The markdown captures narrative prose: implementation descriptions, rationale, and status.
 
-**Why the split?** Structured data (rules, parameters, control mappings) is best managed in
-spreadsheets. Narrative prose (implementation descriptions) is best edited as markdown.
-The two-phase pattern separates these concerns cleanly.
+**Why two phases?** Manage structured data in spreadsheets.
+Structured data includes rules, parameters, and control mappings.
+Edit narrative prose as markdown.
+Narrative prose includes implementation descriptions.
+The two-phase pattern separates these tasks.
 
 ### System Owners: SSP Authoring
 
@@ -118,15 +131,16 @@ trestle author ssp-filter --name my-system --profile fedramp-high --output my-sy
 
 ## The Component Definition Bridge
 
-The component definition is the **bridge artifact** that connects regulatory controls to automated
-assessment. It operates at two layers via two distinct component types.
+The component definition is the **bridge artifact**.
+It connects regulatory controls to automated assessment.
+It operates at two layers with two distinct component types.
 
 ### Layer 1: Service Components (Control-to-Rule)
 
 Service components map regulation controls to technology-specific rules and parameters:
 
 ```
-Control (e.g., AC-2)  -->  Rule (e.g., rule-account-types)  -->  Parameter (e.g., timeout=15min)
+Control (example: AC-2)  -->  Rule (example: rule-account-types)  -->  Parameter (example: timeout=15min)
 ```
 
 - **Owner**: Product vendors, service providers
@@ -138,7 +152,7 @@ Control (e.g., AC-2)  -->  Rule (e.g., rule-account-types)  -->  Parameter (e.g.
 Validation components map rules to PVP check identifiers:
 
 ```
-Rule (e.g., rule-account-types)  -->  Check_Id (e.g., test_github.GitHubOrgs.test_members_is_not_empty)
+Rule (example: rule-account-types)  -->  Check_Id (example: test_github.GitHubOrgs.test_members_is_not_empty)
 ```
 
 - **Owner**: Assessment tool vendors, PVP providers, compliance engineers
@@ -157,9 +171,10 @@ Regulation Control (NIST AC-2)
                 --> Control Posture (satisfied/not-satisfied)
 ```
 
-This chain enables automated compliance: given assessment results from PVPs, the system can
-automatically compute whether regulatory controls are satisfied by following the mappings backward
-through the component definitions.
+This chain supports automated status computation.
+Start from PVP assessment results.
+Follow the mappings back through the component definitions.
+Then get the control status.
 
 ## Multi-Repository Coordination
 
@@ -181,22 +196,23 @@ ssp-repo (System Owners)
 ```
 
 Each repository has independent:
-- **Versioning**: Catalogs change on regulatory cycles; profiles change on policy review cycles
-- **Access control**: Only authorized personas can merge to main
-- **CI/CD pipelines**: Each repo validates and assembles its own artifacts
+- **Versioning**: Catalogs change on regulatory cycles. Profiles change on policy review cycles.
+- **Access control**: Only authorized personas can merge to main.
+- **CI/CD pipelines**: Each repo validates and assembles its own artifacts.
 
 ### Change Propagation Pattern
 
-When an upstream artifact changes, downstream repositories receive automated PRs:
+When an upstream artifact changes, downstream repositories can receive automated PRs:
 
-1. Upstream merge triggers CI/CD pipeline
-2. Pipeline runs `trestle author *-assemble` to produce updated OSCAL JSON
-3. CI/CD creates a PR in each downstream repository that imports this artifact
-4. Downstream owners review and merge, triggering their own assembly pipelines
+1. Upstream merge triggers the CI/CD pipeline.
+2. The pipeline runs `trestle author *-assemble` to produce updated OSCAL JSON.
+3. CI/CD creates a PR in each downstream repository that imports this artifact.
+4. Downstream owners review and merge. That merge triggers their own assembly pipelines.
 
-Example: A new control is added to the catalog. The profile repo gets a PR to include it.
-Once merged, the compdef repo gets a PR to add rule mappings. Once merged, the SSP repo
-gets a PR to include the new control responses.
+Example: A new control is added to the catalog.
+The profile repo gets a PR to include it.
+After merge, the compdef repo gets a PR to add rule mappings.
+After that merge, the SSP repo gets a PR for new control responses.
 
 ### When to Use Multi-Repo vs Single-Repo
 
@@ -208,8 +224,8 @@ gets a PR to include the new control responses.
 | Access control | Same permissions for all | Different access per artifact type |
 | Complexity | Simple, lower overhead | Higher overhead, better separation |
 
-**Recommendation**: Start with a single repo. Split when ownership boundaries become clear
-or when independent versioning is needed.
+**Recommendation**: Start with a single repo.
+Split when ownership boundaries become clear or when independent versioning is needed.
 
 ## CI/CD Pipeline Integration
 
@@ -241,24 +257,28 @@ trestle author ssp-assemble --markdown md_ssp/my-system --output my-system
 ```
 
 **Post-merge propagation:**
-- If the assembled JSON changed, trigger downstream repository updates
-- Downstream repos import the new version and run their own assembly
+- If the assembled JSON changed, trigger downstream repository updates.
+- Downstream repos import the new version and run their own assembly.
 
 ### Write Once, Use Multiple Times
 
-A core principle from the COMPASS architecture: write each compliance artifact once,
-then reuse it across multiple contexts:
+A core principle from the COMPASS architecture is write once, use many times.
+Write each compliance artifact once.
+Then reuse it in more than one context:
 
 - **One catalog** serves multiple profiles (FedRAMP High, Moderate, Low all import from NIST 800-53)
 - **One component definition** serves multiple SSPs (same service deployed in different systems)
 - **One set of PVP checks** validates the same rules across environments (dev, staging, prod)
 
-This avoids duplication and ensures consistency across the compliance program.
+This avoids duplication.
+This keeps artifacts consistent across the compliance program.
 
 ## Compliance-to-Policy (C2P)
 
-C2P is a **separate tool** (not part of Trestle) that bridges OSCAL compliance artifacts
-to runtime policy validation and back to OSCAL assessment results.
+C2P is a **separate tool**.
+It is not part of Trestle.
+C2P bridges OSCAL compliance artifacts to runtime policy validation.
+It also maps results back to OSCAL assessment results.
 
 ### What C2P Does
 
@@ -270,7 +290,7 @@ OSCAL Component Definition
 OSCAL Assessment Results
 ```
 
-C2P reads the component definition's rule-to-check mappings and:
+C2P reads the component definition rule-to-check mappings and:
 1. **Generates PVP policy**: Configures the PVP with the right checks and parameters
 2. **Collects PVP results**: Reads native PVP output after execution
 3. **Produces OSCAL Assessment Results**: Maps check pass/fail back to control posture
@@ -282,7 +302,7 @@ Trestle authors the OSCAL artifacts that C2P consumes:
 - `component-generate` / `component-assemble` adds narrative responses
 - Assessment results from C2P can be imported back: `trestle import -f assessment-results.json`
 
-Trestle does NOT execute PVP checks — that is C2P's responsibility.
+Trestle does not run PVP checks. C2P runs those checks.
 
 ### Supported PVP Types
 
@@ -292,7 +312,7 @@ Trestle does NOT execute PVP checks — that is C2P's responsibility.
 | Imperative | Step-by-step scripts | Auditree (Python), Ansible playbooks |
 
 - **Declarative PVPs**: C2P generates Kubernetes policy CRDs from component definitions
-- **Imperative PVPs**: C2P generates configuration files (e.g., `auditree.json`) with parameters
+- **Imperative PVPs**: C2P generates configuration files (example: `auditree.json`) with parameters
 
 ### C2P Workflow Summary
 
@@ -315,8 +335,8 @@ trestle import -f assessment-results.json -o latest-scan
 
 ## Additional Resources
 
-- [personas-reference.md](personas-reference.md) — Full persona details, CPAC topologies, C2P plugin interface, Auditree project structure
-- [examples.md](examples.md) — Worked pipeline walkthroughs with complete command sequences
+- [personas-reference.md](personas-reference.md): Full persona details, CPAC topologies, C2P plugin interface, Auditree project structure
+- [examples.md](examples.md): Worked pipeline walkthroughs with complete command sequences
 
 ## Cross-References
 

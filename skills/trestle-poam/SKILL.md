@@ -1,9 +1,9 @@
 ---
 name: trestle-poam
 description: >-
-  Knowledge about the OSCAL Plan of Action and Milestones (POA&M) model in Compliance Trestle.
-  Use when users ask about POA&M, plan of action, milestones, remediation, findings tracking,
-  risk management, or managing security finding remediation workflows.
+  Use this skill for the OSCAL Plan of Action and Milestones (POA&M) model in Compliance Trestle.
+  Use it for POA&M, plan of action, milestones, remediation, findings tracking, and risk management.
+  Use it to manage security finding remediation workflows.
 allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 ---
 
@@ -11,11 +11,12 @@ allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 
 ## Overview
 
-The POA&M model tracks security findings that need remediation. It documents:
+The POA&M model tracks security findings that need remediation.
+A POA&M records:
 - What weaknesses were found
 - What risks they pose
-- What actions will be taken to remediate them
-- When remediation milestones are expected to be completed
+- What actions will remediate them
+- When remediation milestones are due
 
 ## POA&M Structure
 
@@ -54,7 +55,7 @@ The POA&M model tracks security findings that need remediation. It documents:
 
 ### POA&M Items
 
-Each POA&M item represents a finding requiring remediation:
+Each POA&M item is a finding that needs remediation:
 
 | Field | Purpose |
 |-------|---------|
@@ -62,12 +63,12 @@ Each POA&M item represents a finding requiring remediation:
 | `description` | Detailed description of the weakness |
 | `related-observations` | Links to observations from assessment |
 | `related-risks` | Links to associated risk entries |
-| `origins` | Who/what identified this item |
-| `remarks` | Additional notes or context |
+| `origins` | Who or what identified this item |
+| `remarks` | Extra notes or context |
 
 ### Observations
 
-Observations provide evidence and context for findings:
+Observations give evidence and context for findings:
 
 ```json
 {
@@ -137,12 +138,12 @@ Risk entries document the risk associated with findings:
 ### Risk Status Values
 | Status | Meaning |
 |--------|---------|
-| `open` | Finding is active, not yet remediated |
+| `open` | The finding is active. Remediation is not complete |
 | `investigating` | Under investigation |
-| `remediating` | Actively being remediated |
-| `deviation-requested` | Requesting deviation/risk acceptance |
+| `remediating` | Remediation is in progress |
+| `deviation-requested` | Request for deviation or risk acceptance |
 | `deviation-approved` | Deviation approved (risk accepted) |
-| `closed` | Finding has been remediated and verified |
+| `closed` | The finding is remediated and verified |
 
 ### Remediation Lifecycle
 | Lifecycle | Meaning |
@@ -185,27 +186,29 @@ Assessment Results → POA&M
       SSP          Remediation Tracking
 ```
 
-- POA&M references an SSP via `import-ssp`
-- POA&M items typically originate from Assessment Results findings
-- Each `not-satisfied` finding in Assessment Results should have a corresponding POA&M item
-- Milestones track the remediation progress over time
+- A POA&M references an SSP with `import-ssp`.
+- POA&M items usually come from Assessment Results findings.
+- Make one POA&M item for each `not-satisfied` finding in Assessment Results.
+- Milestones track remediation progress over time.
 
 ## Common Workflows
 
-1. **Create from Assessment**: Extract findings from Assessment Results into POA&M items
-2. **Track Remediation**: Update risk status and add milestones as work progresses
-3. **Close Findings**: Mark risks as `closed` when remediated and verified
-4. **Report**: Generate POA&M reports showing open items, progress, and timelines
+1. **Create from Assessment**: Extract findings from Assessment Results into POA&M items.
+2. **Track Remediation**: Update risk status and add milestones as work progresses.
+3. **Close Findings**: Mark risks as `closed` when they are remediated and verified.
+4. **Report**: Make POA&M reports that show open items, progress, and timelines.
 
 ## Important: JSON-Based Workflow
 
-The POA&M model does **not** have `trestle author` generate/assemble commands. Unlike catalogs, profiles, component definitions, and SSPs, POA&M uses a **JSON-based workflow**:
+The POA&M model does not have `trestle author` generate or assemble commands.
+Catalogs, profiles, component definitions, and SSPs use those commands.
+POA&M uses a **JSON-based workflow**:
 
 ```
 create → split → edit JSON → merge → validate
 ```
 
-Direct JSON editing via the split/merge cycle is the correct approach for POA&M.
+Edit JSON directly with the split and merge cycle. That is the correct approach for POA&M.
 
 ## Additional Resources
 

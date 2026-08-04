@@ -1,16 +1,20 @@
 ---
 name: trestle-jinja-templating
 description: >-
-  Knowledge about Compliance Trestle's Jinja2 templating system for generating compliance documents.
-  Use when users ask about Jinja templates, document generation from OSCAL data, custom trestle Jinja
-  tags (mdsection_include, md_clean_include, md_datestamp), custom filters (as_list, get_party,
-  parties_for_role, diagram_href), SSP document rendering, lookup tables, or bracket formatting.
+  Use this skill for the Compliance Trestle Jinja2 templating system for compliance documents.
+  Use it for Jinja templates, document generation from OSCAL data, and custom trestle Jinja tags.
+  Tags include mdsection_include, md_clean_include, and md_datestamp.
+  Filters include as_list, get_party, parties_for_role, and diagram_href.
+  Use it for SSP document rendering, lookup tables, or bracket formatting.
 allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 ---
 
 # Trestle Jinja Templating
 
-Trestle provides a Jinja2-based templating system (`trestle author jinja`) for generating compliance documents from OSCAL data. Templates can reference SSPs, profiles, and catalogs to produce formatted markdown or other document formats.
+Trestle includes a Jinja2 templating system (`trestle author jinja`).
+Use it to make compliance documents from OSCAL data.
+Templates can reference SSPs, profiles, and catalogs.
+Output can be markdown or another document format.
 
 ## Command Usage
 
@@ -24,18 +28,18 @@ Trestle extends Jinja2 with three custom tags:
 
 ### mdsection_include
 
-Include a specific section from a markdown file by heading title:
+Include one section from a markdown file. Match the heading title:
 
 ```jinja
 {% mdsection_include "path/to/file.md" "Section Title" heading_level=2 %}
 ```
 
-- `heading_level` controls which heading level to search for (default: based on document structure)
-- Extracts the section and all content until the next heading of equal or higher level
+- `heading_level` sets which heading level to search. The default follows the document structure.
+- The tag extracts the section. Extraction stops at the next heading of the same level or a higher level.
 
 ### md_clean_include
 
-Include an entire markdown file, stripping YAML frontmatter:
+Include a full markdown file and strip YAML frontmatter:
 
 ```jinja
 {% md_clean_include "path/to/file.md" heading_level=2 %}
@@ -43,7 +47,7 @@ Include an entire markdown file, stripping YAML frontmatter:
 
 - Removes YAML frontmatter (between `---` markers)
 - Adjusts heading levels relative to `heading_level`
-- Useful for composing documents from multiple markdown sources
+- Use this tag to build a document from more than one markdown file.
 
 ### md_datestamp
 
@@ -74,23 +78,23 @@ When an SSP is provided (`--ssp`), these objects are available in templates:
 | Variable | Type | Description |
 |----------|------|-------------|
 | `ssp` | SystemSecurityPlan | The full SSP object |
-| `catalog` | Catalog | Resolved catalog from the SSP's profile |
-| `catalog_interface` | CatalogInterface | Utility for querying catalog controls |
-| `control_interface` | ControlInterface | Utility for working with individual controls |
-| `control_writer` | DocsControlWriter | Writer for formatting control documentation |
+| `catalog` | Catalog | Resolved catalog from the SSP profile |
+| `catalog_interface` | CatalogInterface | Utility for queries of catalog controls |
+| `control_interface` | ControlInterface | Utility for work with individual controls |
+| `control_writer` | DocsControlWriter | Writer for formatting of control documentation |
 | `ssp_md_writer` | SSPMarkdownWriter | Writer for SSP markdown output |
 
 When `--docs-profile` is used for per-control output:
 
 | Variable | Type | Description |
 |----------|------|-------------|
-| `profile` | Profile | The profile being processed |
-| `control` | Control | Current control being rendered |
-| `group_title` | str | Title of the control's group |
+| `profile` | Profile | The active profile |
+| `control` | Control | The current control |
+| `group_title` | str | Title of the control group |
 
 ## Lookup Tables
 
-Provide additional variables via a YAML lookup table (`-lut`):
+Provide extra variables with a YAML lookup table (`-lut`):
 
 ```yaml
 # lookup.yaml
@@ -116,8 +120,8 @@ The `-bf` / `--bracket-format` flag controls how parameter values appear:
 | None | `value` (no brackets) |
 
 Use `-vap` and `-vnap` to prefix values based on assignment status:
-- `-vap "Assigned: "` — prefix when parameter has a value
-- `-vnap "MISSING: "` — prefix when parameter has no value
+- `-vap "Assigned: "`: prefix when the parameter has a value
+- `-vnap "MISSING: "`: prefix when the parameter has no value
 
 ## Example Templates
 
@@ -161,7 +165,10 @@ date: {% md_datestamp format="%B %d, %Y" %}
 
 ## Assessment and POA&M Report Templates
 
-Assessment data is not directly available as Jinja context objects (unlike SSPs). To use assessment and POA&M data in Jinja templates, pre-extract the data into YAML lookup tables and pass them via `-lut`.
+Assessment data is not available as Jinja context objects.
+SSP data is available as context objects.
+To use assessment and POA&M data in Jinja templates, extract the data into YAML lookup tables first.
+Pass the tables with `-lut`.
 
 ### Assessment Report Template
 

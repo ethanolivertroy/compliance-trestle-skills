@@ -26,7 +26,7 @@ For a Trestle workspace without the workbench wrapper:
 trestle validate -a
 ```
 
-Or use the repo helper:
+Or use the repository helper:
 
 ```bash
 bash scripts/trestle-workflow.sh validate <workspace>
@@ -34,11 +34,11 @@ bash scripts/trestle-workflow.sh validate <workspace>
 
 ## Report requirements
 
-- Record validator output or a documented skipped/missing-tool status.
+- Record validator output or a documented skipped or missing-tool status.
 - Do not claim validation passed if Trestle or OSCAL CLI was unavailable unless the user accepted partial validation.
 - Distinguish structural validation from compliance effectiveness or authorization.
 
-## After assemble/import/merge/create/split
+## After assemble, import, merge, create, or split
 
 If the user recently ran `trestle assemble`, `trestle import`, `trestle merge`, `trestle create`, or `trestle split`, recommend targeted validation such as:
 

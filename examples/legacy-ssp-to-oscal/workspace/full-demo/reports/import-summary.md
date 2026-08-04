@@ -8,8 +8,8 @@
 
 ## Next steps
 
-1. Review extracted source material.
-2. Populate source traceability map.
-3. Map content into OSCAL SSP structure.
+1. Review the extracted source material.
+2. Make the source traceability map.
+3. Map content to the OSCAL SSP structure.
 4. Run validation.
-5. Resolve needs_review items.
+5. Resolve `needs_review` items.

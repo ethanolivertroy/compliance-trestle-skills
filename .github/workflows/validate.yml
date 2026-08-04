@@ -17,14 +17,15 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install Compliance Trestle
-        run: pip install compliance-trestle
+        run: pip install 'compliance-trestle==4.2.0'
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
       - name: Install oscal-cli
         run: |
-          curl -sSL -o /tmp/oscal-cli.zip https://repo1.maven.org/maven2/dev/metaschema/oscal/oscal-cli-enhanced/3.2.0/oscal-cli-enhanced-3.2.0-oscal-cli.zip
+          curl --fail -sSL -o /tmp/oscal-cli.zip https://repo1.maven.org/maven2/dev/metaschema/oscal/oscal-cli-enhanced/3.2.0/oscal-cli-enhanced-3.2.0-oscal-cli.zip
+          echo 'e001b353ee245da6f4ff0ad930c4dfaa88083c63243ca004bd5f5bcef44e8ec8  /tmp/oscal-cli.zip' | sha256sum -c -
           sudo unzip -qo /tmp/oscal-cli.zip -d /opt/oscal-cli
           sudo ln -sf /opt/oscal-cli/bin/oscal-cli /usr/local/bin/oscal-cli
           oscal-cli --version

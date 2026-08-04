@@ -7,6 +7,7 @@ import argparse
 import csv
 import json
 import re
+import shutil
 import subprocess
 import sys
 import uuid
@@ -15,7 +16,7 @@ from pathlib import Path
 from typing import Any
 
 CONTROL_HEADING_RE = re.compile(
-    r"^(?P<id>[A-Za-z]{2,3}-\d+(?:\.\d+)?(?:\(\w+\))?)\s*(?P<title>.*)$"
+    r"^(?P<id>[A-Za-z]{2,3}-\d+(?:\.\d+)?(?:\s*\(\w+\))*)\s*(?P<title>.*)$"
 )
 OWNER_RE = re.compile(r"(?i)(system owner|isso|authorizing official|information system security officer)\s*:\s*(.+)")
 
@@ -83,13 +84,16 @@ def slugify(value: str) -> str:
 
 
 def normalize_control_id(raw: str) -> str:
-    """Normalize legacy control IDs to OSCAL form: AC-2(1) -> ac-2.1, AC-2 -> ac-2."""
-    match = re.match(r"([a-z]{2,3})-(\d+)(?:\.(\d+))?(?:\((\d+)\))?", raw.lower())
+    """Normalize legacy control IDs to OSCAL form: AC-2(1) -> ac-2.1, AC-2 (3)(a) -> ac-2.3.a."""
+    compact = re.sub(r"\s+", "", raw.lower())
+    match = re.fullmatch(r"([a-z]{2,3})-(\d+)((?:\.\w+|\(\w+\))*)", compact)
     if not match:
-        return raw.lower()
-    family, number, dotted, parenthesized = match.groups()
-    enhancement = dotted or parenthesized
-    return f"{family}-{number}.{enhancement}" if enhancement else f"{family}-{number}"
+        return compact
+    family, number, rest = match.groups()
+    parts = [number]
+    for dotted, parenthesized in re.findall(r"\.(\w+)|\((\w+)\)", rest or ""):
+        parts.append(dotted or parenthesized)
+    return f"{family}-{parts[0]}" if len(parts) == 1 else f"{family}-{parts[0]}." + ".".join(parts[1:])
 
 
 def load_section_rules(templates_dir: Path) -> list[tuple[re.Pattern[str], str, str, str]]:
@@ -125,15 +129,15 @@ def infer_system_name(sections: list[dict[str, Any]]) -> str:
 
 
 def full_excerpt(section: dict[str, Any], extracted_md: Path) -> str:
-    excerpt = (section.get("excerpt") or "").strip()
-    if excerpt:
-        return excerpt
-    if not extracted_md.exists():
-        return ""
-    lines = extracted_md.read_text(encoding="utf-8", errors="replace").splitlines()
-    start = int(section.get("start_line", 1)) - 1
-    end = int(section.get("end_line", len(lines)))
-    return "\n".join(lines[start:end]).strip()
+    if extracted_md.exists():
+        lines = extracted_md.read_text(encoding="utf-8", errors="replace").splitlines()
+        start = max(0, int(section.get("start_line", 1)) - 1)
+        end = int(section.get("end_line", len(lines)))
+        end = min(len(lines), max(start, end))
+        body = "\n".join(lines[start:end]).strip()
+        if body:
+            return body
+    return (section.get("excerpt") or "").strip()
 
 
 def map_sections(
@@ -228,8 +232,6 @@ def remove_model(root: Path, model_type: str, alias: str) -> None:
     }
     target = dirs.get(model_type)
     if target and target.exists():
-        import shutil
-
         shutil.rmtree(target)
 
 
@@ -267,15 +269,16 @@ def patch_catalog(path: Path, plan: DraftPlan, mappings: list[SectionMapping]) -
         family = control.pop("_family")
         groups.setdefault(family, []).append(control)
 
-    root["groups"] = [
-        {
-            "id": family,
-            "class": "SP800-53",
-            "title": f"{family.upper()} controls (draft stubs)",
-            "controls": group_controls,
-        }
-        for family, group_controls in sorted(groups.items())
-    ]
+    if groups:
+        root["groups"] = [
+            {
+                "id": family,
+                "class": "SP800-53",
+                "title": f"{family.upper()} controls (draft stubs)",
+                "controls": group_controls,
+            }
+            for family, group_controls in sorted(groups.items())
+        ]
     path.write_text(json.dumps(catalog, indent=2) + "\n", encoding="utf-8")
 
 
@@ -283,12 +286,12 @@ def patch_profile(path: Path, plan: DraftPlan) -> None:
     profile = json.loads(path.read_text(encoding="utf-8"))
     root = profile["profile"]
     root["metadata"]["title"] = f"{plan.system_name} draft profile ({plan.profile_label})"
-    root["imports"] = [
-        {
-            "href": f"trestle://catalogs/{plan.catalog_alias}/catalog.json",
-            "include-controls": [{"with-ids": plan.control_ids}] if plan.control_ids else [],
-        }
-    ]
+    catalog_import: dict[str, Any] = {
+        "href": f"trestle://catalogs/{plan.catalog_alias}/catalog.json",
+    }
+    if plan.control_ids:
+        catalog_import["include-controls"] = [{"with-ids": plan.control_ids}]
+    root["imports"] = [catalog_import]
     path.write_text(json.dumps(profile, indent=2) + "\n", encoding="utf-8")
 
 
@@ -431,9 +434,10 @@ def write_draft_summary(report_path: Path, plan: DraftPlan, ssp_path: Path, vali
                 f"- Import profile: trestle://profiles/{plan.profile_alias}/profile.json",
                 f"- Validation status: {validation_status}",
                 "",
-                "This draft uses FedRAMP Rev 5 SSP heading conventions for structure mapping only.",
-                "If drafted without --baseline-profile, replace catalog stubs with authoritative",
-                "FedRAMP/NIST OSCAL content (fetch-oscal-baseline.sh) before authorization use.",
+                "This draft uses FedRAMP Rev 5 SSP heading conventions.",
+                "Use those conventions for structure mapping only.",
+                "If you drafted this SSP without --baseline-profile, replace catalog stubs with authoritative FedRAMP or NIST OSCAL content.",
+                "Run fetch-oscal-baseline.sh before you use this SSP for authorization.",
                 "Schema-valid OSCAL does not prove compliance effectiveness.",
                 "",
             ]
@@ -452,13 +456,13 @@ def main() -> int:
     extracted_md = extracted_dir / "extracted.md"
     metadata_path = extracted_dir / "extracted-metadata.json"
 
-    if not shutil_exists(trestle_root / ".trestle"):
+    if not (trestle_root / ".trestle").exists():
         sys.stderr.write("draft-ssp-from-extraction: trestle workspace missing; run bootstrap-trestle-workspace.sh first\n")
         return 2
     if not sections_path.exists():
         sys.stderr.write("draft-ssp-from-extraction: missing extracted/sections.json\n")
         return 2
-    if subprocess.run(["bash", "-lc", "command -v trestle"], capture_output=True).returncode != 0:
+    if shutil.which("trestle") is None:
         sys.stderr.write(
             "draft-ssp-from-extraction: Compliance Trestle CLI not found. Install with: pip install compliance-trestle\n"
         )
@@ -534,10 +538,6 @@ def main() -> int:
     print(f"  summary: {workspace / 'reports' / 'draft-summary.md'}")
     print(f"  validation: {validation_status}")
     return 0
-
-
-def shutil_exists(path: Path) -> bool:
-    return path.exists()
 
 
 if __name__ == "__main__":

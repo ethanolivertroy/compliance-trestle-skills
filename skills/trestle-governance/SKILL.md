@@ -1,21 +1,24 @@
 ---
 name: trestle-governance
 description: >-
-  Knowledge about Compliance Trestle's document governance system for enforcing consistent
-  document structure and YAML headers. Use when users ask about document governance, header
-  enforcement, template validation, governed headings, governed folders, trestle author docs/headers/folders,
-  template setup, document structure enforcement, or CI/CD compliance document validation.
+  Use this skill for the Compliance Trestle document governance system.
+  The system checks document structure and YAML headers.
+  Use it for document governance, header checks, template validation, governed headings, and governed folders.
+  Use it for trestle author docs, headers, folders, template setup, or CI/CD document validation.
 allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 ---
 
 # Trestle Document Governance
 
-Trestle provides three governance commands that enforce consistent structure across compliance documentation using templates. This enables teams to maintain standardized document formats and integrate structure validation into CI/CD pipelines.
+Trestle has three governance commands.
+The commands check document structure against templates.
+Teams can keep a standard document format.
+Teams can add structure validation to CI/CD pipelines.
 
 ## Three Governance Commands
 
-| Command | Scope | What It Enforces |
-|---------|-------|-----------------|
+| Command | Scope | What It Checks |
+|---------|-------|----------------|
 | `trestle author headers` | YAML frontmatter only | Header field names, types, and required values |
 | `trestle author docs` | Full markdown documents | Headers + document structure (headings, sections) |
 | `trestle author folders` | Directory structure | Headers + docs + folder layout (same files in each instance) |
@@ -67,17 +70,18 @@ status: draft
 ---
 ```
 
-When `--template-version` is specified during validation, only documents matching that template version are checked. This enables gradual template migration.
+If you set `--template-version` during validation, Trestle checks only documents with that template version.
+You can migrate templates in steps.
 
 ## Governed Headings
 
-The `-gh` / `--governed-heading` flag enforces that specific markdown headings exist in documents:
+The `-gh` / `--governed-heading` flag requires specific markdown headings in documents:
 
 ```bash
 trestle author docs validate -tn my-task -gh "Purpose" -gh "Scope"
 ```
 
-This ensures every document under `my-task/` contains `## Purpose` and `## Scope` sections.
+This check requires every document under `my-task/` to contain `## Purpose` and `## Scope` sections.
 
 ## Key Flags
 
@@ -96,7 +100,7 @@ This ensures every document under `my-task/` contains `## Purpose` and `## Scope
 
 ## CI/CD Integration
 
-Governance commands are designed for CI/CD pipelines. Common patterns:
+Use governance commands in CI/CD pipelines. Common patterns follow.
 
 ### GitHub Actions
 
@@ -127,9 +131,9 @@ Governance commands are designed for CI/CD pipelines. Common patterns:
    ```
 
 2. **Customize the template** at `.trestle/author/security-policies/template.md`:
-   - Add required YAML header fields
-   - Add governed heading structure
-   - Set `x-trestle-template-version`
+   - Add required YAML header fields.
+   - Add governed heading structure.
+   - Set `x-trestle-template-version`.
 
 3. **Generate samples**:
    ```bash
@@ -141,15 +145,15 @@ Governance commands are designed for CI/CD pipelines. Common patterns:
    trestle author docs validate -tn security-policies -hv -gh "Purpose"
    ```
 
-5. **Add to CI/CD** to enforce going forward.
+5. Add the check to CI/CD. Keep the check in place.
 
 ## Headers vs Docs vs Folders
 
 Choose the right governance level:
 
-- **headers**: Lightweight — just enforce consistent YAML frontmatter across documents. Good for metadata standardization.
-- **docs**: Medium — enforce both headers and document structure (headings). Good for policy documents, procedures, runbooks.
-- **folders**: Heavy — enforce entire directory structures. Good for system assessment packages, component evidence folders, or any case where multiple related files must exist together.
+- **headers**: Light check. Require consistent YAML frontmatter across documents. Use this for metadata standards.
+- **docs**: Medium check. Require headers and document structure (headings). Use this for policy documents, procedures, and runbooks.
+- **folders**: Heavy check. Require full directory structures. Use this for system assessment packages, component evidence folders, or any case where related files must exist together.
 
 ## Practical Template Example: Security Policy
 
@@ -260,23 +264,25 @@ Global templates apply organization-wide header standards across all task names.
 
 ### How Global Templates Work
 
-1. The global template defines **baseline YAML header fields** that every document must have (e.g., `status`, `owner`, `review-date`)
-2. Task-specific templates can add **additional fields** on top of the global requirements
+1. The global template defines **baseline YAML header fields** that every document must have. Examples: `status`, `owner`, `review-date`.
+2. Task-specific templates can add **additional fields** on top of the global requirements.
 3. Validate against the global template with the `-g` flag:
    ```bash
    trestle author headers validate -tn security-policies -g
    ```
-4. Global + task-specific validation runs both checks:
+4. Global plus task-specific validation runs both checks:
    ```bash
    trestle author headers validate -tn security-policies -g
    trestle author docs validate -tn security-policies -hv -gh "Purpose"
    ```
 
-This lets you enforce organization-wide metadata standards while allowing each document type to have its own structural requirements.
+You can require organization-wide metadata.
+Each document type can still have its own structure rules.
 
 ## Template Migration
 
-When templates evolve (e.g., adding a new required heading or header field), use template versioning for a smooth transition.
+When templates change, use template versioning.
+Example: you add a required heading or header field.
 
 ### Migration Steps
 
@@ -298,23 +304,23 @@ When templates evolve (e.g., adding a new required heading or header field), use
    [New required section for v2.0.0]
    ```
 
-3. **Validate old documents against the old version** (no breakage):
+3. **Validate old documents against the old version** (existing documents still pass):
    ```bash
    trestle author docs validate -tn security-policies -hv --template-version 1.0.0
    ```
 
-4. **Migrate documents incrementally** — update each document to v2.0.0 format by adding the new field and section, then change its `x-trestle-template-version` to `2.0.0`.
+4. **Migrate documents in steps.** Update each document to the v2.0.0 format. Add the new field and section. Then change `x-trestle-template-version` to `2.0.0`.
 
 5. **Validate migrated documents against the new version**:
    ```bash
    trestle author docs validate -tn security-policies -hv --template-version 2.0.0
    ```
 
-6. **Drop the old version** once all documents are migrated — remove the `--template-version` flag to validate all documents against the current template.
+6. **Drop the old version** after all documents migrate. Remove the `--template-version` flag. Trestle then validates all documents against the current template.
 
 ## Governed Folder Example: Assessment Package
 
-Governed folders ensure every instance of a folder-based document package has the same structure.
+Governed folders require every instance of a folder-based document package to use the same structure.
 
 ### Template Structure
 
@@ -357,10 +363,12 @@ trestle author folders create-sample -tn assessment-evidence -on 2025-q1-assessm
 trestle author folders validate -tn assessment-evidence -hv
 ```
 
-Validation checks that each instance folder contains all the files present in the template folder, and that those files conform to their template's headers and governed headings.
+Validation checks each instance folder.
+Each folder must contain all template files.
+Those files must match the template headers and governed headings.
 
 ## Cross-References
 
-- **trestle-control-implementation**: SSP control markdown follows trestle-governed header conventions for parameters and rules
-- **trestle-validation**: Combine governance structure validation with OSCAL schema validation for full coverage
-- **trestle-authoring-workflow**: Integrating governance validation into the generate/assemble CI/CD pipeline
+- **trestle-control-implementation**: SSP control markdown follows trestle-governed header conventions for parameters and rules.
+- **trestle-validation**: Combine governance structure validation with OSCAL schema validation.
+- **trestle-authoring-workflow**: Add governance validation to the generate and assemble CI/CD pipeline.

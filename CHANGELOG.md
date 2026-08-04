@@ -5,6 +5,27 @@ All notable changes to the compliance-trestle Claude Code plugin are documented 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- Project documentation now uses ASD-STE100 Simplified Technical English. Technical names, commands, and safety phrases stay the same.
+- Agent compatibility lists Devin Desktop in place of Windsurf. Project rules live in `.devin/rules/`. `.windsurf/rules/` stays as a fallback.
+
+### Fixed
+- Draft SSP generation reads full section text from `extracted.md` instead of 240-character excerpts
+- PDF extraction header insert is portable on macOS BSD sed
+- Cursor review-queue commands accept `--output`; `build-review-queue.sh` no longer crashes on braces in CSV fields
+- Validation wrappers exit non-zero when Trestle or oscal-cli is missing unless `--allow-partial` is set
+- `validate-oscal-package.sh` skips non-OSCAL JSON and avoids unsafe `bash -c` path interpolation
+- `run-example.sh` writes `workspace/basic-demo/` instead of deleting `full-demo/`
+- KSI coverage treats base-control-only matches as partial and includes zero-control indicators as not applicable
+- Claude OSCAL edit hook warns without blocking Write/Edit
+- Workspaces directory is gitignored; plugin URLs, licenses, and leftover 0.1.0 versions are aligned to this repository
+
+### Added
+- `draft-ssp-from-extraction` workbench command and marketplace entry
+- Behavior checks for excerpt length, review-queue flags, missing-tool exit codes, and manifest versions
+
 ## [0.2.2] - 2026-07-21
 
 ### Fixed

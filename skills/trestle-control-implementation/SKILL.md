@@ -1,9 +1,9 @@
 ---
 name: trestle-control-implementation
 description: >-
-  Knowledge about writing control implementation responses, rules, parameters, component-level
-  responses, inheritance, and leveraged SSPs in Compliance Trestle. Use when users ask about
-  writing control responses, implementation status, rules, parameters, component definitions,
+  Use this skill to write control implementation responses, rules, parameters, and component-level responses.
+  Use it for inheritance and leveraged SSPs in Compliance Trestle.
+  Use it for control responses, implementation status, rules, parameters, component definitions,
   SSP implementation details, or compliance documentation content.
 allowed-tools: Bash, Read, Glob, Grep, Write, Edit
 ---
@@ -69,20 +69,19 @@ Implementation prose for the overall system addressing part a.
 
 ## Component-Level Responses
 
-Each control statement part gets responses from each component:
+Each control statement part gets a response from each component:
 
 1. **Named Components** (from component-definitions): Have rules, parameters, status
 2. **This System** component: Overall system-level response (always present)
 
 > **First run without component definitions:** If you run `ssp-generate` without
-> `--compdefs` (or before any component-definitions exist in the workspace), the
-> generated markdown will only contain `This System` sections. Named component
-> sections such as `Identity Provider` in the examples below only appear after
-> component definitions are loaded and passed via `--compdefs`. This is expected,
-> not an error.
+> `--compdefs`, the generated markdown contains only `This System` sections.
+> Named component sections such as `Identity Provider` appear only after you load
+> component definitions and pass them with `--compdefs`. This result is expected.
+> It is not an error.
 
 ### Adding Implementation Prose
-Replace the HTML comment placeholders with actual implementation text:
+Replace the HTML comment placeholders with implementation text:
 ```markdown
 ### My Component
 This component implements access control policy by...
@@ -91,7 +90,7 @@ This component implements access control policy by...
 ## Rules and Parameters
 
 ### Rules
-Rules come from component definitions and are **read-only** in SSP markdown:
+Rules come from component definitions. Rules are **read-only** in SSP markdown:
 ```yaml
 x-trestle-comp-def-rules:
   Component Name:
@@ -100,7 +99,7 @@ x-trestle-comp-def-rules:
 ```
 
 ### Rule Parameters
-Parameters for rules can have values overridden in SSP:
+You can override parameter values for rules in the SSP:
 ```yaml
 x-trestle-comp-def-rules-param-vals:
   Component Name:
@@ -113,7 +112,7 @@ x-trestle-comp-def-rules-param-vals:
 
 ## Implementation Status
 
-Set per-component using these values:
+Set status per component with these values:
 | Status | Meaning |
 |--------|---------|
 | `implemented` | Fully implemented |
@@ -144,11 +143,11 @@ How the inheriting system satisfies its responsibilities.
 
 ### Control Origination
 Tracks where control implementation comes from:
-- `organization` - Organization-wide policy/procedure
-- `system-specific` - Specific to this system
-- `customer-configured` - Customer configures provider capability
-- `customer-provided` - Customer provides the implementation
-- `inherited` - Inherited from provider system
+- `organization`: Organization-wide policy or procedure
+- `system-specific`: Specific to this system
+- `customer-configured`: Customer configures provider capability
+- `customer-provided`: Customer provides the implementation
+- `inherited`: Inherited from provider system
 
 ## Profile-Level Control Additions
 
@@ -160,7 +159,7 @@ x-trestle-sections:
   expevid: Expected Evidence
 ```
 
-These sections appear in the markdown and can be edited:
+These sections appear in the markdown and you can edit them:
 ```markdown
 ## Implementation Guidance
 Organization-specific implementation guidance here.
@@ -171,19 +170,19 @@ Evidence required to demonstrate implementation.
 
 ## Best Practices
 
-1. **Be specific**: Reference actual system components, tools, and processes
-2. **Address each part**: Ensure every statement part has a response
-3. **Set parameters**: Replace `<REPLACE_ME>` placeholders with actual values
-4. **Track status honestly**: Use `partial` or `planned` when appropriate
-5. **Document inheritance**: Clearly describe what is inherited vs. locally implemented
-6. **Use component definitions**: Define reusable compliance content in component-definitions
-7. **Leverage CI/CD**: Use assemble in pipelines to validate changes automatically
+1. **Be specific**: Name actual system components, tools, and processes.
+2. **Address each part**: Give a response for every statement part.
+3. **Set parameters**: Replace `<REPLACE_ME>` placeholders with actual values.
+4. **Set status honestly**: Use `partial` or `planned` when that is the true state.
+5. **Document inheritance**: Describe what is inherited and what is local.
+6. **Use component definitions**: Put reusable compliance content in component-definitions.
+7. **Use CI/CD**: Run assemble in pipelines to validate changes automatically.
 
 ## Worked Example: Writing AC-2 Account Management
 
-This example assumes a component definition providing an `Identity Provider`
-component was passed to `ssp-generate` via `--compdefs`. Without it, only the
-`This System` sections appear.
+This example assumes you passed a component definition with an `Identity Provider`
+component to `ssp-generate` with `--compdefs`.
+Without it, only the `This System` sections appear.
 
 ### Before: Generated Markdown (Unfilled)
 
@@ -280,15 +279,19 @@ Appendix A and are drawn from the operations team as designated by the ISSO.
 
 ## Parameter Precedence
 
-Parameter values flow through three levels, with each level able to override the previous:
+Parameter values flow through three levels.
+Each level can override the previous level:
 
 | Level | Field | Source | Purpose |
 |-------|-------|--------|---------|
-| 1. Catalog | `values` | Catalog parameter definition | Default/suggested value |
+| 1. Catalog | `values` | Catalog parameter definition | Default or suggested value |
 | 2. Profile | `profile-values` | Profile `set-parameters` | Baseline-specific tailoring |
 | 3. SSP | `ssp-values` | SSP control markdown header | System-specific implementation value |
 
-**The SSP-level `ssp-values` always wins.** If `ssp-values` is set, it overrides both `profile-values` and catalog `values`. If `ssp-values` is empty, the profile value is used. If the profile doesn't set a value, the catalog default applies.
+**The SSP-level `ssp-values` always wins.**
+If `ssp-values` is set, it overrides `profile-values` and catalog `values`.
+If `ssp-values` is empty, Trestle uses the profile value.
+If the profile does not set a value, Trestle uses the catalog default.
 
 Example showing the same parameter at all three levels:
 ```yaml
@@ -309,7 +312,9 @@ In the assembled SSP, the resolved value is `at least every 365 days or upon pol
 
 ## Handling Multi-Part Controls
 
-OSCAL controls often have statement parts (a, b, c...) and sometimes sub-parts (a.1, a.2). Each maps to a specific markdown structure.
+OSCAL controls often have statement parts (a, b, c).
+Some controls also have sub-parts (a.1, a.2).
+Each part maps to a markdown structure.
 
 ### Statement Parts
 
@@ -335,9 +340,9 @@ Nested sub-parts use extended identifiers:
 
 ### Which Parts Need Responses
 
-- **Every statement part must have a response** for each component — even if only to say the part is not applicable to that component
-- Control statement text, guidance, and objective sections are **informational** and should not be edited
-- Only the sections below the horizontal rule (`______________________________________________________________________`) accept implementation prose
+- Give a response for every statement part and every component. If a part does not apply, say the part is not applicable to that component.
+- Control statement text, guidance, and objective sections are **informational**. Do not edit them.
+- Only the sections below the horizontal rule (`______________________________________________________________________`) accept implementation prose.
 
 ## Compensating Controls
 
@@ -359,24 +364,24 @@ When a control requirement cannot be met as stated, document a compensating cont
    by the AO on 2024-06-15 (see POA&M item PM-2024-042).
    ```
 
-3. **Reference the POA&M entry** if one exists for tracking the gap
+3. **Reference the POA&M entry** if one exists for tracking the gap.
 
 ## Common Mistakes
 
 | Mistake | Impact | Fix |
 |---------|--------|-----|
-| Leaving `<!-- Add control implementation -->` comments | Assemble silently includes them as empty content — auditors see blank responses | Replace every placeholder with actual prose or remove it |
-| Wrong YAML indentation in headers | Assemble fails with a YAML parse error | Use 2-space indentation consistently, never tabs |
-| Missing `ssp-values` when values are required | Parameters resolve to catalog defaults which may be vague placeholders | Set explicit `ssp-values` for every parameter |
-| Writing generic responses like "The system implements this control" | Fails ATO review — assessors need specific detail | Reference specific tools, processes, configurations, and responsible roles |
-| Not addressing every statement part separately | Assemble may silently drop unaddressed parts | Add a response (even "Not applicable to this component") for each part per component |
-| Confusing `values` vs `ssp-values` | Assembled SSP uses the wrong parameter value | `values` = catalog default; `ssp-values` = what this system actually uses |
-| Editing content above the horizontal rule | Changes are overwritten on the next generate | Only edit content below the `______________________________________________________________________` divider |
+| Leaving `<!-- Add control implementation -->` comments | Assemble keeps them as empty content. Auditors see blank responses | Replace every placeholder with actual prose. Or remove it |
+| Wrong YAML indentation in headers | Assemble fails with a YAML parse error | Use 2-space indentation consistently. Never use tabs |
+| Missing `ssp-values` when values are required | Parameters resolve to catalog defaults. Those defaults can be vague placeholders | Set explicit `ssp-values` for every parameter |
+| Writing generic responses like "The system implements this control" | Fails ATO review. Assessors need specific detail | Reference specific tools, processes, configurations, and responsible roles |
+| Not addressing every statement part separately | Assemble can drop unaddressed parts without a warning | Add a response for each part per component. "Not applicable to this component" is valid |
+| Confusing `values` vs `ssp-values` | Assembled SSP uses the wrong parameter value | `values` = catalog default. `ssp-values` = what this system actually uses |
+| Editing content above the horizontal rule | The next generate overwrites the changes | Only edit content below the `______________________________________________________________________` divider |
 
 ## Where Rules Come From
 
-Rules that appear in SSP markdown (under `x-trestle-comp-def-rules`) originate from the
-component definition authoring supply chain — they are **not authored in the SSP**.
+Rules in SSP markdown under `x-trestle-comp-def-rules` come from the component definition authoring chain.
+Do not author rules in the SSP.
 
 ### The Rules Supply Chain
 
@@ -391,20 +396,21 @@ CSV spreadsheet (vendor-authored rules, parameters, control mappings)
 
 ### Rules Are Read-Only in SSP Markdown
 
-The rules section in SSP control markdown is populated from component definitions during
-`ssp-generate`. Editing rules directly in SSP markdown has no effect — they will be
-overwritten on the next `ssp-generate` run.
+The rules section in SSP control markdown is populated from component definitions during `ssp-generate`.
+Edits to rules in SSP markdown have no effect.
+The next `ssp-generate` run overwrites them.
 
-**To change a rule**: Edit the source component definition (CSV or component markdown),
-reassemble it, then regenerate the SSP.
+**To change a rule**: Edit the source component definition in CSV or component markdown.
+Reassemble it.
+Then regenerate the SSP.
 
 ### To Add New Rules
 
-1. Add the rule to the component definition CSV
-2. Run `trestle task csv-to-oscal-cd` to rebuild the component definition
-3. Run `trestle author component-generate` and write the prose response
-4. Run `trestle author component-assemble`
-5. Run `trestle author ssp-generate` to pull the new rule into SSP markdown
+1. Add the rule to the component definition CSV.
+2. Run `trestle task csv-to-oscal-cd` to rebuild the component definition.
+3. Run `trestle author component-generate` and write the prose response.
+4. Run `trestle author component-assemble`.
+5. Run `trestle author ssp-generate` to pull the new rule into SSP markdown.
 
 For the full two-phase component definition workflow, see **trestle-compliance-pipeline**.
 
@@ -412,5 +418,5 @@ For the full two-phase component definition workflow, see **trestle-compliance-p
 
 - **trestle-authoring-workflow**: The full generate → edit → assemble cycle for SSP control implementation
 - **trestle-validation**: Diagnosing and fixing assemble errors, YAML parse failures, and schema validation issues
-- **trestle-governance**: Enforcing consistent response structure and required headings across control implementations
+- **trestle-governance**: Checking consistent response structure and required headings across control implementations
 - **trestle-compliance-pipeline**: End-to-end pipeline including the rules supply chain and two-phase component definition authoring

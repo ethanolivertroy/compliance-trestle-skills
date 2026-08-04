@@ -1,0 +1,2 @@
+Keep this directory for local OSCAL import workspaces such as `workspaces/<system>-ssp-import/`.
+Do not commit real customer SSPs, diagrams, credentials, or evidence.

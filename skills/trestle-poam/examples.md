@@ -1,12 +1,14 @@
-# POA&M — Worked Examples
+# POA&M: Worked Examples
 
-These walkthroughs demonstrate how to create and manage POA&M documents using the split/merge JSON workflow. For core reference material, see [SKILL.md](SKILL.md).
+These walkthroughs show how to make and manage POA&M documents.
+Use the split and merge JSON workflow.
+For core reference material, see [SKILL.md](SKILL.md).
 
 ## Step-by-Step: Creating POA&M from Assessment Findings
 
 ### 1. Identify Not-Satisfied Findings
 
-First, review assessment results for `not-satisfied` findings:
+Review assessment results for `not-satisfied` findings:
 
 ```bash
 # Find all not-satisfied findings
@@ -29,7 +31,7 @@ trestle split -f plan-of-action-and-milestones.json -e 'plan-of-action-and-miles
 
 ### 4. Edit import-ssp
 
-Reference the system's SSP:
+Reference the system SSP:
 ```json
 {
   "href": "../../system-security-plans/my-ssp/system-security-plan.json"
@@ -38,7 +40,8 @@ Reference the system's SSP:
 
 ### 5. Copy Observations from Assessment Results
 
-Copy relevant observations from your assessment results, preserving UUIDs for cross-referencing:
+Copy relevant observations from your assessment results.
+Keep the UUIDs. Other records use them as references:
 ```json
 [
   {
@@ -114,7 +117,7 @@ For each finding, create a risk entry with a remediation plan and milestones:
 
 ### 7. Create POA&M Items
 
-Link POA&M items to their observations and risks using UUIDs:
+Link POA&M items to their observations and risks with UUIDs:
 ```json
 [
   {
@@ -146,7 +149,8 @@ trestle validate -t plan-of-action-and-milestones -n my-system-poam
 
 ## Remediation Tracking Workflow
 
-Track remediation progress by updating the risk `status` field through the lifecycle:
+Track remediation progress.
+Update the risk `status` field through the lifecycle:
 
 ### Status Transitions
 
@@ -156,7 +160,7 @@ open -> investigating -> remediating -> closed
   +-> deviation-requested -> deviation-approved
 ```
 
-### Updating Status via Split/Merge
+### Update Status with Split and Merge
 
 ```bash
 # Split just the risks for editing
@@ -325,7 +329,7 @@ trestle merge -e 'plan-of-action-and-milestones.risks'
 }
 ```
 
-## Using Split/Merge for POA&M Editing
+## Using Split and Merge for POA&M Editing
 
 ### Split Specific Elements
 
@@ -356,7 +360,7 @@ trestle merge -e 'plan-of-action-and-milestones.observations,plan-of-action-and-
 
 ### Edit-One-Field Pattern
 
-To update a single field (e.g., a risk status), use a targeted split/edit/merge:
+To update one field, such as a risk status, use a targeted split, edit, and merge:
 
 ```bash
 # 1. Split just risks

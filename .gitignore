@@ -22,3 +22,8 @@ node_modules/
 
 # Regenerated demo Trestle workspace (run examples/legacy-ssp-to-oscal/full-demo.sh)
 examples/legacy-ssp-to-oscal/workspace/full-demo/trestle-workspace/
+examples/legacy-ssp-to-oscal/workspace/basic-demo/trestle-workspace/
+
+# User import workspaces may contain sensitive SSPs or evidence.
+/workspaces/*
+!/workspaces/.gitkeep

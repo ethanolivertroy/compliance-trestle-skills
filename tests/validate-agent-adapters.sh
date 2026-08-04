@@ -12,6 +12,7 @@ required_files=(
   OPENCODE.md
   adapters/cursor/README.md
   .cursor/rules/compliance-trestle.mdc
+  .devin/rules/compliance-trestle.md
   .windsurf/rules/compliance-trestle.md
   docs/AGENT-COMPATIBILITY.md
   docs/PORTABLE-SKILLS.md
@@ -36,6 +37,8 @@ grep -q 'OpenAI Codex CLI' docs/AGENT-COMPATIBILITY.md || { echo "compatibility 
 grep -q 'Gemini CLI' docs/AGENT-COMPATIBILITY.md || { echo "compatibility doc missing Gemini CLI" >&2; exit 1; }
 grep -q 'OpenCode' docs/AGENT-COMPATIBILITY.md || { echo "compatibility doc missing OpenCode" >&2; exit 1; }
 grep -q 'Generic desktop agent app' docs/AGENT-COMPATIBILITY.md || { echo "compatibility doc missing generic desktop app" >&2; exit 1; }
+grep -q 'Devin Desktop' docs/AGENT-COMPATIBILITY.md || { echo "compatibility doc missing Devin Desktop" >&2; exit 1; }
+grep -q '.devin/rules/' docs/AGENT-COMPATIBILITY.md || { echo "compatibility doc must prefer .devin/rules/" >&2; exit 1; }
 
 grep -q 'agent-skills/' docs/PORTABLE-SKILLS.md || { echo "portable skills doc must define agent-skills directory" >&2; exit 1; }
 grep -q 'name:' docs/PORTABLE-SKILLS.md || { echo "portable skills doc must show required frontmatter" >&2; exit 1; }

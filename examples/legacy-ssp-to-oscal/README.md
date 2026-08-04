@@ -1,6 +1,7 @@
 # Legacy SSP to OSCAL Example
 
-This synthetic example demonstrates the first step of the OSCAL document modernization flow without committing sensitive customer data.
+This synthetic example shows the first step of the OSCAL document modernization flow.
+It does not commit sensitive customer data.
 
 ## Run
 
@@ -9,17 +10,19 @@ bash examples/legacy-ssp-to-oscal/scripts/run-example.sh
 bash examples/legacy-ssp-to-oscal/full-demo.sh
 ```
 
-When Compliance Trestle is installed, the scripts draft a schema-valid OSCAL SSP from extracted legacy sections using FedRAMP Rev 5 heading conventions.
+When Compliance Trestle is installed, the scripts draft a schema-valid OSCAL SSP from extracted legacy sections.
+They use FedRAMP Rev 5 heading conventions.
 
-The script extracts `input/sample-ssp.md`, creates a traceability map, bootstraps a Trestle workspace scaffold, and writes reports under `examples/legacy-ssp-to-oscal/workspace/`.
+`run-example.sh` writes a basic demo under `examples/legacy-ssp-to-oscal/workspace/basic-demo/`.
+It does not delete `workspace/full-demo/`.
 
 ## Expected outputs
 
-- `workspace/extracted/extracted.md`
-- `workspace/extracted/source-map.csv`
-- `workspace/extracted/extract-manifest.json`
-- `workspace/trestle-workspace/`
-- `workspace/reports/import-summary.md`
-- `workspace/reports/unmapped-items.md`
+- `workspace/basic-demo/extracted/extracted.md`
+- `workspace/basic-demo/extracted/source-map.csv`
+- `workspace/basic-demo/extracted/extract-manifest.json`
+- `workspace/basic-demo/trestle-workspace/`
+- `workspace/basic-demo/reports/`
 
-This example is intentionally small and synthetic. Do not commit real SSPs or customer evidence.
+This example is small and synthetic by design.
+Do not commit real SSPs or customer evidence.

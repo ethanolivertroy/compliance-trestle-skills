@@ -4,7 +4,7 @@ Worked examples for end-to-end compliance pipelines using Trestle.
 
 ## Example 1: Full Pipeline Walkthrough
 
-This walkthrough shows the complete flow from catalog import through SSP assembly.
+This walkthrough shows the full flow from catalog import to SSP assembly.
 
 ### Step 1: Import a Catalog
 
@@ -19,7 +19,7 @@ trestle import -f https://raw.githubusercontent.com/usnistgov/oscal-content/main
 ### Step 2: Create a Profile (Baseline)
 
 ```bash
-# Import an existing profile (e.g., FedRAMP High)
+# Import an existing profile (example: FedRAMP High)
 trestle import -f fedramp-high-profile.json -o fedramp-high
 
 # Generate markdown for editing
@@ -30,7 +30,7 @@ trestle author profile-generate --name fedramp-high --output md_profiles/fedramp
 trestle author profile-assemble --markdown md_profiles/fedramp-high --output fedramp-high --set-parameters
 ```
 
-### Step 3: Create Component Definition — Phase 1 (Rules via CSV)
+### Step 3: Create Component Definition: Phase 1 (Rules with CSV)
 
 Create a CSV file `data/my-service-controls.csv`:
 
@@ -60,7 +60,7 @@ trestle task csv-to-oscal-cd
 trestle validate -f component-definitions/my-service/component-definition.json
 ```
 
-### Step 4: Create Component Definition — Phase 2 (Responses via Markdown)
+### Step 4: Create Component Definition: Phase 2 (Responses with Markdown)
 
 ```bash
 # Generate markdown from the component definition
@@ -193,10 +193,10 @@ jobs:
 
 ### Key CI/CD Principles
 
-1. **Assemble only writes if changed**: Prevents infinite CI/CD loops
-2. **Validate after assembly**: Catches schema violations before propagation
-3. **Cross-repo triggers**: `repository_dispatch` events propagate changes downstream
-4. **Conditional commits**: Only commit and propagate if the assembled JSON actually changed
+1. **Assemble only writes if changed**: This prevents infinite CI/CD loops.
+2. **Validate after assembly**: This finds schema violations before propagation.
+3. **Cross-repo triggers**: `repository_dispatch` events propagate changes downstream.
+4. **Conditional commits**: Commit and propagate only if the assembled JSON actually changed.
 
 ## Example 3: Dual Component Definition CSV
 
@@ -248,8 +248,9 @@ trestle task csv-to-oscal-cd
 # (Run with second config section for validation, or use separate config file)
 ```
 
-**Note**: The Service and Validation component definitions can be separate files or combined
-into one. Separate files are easier to manage when different teams own each.
+**Note**: Service and Validation component definitions can be separate files.
+They can also be one file.
+Separate files are easier when different teams own each type.
 
 ## Example 4: C2P Pipeline (Auditree)
 
@@ -258,7 +259,7 @@ into one. Separate files are easier to manage when different teams own each.
 Create the Service component definition (rules) and Validation component definition
 (checks) as shown in Example 3 above using `csv-to-oscal-cd`.
 
-### Step 2: Generate Auditree Configuration via C2P
+### Step 2: Generate Auditree Configuration with C2P
 
 ```bash
 # C2P reads component-definition.json and generates auditree.json
@@ -268,9 +269,9 @@ python compliance_to_policy.py \
   -o auditree.json
 ```
 
-C2P extracts parameter values from the component definition and substitutes them
-into the `auditree.json` template. For example, if the component definition has
-parameter `org.gh.orgs = ["my-org"]`, C2P writes this into the auditree config.
+C2P reads parameter values from the component definition.
+C2P writes those values into the `auditree.json` template.
+Example: if the component definition has parameter `org.gh.orgs = ["my-org"]`, C2P writes this into the auditree config.
 
 ### Step 3: Execute Auditree
 
@@ -284,10 +285,10 @@ compliance --check demo.custom.accred --evidence local -C auditree.json -v
 
 Auditree produces `check_results.json` in the evidence locker.
 
-### Step 4: Generate OSCAL Assessment Results via C2P
+### Step 4: Generate OSCAL Assessment Results with C2P
 
 ```bash
-# C2P maps check results back to controls via component definition traceability
+# C2P maps check results back to controls through component definition traceability
 python result_to_compliance.py \
   -i ${LOCKER_PATH}/check_results.json \
   -c component-definitions/my-service/component-definition.json \
@@ -306,5 +307,5 @@ c2p tools viewer -ar assessment-results.json \
   > assessment-results.md
 ```
 
-The assessment results show per-control posture (satisfied/not-satisfied) with
-full traceability back through rules and checks to the original regulatory controls.
+The assessment results show per-control posture (`satisfied` or `not-satisfied`).
+The chain traces back through rules and checks to the original regulatory controls.

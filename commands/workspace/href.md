@@ -5,31 +5,32 @@ user-invocable: true
 argument-hint: "<profile_name> [--href <new_href>]"
 ---
 
-View or update the import href(s) in a profile to point to catalogs/profiles in the local trestle workspace.
+View or update the import hrefs in a profile.
+Point them to catalogs or profiles in the local trestle workspace.
 
 ## Steps
 
-1. Verify we are in a trestle workspace.
+1. Check that you are in a trestle workspace.
 
-2. Parse $ARGUMENTS for:
-   - `profile_name` (`-n` / `--name`): Name of the trestle profile to inspect or modify
-   - `href` (`-hr` / `--href`, optional): New href value to set
-   - `item` (`-i` / `--item`, optional): Index of the import href to modify (default: 0)
+2. Read $ARGUMENTS for:
+   - `profile_name` (`-n` / `--name`): name of the trestle profile to check or change
+   - `href` (`-hr` / `--href`, optional): new href value to set
+   - `item` (`-i` / `--item`, optional): index of the import href to change (default: 0)
 
-3. Verify the profile exists in `profiles/<profile_name>/`.
+3. Check that the profile exists in `profiles/<profile_name>/`.
 
-4. If no `--href` provided, **view mode** — list current import hrefs:
-   - Read the profile and show all import entries with their current href values
-   - Show which catalogs/profiles they reference
+4. If `--href` is not provided, use **view mode**. List the import hrefs:
+   - Read the profile and show all import entries with their href values.
+   - Show which catalogs or profiles they reference.
 
-5. If `--href` provided, **update mode** — change the href:
+5. If `--href` is provided, use **update mode**. Change the href:
    ```
    trestle href -n <profile_name> -hr <new_href>
    ```
 
    Common href formats:
-   - `trestle://catalogs/my-catalog/catalog.json` — local workspace catalog
-   - `trestle://profiles/my-profile/profile.json` — local workspace profile
-   - `https://...` — remote OSCAL document URL
+   - `trestle://catalogs/my-catalog/catalog.json`: local workspace catalog
+   - `trestle://profiles/my-profile/profile.json`: local workspace profile
+   - `https://...`: remote OSCAL document URL
 
-6. After updating, verify the import resolves correctly by checking that the referenced model exists in the workspace.
+6. After the update, check that the referenced model exists in the workspace.

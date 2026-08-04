@@ -8,8 +8,8 @@ Use this template to draft `system-characteristics` content from source-traceabl
 | --- | --- |
 | `system-security-plan.system-characteristics.system-name` | source statement of system name |
 | `system-security-plan.system-characteristics.description` | source description or `needs_review` |
-| `system-security-plan.system-characteristics.security-sensitivity-level` | source classification/baseline or `needs_review` |
-| `system-security-plan.system-characteristics.authorization-boundary.description` | source boundary text/diagram reference |
+| `system-security-plan.system-characteristics.security-sensitivity-level` | source classification or baseline, or `needs_review` |
+| `system-security-plan.system-characteristics.authorization-boundary.description` | source boundary text or diagram reference |
 
 ## Drafting pattern
 
@@ -21,4 +21,5 @@ Status: mapped
 Reviewer notes: <normalization notes>
 ```
 
-If the source is ambiguous, use `Status: needs_review` and do not guess.
+If the source is ambiguous, use `Status: needs_review`.
+Do not guess.

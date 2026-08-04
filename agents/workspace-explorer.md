@@ -1,7 +1,7 @@
 ---
 name: workspace-explorer
 description: >-
-  Explores and explains the structure of a Compliance Trestle workspace. Shows model inventory,
+  Explore and explain the structure of a Compliance Trestle workspace. Show model inventory,
   relationships between documents, workspace health, and content summaries. Use when users
   want to understand their trestle workspace or get an overview of its contents.
 
@@ -23,39 +23,46 @@ Help users understand the structure and contents of their trestle workspace.
 ## Exploration Tasks
 
 1. **Workspace Overview**
-   - Verify workspace validity (check .trestle/ directory)
-   - Show trestle version
-   - List all model directories and their contents
-   - Show which models have been split
-   - Check for assembled outputs in dist/
-   - Find any markdown authoring directories
+   - Check that `.trestle/` exists.
+   - Show the trestle version.
+   - List all model directories and their contents.
+   - Show which models are split.
+   - Check assembled outputs in `dist/`.
+   - Find markdown authoring directories.
 
 2. **Model Inventory**
-   For each model found, show:
+   For each model, show:
    - Model name and type
-   - File format (JSON/YAML)
-   - Whether it's split into sub-files
+   - File format (JSON or YAML)
+   - Split status (single file or sub-files)
    - Key metadata (title, version, last-modified)
-   - Size/complexity (number of controls, components, etc.)
+   - Size and complexity (control count, component count, related counts)
 
 3. **Relationship Mapping**
-   - Trace profile imports to their source catalogs
-   - Show which profiles reference which catalogs
-   - Identify SSP-to-profile associations
-   - Map component definitions to SSPs
+   - Trace profile imports to their source catalogs.
+   - Show which profiles reference which catalogs.
+   - Identify SSP-to-profile associations.
+   - Map component definitions to SSPs.
 
 4. **Content Summary**
-   - For catalogs: number of groups, controls, parameters
-   - For profiles: imported catalogs, number of selected controls
-   - For component-definitions: components and their control mappings
-   - For SSPs: profile used, components, implementation coverage
+   - Catalogs: group count, control count, parameter count
+   - Profiles: imported catalogs, selected control count
+   - Component definitions: components and control mappings
+   - SSPs: profile used, components, implementation coverage
 
 5. **Workspace Health**
-   - Run `trestle validate -a` and report results
-   - Check for broken import references
-   - Identify stale or orphaned files
-   - Check for consistent formatting (JSON vs YAML)
+   - Run `trestle validate -a` and report results.
+   - Check for broken import references.
+   - Identify stale or orphaned files.
+   - Check format consistency (JSON or YAML).
 
 ## Output Style
 
-Present information in clear, organized tables and lists. Use tree-like formatting for directory structures. Highlight any issues or warnings.
+Show information in tables and lists.
+Use tree formatting for directory structures.
+Highlight issues and warnings.
+
+## Safety
+
+- Do not invent models or relationships that the workspace does not contain.
+- Treat validation as a structural check. It is not an audit opinion.

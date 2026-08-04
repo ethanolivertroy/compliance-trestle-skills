@@ -7,11 +7,13 @@ usage() {
 Usage: scripts/trestle-workflow.sh <init|status|validate|assemble|command-log> <workspace> [args]
 
 Commands:
-  init <workspace>                         Initialize a Trestle workspace or scaffold if trestle is missing.
-  status <workspace>                       Print workspace/tool status.
-  validate <workspace>                     Run trestle validate -a or write skipped report.
-  assemble <workspace> <markdown-path>     Run trestle author ssp-assemble when available.
-  command-log <workspace>                  Create reports/trestle-command-log.md if missing.
+  init <workspace>                                      Initialize a Trestle workspace or scaffold if trestle is missing.
+  status <workspace>                                    Print workspace/tool status.
+  validate <workspace>                                  Run trestle validate -a or write skipped report.
+  assemble <workspace> <markdown-path> <output-ssp>     Run trestle author ssp-assemble.
+  command-log <workspace>                               Create reports/trestle-command-log.md if missing.
+
+Exit codes: 0 success, 2 bad arguments, 5 trestle missing (skipped), 127 missing trestle on validate/assemble, other codes from trestle.
 EOF
 }
 
@@ -40,8 +42,12 @@ case "$cmd" in
   init)
     mkdir -p "$workspace"
     if $has_trestle; then
+      set +e
       (cd "$workspace" && trestle init)
-      code=$?; append_log 'trestle init' "$code" "$workspace" 'initialized with trestle'; exit "$code"
+      code=$?
+      set -e
+      append_log 'trestle init' "$code" "$workspace" 'initialized with trestle'
+      exit "$code"
     fi
     mkdir -p "$workspace"/{catalogs,profiles,component-definitions,system-security-plans,markdown,reports}
     cat > "$report" <<EOF
@@ -51,7 +57,8 @@ Status: skipped
 Reason: Compliance Trestle CLI was not found.
 Generated scaffold only. Install trestle before treating validation or assembly as complete.
 EOF
-    append_log 'trestle init' 127 "$report" 'trestle missing; scaffold created'
+    append_log 'trestle init' 5 "$report" 'trestle missing; scaffold created'
+    exit 5
     ;;
   status)
     {
@@ -82,25 +89,30 @@ EOF
 Status: skipped
 Reason: Compliance Trestle CLI was not found.
 EOF
-    append_log 'trestle validate -a' 127 "$workspace/reports/trestle-validate.log" 'trestle missing; validation skipped'
+    append_log 'trestle validate -a' 5 "$workspace/reports/trestle-validate.log" 'trestle missing; validation skipped'
+    exit 5
     ;;
   assemble)
     markdown_path="${1:-}"
+    output_name="${2:-}"
     [[ -n "$markdown_path" ]] || { echo 'assemble requires markdown path' >&2; exit 2; }
+    [[ -n "$output_name" ]] || { echo 'assemble requires output SSP name' >&2; exit 2; }
     if $has_trestle; then
       set +e
-      (cd "$workspace" && trestle author ssp-assemble -m "$markdown_path") > "$workspace/reports/trestle-assemble.log" 2>&1
+      (cd "$workspace" && trestle author ssp-assemble -m "$markdown_path" -o "$output_name") > "$workspace/reports/trestle-assemble.log" 2>&1
       code=$?
       set -e
-      append_log "trestle author ssp-assemble -m $markdown_path" "$code" "$workspace/reports/trestle-assemble.log" 'assembly run'
+      append_log "trestle author ssp-assemble -m $markdown_path -o $output_name" "$code" "$workspace/reports/trestle-assemble.log" 'assembly run'
       exit "$code"
     fi
     cat > "$workspace/reports/trestle-assemble.log" <<EOF
 Status: skipped
 Reason: Compliance Trestle CLI was not found.
 Requested markdown path: $markdown_path
+Requested output: $output_name
 EOF
-    append_log "trestle author ssp-assemble -m $markdown_path" 127 "$workspace/reports/trestle-assemble.log" 'trestle missing; assembly skipped'
+    append_log "trestle author ssp-assemble -m $markdown_path -o $output_name" 5 "$workspace/reports/trestle-assemble.log" 'trestle missing; assembly skipped'
+    exit 5
     ;;
   command-log)
     append_log 'trestle command-log' 0 "$log" 'command log ensured'

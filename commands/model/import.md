@@ -9,33 +9,34 @@ Import an existing OSCAL document into the Trestle workspace.
 
 ## Steps
 
-1. Verify we are in a trestle workspace.
+1. Check that you are in a trestle workspace.
 
-2. Parse $ARGUMENTS for:
-   - `file`: Path to the OSCAL file (absolute, relative, or URL). Supported protocols: file:///, https://, sftp://
-   - `name`: The name/alias for the imported model
+2. Read $ARGUMENTS for:
+   - `file`: path to the OSCAL file (absolute, relative, or URL). Supported protocols: file:///, https://, sftp://
+   - `name`: the name or alias for the imported model
 
-3. Verify the source file exists (if local path) and has a valid extension (.json, .yaml, .yml).
+3. If the source is a local path, check that the file exists.
+   Check that the extension is `.json`, `.yaml`, or `.yml`.
 
 4. Run the import command:
    ```
    trestle import -f <file> -o <name>
    ```
 
-5. The import will auto-detect the model type and validate the file.
+5. The import detects the model type and validates the file.
 
-6. If import fails, explain the error:
-   - Validation failure: describe what's wrong with the OSCAL document
-   - File not found: check the path
-   - File inside trestle dir: must import from outside the workspace
+6. If import fails, tell the user the error:
+   - Validation failure: describe what is wrong with the OSCAL document.
+   - File not found: check the path.
+   - File inside the trestle dir: import from outside the workspace.
 
-7. On success, show where the model was imported and suggest next steps:
-   - Use `trestle describe` to explore the model
-   - Use `trestle split` to decompose for editing
-   - Use author commands (catalog-generate, profile-generate, etc.) for markdown authoring
+7. On success, show where the model was imported. Suggest next steps:
+   - Use `trestle describe` to examine the model.
+   - Use `trestle split` to break the model for editing.
+   - Use author commands such as catalog-generate or profile-generate for markdown authoring.
 
 8. **If the imported model is a profile**, warn the user about import resolution:
-   - Read the profile JSON and check `profile.imports[].href`
-   - If any import uses `trestle://catalogs/<name>/...`, verify that catalog exists in the workspace
-   - If it doesn't, tell the user they need to either import the referenced catalog or update the href with `trestle href`
-   - This is critical — author commands (profile-generate) will fail if imports don't resolve
+   - Read the profile JSON and check `profile.imports[].href`.
+   - If any import uses `trestle://catalogs/<name>/...`, check that that catalog exists in the workspace.
+   - If it does not exist, tell the user to import the referenced catalog or update the href with `trestle href`.
+   - This is required. Author commands such as profile-generate fail when imports do not resolve.

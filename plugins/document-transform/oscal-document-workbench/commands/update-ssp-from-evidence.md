@@ -5,47 +5,64 @@ description: Use new evidence, findings, or POA&M information to update an exist
 
 # /oscal-document-workbench:update-ssp-from-evidence
 
-Use new evidence, findings, or POA&M information to update an existing OSCAL SSP while preserving traceability.
+Use new evidence, findings, or POA&M information to update an existing OSCAL SSP.
+Keep source traceability.
+This is an agent-led workflow.
+This is not a one-shot converter.
 
 ## How to run
 
+1. Summarize the current source map:
+
 ```bash
-bash plugins/document-transform/oscal-document-workbench/scripts/summarize-source-map.js <source-map.csv>
+node plugins/document-transform/oscal-document-workbench/scripts/summarize-source-map.js <workspace>/extracted/source-map.csv
+```
+
+Exit `3` means `needs_review` rows remain.
+That is expected until review is complete.
+
+2. Add or update source-map rows for the new evidence.
+Keep source hashes, targets, and `needs_review` where the evidence is incomplete.
+3. Update the SSP through the Trestle authoring roundtrip when possible.
+If a direct JSON edit is required, validate afterward.
+4. Rebuild the review queue:
+
+```bash
+bash plugins/document-transform/oscal-document-workbench/scripts/build-review-queue.sh \
+  <workspace>/extracted/source-map.csv \
+  --output <workspace>/reports/review-queue.md
+```
+
+5. Validate:
+
+```bash
+bash plugins/document-transform/oscal-document-workbench/scripts/validate-oscal-package.sh \
+  <workspace>/trestle-workspace \
+  --output <workspace>/reports/validation-report.json
 ```
 
 ## Arguments
 
-- `<input>` — legacy source document path when extraction is required.
-- `<workspace>` — working directory for extracted content, Trestle files, reports, and review artifacts.
-- `<path>` — OSCAL file or package directory to validate.
-- `--output <path>` — output directory or report path depending on the script.
-- `--profile <name>` — optional baseline/profile label such as `fedramp-moderate`.
-- `--oscal-version <version>` — optional OSCAL version note for generated workspace metadata.
-- `--overwrite` — allow replacing an existing generated workspace where supported.
+- `<workspace>` : import workspace with `extracted/`, `trestle-workspace/`, and `reports/`
+- `<source-map.csv>` : current source traceability map
 
 ## Outputs
 
-Expected outputs may include:
-
-- `extracted.md`
-- `source-map.csv`
-- `extract-manifest.json`
-- `trestle-workspace/`
-- `reports/import-summary.md`
+- updated `source-map.csv`
+- updated SSP model or markdown
+- `reports/review-queue.md`
 - `reports/validation-report.json`
-- `reports/unmapped-items.md`
 
 ## Exit codes
 
-- `0` — success
-- `2` — bad arguments, unreadable input, or unsafe overwrite attempt
-- `3` — validation or transformation failed
-- `5` — required external dependency is missing
-- `6` — unsupported format or structurally invalid OSCAL
+- `0` : summary has no `needs_review` rows
+- `2` : bad arguments or unreadable input
+- `3` : `needs_review` rows remain or validation failed
+- `5` : required external dependency is missing
 
 ## Safety notes
 
-- Preserve source files unchanged.
+- Keep source files unchanged.
 - Maintain source traceability for every mapped OSCAL field.
 - Mark uncertain mappings as `needs_review`.
 - Do not treat structural validation as an audit opinion.

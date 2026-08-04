@@ -1,6 +1,6 @@
 # Prompt: validate OSCAL package
 
-Run available validation for the Trestle/OSCAL package.
+Run available validation for the Trestle or OSCAL package.
 
 Expected commands:
 
@@ -9,4 +9,5 @@ bash plugins/document-transform/oscal-document-workbench/scripts/validate-oscal-
 bash scripts/trestle-workflow.sh validate <workspace>
 ```
 
-Summarize validation failures, skipped checks, missing tools, and review blockers. State that validation does not prove compliance effectiveness.
+Summarize validation failures, skipped checks, missing tools, and review blockers.
+State that validation does not prove compliance effectiveness.

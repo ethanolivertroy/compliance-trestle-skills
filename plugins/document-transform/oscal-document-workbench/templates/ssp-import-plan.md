@@ -3,7 +3,7 @@
 ## Workspace
 
 - System name:
-- Source document(s):
+- Source document or documents:
 - Target profile:
 - OSCAL version:
 - Trestle workspace:

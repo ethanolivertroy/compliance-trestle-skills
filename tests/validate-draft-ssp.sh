@@ -48,6 +48,8 @@ cases = {
     "AC-2": "ac-2",
     "AC-2(1)": "ac-2.1",
     "AC-2(12)": "ac-2.12",
+    "AC-2 (1)": "ac-2.1",
+    "AU-2(3)(a)": "au-2.3.a",
     "SC-13": "sc-13",
     "IA-5.1": "ia-5.1",
 }
@@ -83,6 +85,16 @@ template_headings = [
 ]
 unmatched = [h for h in template_headings if not any(p.search(h) for p in patterns)]
 assert not unmatched, f"legacy FedRAMP template headings without mapping rules: {unmatched}"
+target_by_heading = {
+    "Users": "system-security-plan.system-implementation.users",
+    "System Environment": "system-security-plan.system-characteristics.network-architecture.description",
+}
+for heading, expected in target_by_heading.items():
+    match = next(
+        (rule["oscal_target"] for rule, pattern in zip(rules["section_rules"], patterns) if pattern.search(heading)),
+        None,
+    )
+    assert match == expected, f"{heading} mapped to {match}, expected {expected}"
 print("FedRAMP legacy template heading regression checks passed.")
 PY
 
@@ -101,6 +113,16 @@ if command -v trestle >/dev/null 2>&1; then
   bash "$plugin_root/scripts/bootstrap-trestle-workspace.sh" "$workdir" --profile fedramp-moderate --overwrite
   bash "$script_sh" "$workdir" --overwrite
   [[ -f "$workdir/reports/draft-summary.md" ]] || { echo "missing draft-summary.md after integration run" >&2; exit 1; }
+  python3 - "$workdir" <<'PY'
+import json, sys
+from pathlib import Path
+workspace = Path(sys.argv[1])
+ssp_file = next(workspace.joinpath("trestle-workspace/system-security-plans").rglob("system-security-plan.json"))
+ssp = json.loads(ssp_file.read_text(encoding="utf-8"))
+prose = ssp["system-security-plan"]["system-characteristics"]["description"]
+assert "No real customer data is included in this example." in prose, prose
+assert len(prose) > 240, len(prose)
+PY
   ssp_file="$(find "$workdir/trestle-workspace/system-security-plans" -name system-security-plan.json | head -1)"
   [[ -n "$ssp_file" ]] || { echo "missing drafted SSP JSON" >&2; exit 1; }
   (cd "$workdir/trestle-workspace" && trestle validate -f "$ssp_file") >/dev/null

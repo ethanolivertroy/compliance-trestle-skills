@@ -14,6 +14,7 @@ required_commands=(
   extract-legacy-doc
   build-trestle-workspace
   fetch-oscal-baseline
+  draft-ssp-from-extraction
   ksi-coverage
   validate-oscal-package
   update-ssp-from-evidence
@@ -42,7 +43,7 @@ const marketplace = JSON.parse(fs.readFileSync('.claude-plugin/marketplace.json'
 const entry = marketplace.plugins.find((plugin) => plugin.name === 'oscal-document-workbench');
 if (!entry) throw new Error('oscal-document-workbench is not registered in marketplace.json');
 if (entry.source !== './plugins/document-transform/oscal-document-workbench') throw new Error(`unexpected source: ${entry.source}`);
-for (const command of ['ingest-ssp','extract-legacy-doc','build-trestle-workspace','validate-oscal-package','update-ssp-from-evidence']) {
+for (const command of ['ingest-ssp','extract-legacy-doc','build-trestle-workspace','fetch-oscal-baseline','draft-ssp-from-extraction','ksi-coverage','validate-oscal-package','update-ssp-from-evidence']) {
   if (!entry.commands.includes(command)) throw new Error(`marketplace entry missing command ${command}`);
 }
 NODE
@@ -83,5 +84,34 @@ grep -q '^source_id,source_file,page_or_section,heading,extracted_text_hash,osca
 
 [[ -f "$plugin_root/templates/fedramp-rev5-heading-map.json" ]] || { echo "missing FedRAMP heading map template" >&2; exit 1; }
 grep -q 'draft-ssp-from-extraction' "$plugin_root/commands/ingest-ssp.md" || { echo "ingest-ssp must document draft script" >&2; exit 1; }
+
+grep -q 'sed -i "1i' "$plugin_root/scripts/extract-legacy-doc.sh" && {
+  echo "extract-legacy-doc.sh still uses GNU sed -i insert syntax" >&2
+  exit 1
+}
+
+grep -q -- '--allow-partial' "$plugin_root/scripts/validate-oscal-package.sh" || {
+  echo "validate-oscal-package.sh must support --allow-partial" >&2
+  exit 1
+}
+
+summarize_dir="$(mktemp -d)"
+cat > "$summarize_dir/source-map.csv" <<'CSV'
+source_id,source_file,page_or_section,heading,extracted_text_hash,oscal_target,status,notes
+SRC-001,sample.md,1,"Services, Ports, and Protocols",sha256:abc,system-implementation.components,mapped,ok
+SRC-002,sample.md,2,Open Items,sha256:def,back-matter.resources,needs_review,gap
+CSV
+set +e
+node "$plugin_root/scripts/summarize-source-map.js" "$summarize_dir/source-map.csv" >"$summarize_dir/summary.json"
+summary_code=$?
+set -e
+[[ "$summary_code" -eq 3 ]] || { echo "summarize-source-map.js should exit 3 when needs_review remains" >&2; exit 1; }
+python3 - "$summarize_dir/summary.json" <<'PY'
+import json, sys
+summary = json.load(open(sys.argv[1], encoding="utf-8"))
+assert summary["total"] == 2, summary
+assert summary["counts"]["mapped"] == 1 and summary["counts"]["needs_review"] == 1, summary
+PY
+rm -rf "$summarize_dir"
 
 echo "OSCAL Document Workbench plugin surface is valid."

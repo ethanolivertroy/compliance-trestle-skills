@@ -1,6 +1,7 @@
 # OSCAL import review queue
 
-Schema-valid OSCAL does not prove compliance effectiveness. Review every uncertain mapping before relying on generated content.
+Schema-valid OSCAL does not prove compliance effectiveness.
+Human review is required for uncertain mappings.
 
 - Source rows: 9
 - Review items: 3

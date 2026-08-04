@@ -29,4 +29,5 @@
 - Status:
 - Notes:
 
-Keep ownership and inherited responsibility explicit. Mark missing or ambiguous owners as `needs_review`.
+Keep ownership and inherited responsibility explicit.
+Mark missing or ambiguous owners as `needs_review`.

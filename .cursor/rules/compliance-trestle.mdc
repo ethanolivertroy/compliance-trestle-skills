@@ -3,14 +3,24 @@ description: Compliance Trestle repository rules
 alwaysApply: true
 ---
 
-Read `AGENTS.md` and `CURSOR.md` before modifying this repository. This project is an agent-portable Compliance Trestle and OSCAL engineering toolkit; Claude Code plugins are one adapter, not the only runtime.
+Read `AGENTS.md` and `CURSOR.md` before you change this repository.
+This project is an agent-portable Compliance Trestle and OSCAL engineering toolkit.
+Claude Code plugins are one adapter.
+They are not the only runtime.
+
+Write project documentation in ASD-STE100 Simplified Technical English.
 
 For Cursor-native workflows, use project skills under `.cursor/skills/`:
 
-- `/oscal-document-engineering` for legacy SSP/PDF/DOCX/Markdown to OSCAL
+- `/oscal-document-engineering` for legacy SSP, PDF, DOCX, or Markdown to OSCAL
 - `/compliance-trestle-engineering` for Trestle workspace operations
 - `/import-legacy-ssp`, `/validate-oscal-package`, `/review-oscal-mappings`, and `/workspace-validate` for explicit workflow commands
 
-Canonical portable playbooks live in `agent-skills/`. Preserve source traceability for every mapped OSCAL field, mark uncertain content as `needs_review`, and validate structurally before claiming success.
+Canonical portable playbooks live in `agent-skills/`.
+Preserve source traceability for every mapped OSCAL field.
+Mark uncertain content as `needs_review`.
+Validate structurally before you claim success.
 
-Do not copy licensed framework text, commit sensitive customer evidence, or invent compliance facts.
+Do not copy licensed framework text.
+Do not commit sensitive customer evidence.
+Do not invent compliance facts.

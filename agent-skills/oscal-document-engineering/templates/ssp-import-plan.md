@@ -10,7 +10,7 @@
 
 - System name:
 - OSCAL document type: SSP
-- Framework/profile:
+- Framework or profile:
 - OSCAL version:
 - Trestle workspace path:
 
@@ -19,7 +19,7 @@
 | Area | Source sections | OSCAL target | Status | Reviewer |
 |---|---|---|---|---|
 | Metadata |  | metadata | pending |  |
-| Parties/Roles |  | metadata.parties / responsible-parties | pending |  |
+| Parties and roles |  | metadata.parties / responsible-parties | pending |  |
 | System characteristics |  | system-characteristics | pending |  |
 | System implementation |  | system-implementation | pending |  |
 | Control implementation |  | control-implementation | pending |  |

@@ -19,17 +19,20 @@ bash plugins/document-transform/oscal-document-workbench/scripts/bootstrap-trest
 draft_code=0
 validation_status="not-run"
 if command -v trestle >/dev/null 2>&1; then
+  set +e
   bash plugins/document-transform/oscal-document-workbench/scripts/draft-ssp-from-extraction.sh \
     "$workspace" \
     --profile-label fedramp-moderate \
     --overwrite
   draft_code=$?
+  set -e
   bash plugins/document-transform/oscal-document-workbench/scripts/validate-oscal-package.sh \
     "$workspace/trestle-workspace" \
-    --output "$workspace/reports/validation-report.json"
-  validation_status="$(node -pe "JSON.parse(require('fs').readFileSync('$workspace/reports/validation-report.json','utf8')).status")"
+    --output "$workspace/reports/validation-report.json" \
+    --allow-partial
+  validation_status="$(python3 -c "import json; print(json.load(open('$workspace/reports/validation-report.json'))['status'])")"
 else
-  echo "Compliance Trestle not installed; skipping draft SSP and validation steps." >&2
+  printf 'Compliance Trestle is not installed. Skip draft SSP and validation steps.\n' >&2
   draft_code=5
   validation_status="skipped-missing-trestle"
 fi
@@ -55,7 +58,8 @@ cat > "$workspace/reports/demo-summary.md" <<EOF
 - Review queue exit code: $review_code
 - Validation status: $validation_status
 
-When Trestle is installed, this demo drafts a schema-valid OSCAL SSP from extracted legacy sections using FedRAMP Rev 5 heading conventions.
+When Trestle is installed, this demo drafts a schema-valid OSCAL SSP from extracted legacy sections.
+It uses FedRAMP Rev 5 heading conventions.
 Schema-valid OSCAL does not prove compliance effectiveness.
 EOF
 

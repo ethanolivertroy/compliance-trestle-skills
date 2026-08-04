@@ -9,24 +9,25 @@ Assemble edited profile markdown into an OSCAL JSON profile.
 
 ## Steps
 
-1. Verify we are in a trestle workspace.
+1. Check that you are in a trestle workspace.
 
-2. Parse $ARGUMENTS for:
-   - `markdown_dir` (`--markdown`): Directory with edited markdown
-   - `output_profile` (`--output`): Name for assembled profile
-   - Optional: `--name`: Source profile for metadata
-   - Optional: `--set-parameters`: Apply parameter changes
-   - Optional: `--sections`: Define sections (short_name:Long Name,...)
-   - Optional: `--required-sections`: Required sections (comma-separated short names)
-   - Optional: `--allowed-sections`: Allowed sections (comma-separated short names)
-   - Optional: `--version`: Version string
-   - Optional: `--regenerate`: New UUIDs
+2. Read $ARGUMENTS for:
+   - `markdown_dir` (`--markdown`): directory with edited markdown
+   - `output_profile` (`--output`): name for the assembled profile
+   - Optional: `--name`: source profile for metadata
+   - Optional: `--set-parameters`: apply parameter changes
+   - Optional: `--sections`: define sections (`short_name:Long Name,...`)
+   - Optional: `--required-sections`: required sections (comma-separated short names)
+   - Optional: `--allowed-sections`: allowed sections (comma-separated short names)
+   - Optional: `--version`: version string
+   - Optional: `--regenerate`: new UUIDs
 
 3. Run:
    ```
    trestle author profile-assemble --markdown <markdown_dir> --output <output_profile> [--set-parameters] [--sections "impl:Implementation Guidance"]
    ```
 
-4. Assembly will fail if `--required-sections` are missing or disallowed sections are present.
+4. Assembly fails when `--required-sections` are missing.
+   Assembly also fails when disallowed sections are present.
 
-5. Show output and suggest next steps.
+5. Show the output. Suggest next steps.

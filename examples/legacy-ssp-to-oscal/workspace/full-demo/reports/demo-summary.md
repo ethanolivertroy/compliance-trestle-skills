@@ -11,5 +11,6 @@
 - Review queue exit code: 1
 - Validation status: pass
 
-When Trestle is installed, this demo drafts a schema-valid OSCAL SSP from extracted legacy sections using FedRAMP Rev 5 heading conventions.
+When Trestle is installed, this demo drafts a schema-valid OSCAL SSP from extracted legacy sections.
+It uses FedRAMP Rev 5 heading conventions.
 Schema-valid OSCAL does not prove compliance effectiveness.

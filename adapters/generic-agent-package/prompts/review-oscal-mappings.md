@@ -4,8 +4,8 @@ Review `source-map.csv`, `sections.json`, and any draft OSCAL SSP content.
 
 For each mapping:
 
-- confirm the source supports the OSCAL target;
-- mark unsupported claims `needs_review` or `reject`;
-- identify missing evidence;
-- preserve reviewer notes;
-- do not silently upgrade low-confidence mappings to facts.
+- make sure the source supports the OSCAL target
+- mark unsupported claims `needs_review` or `reject`
+- identify missing evidence
+- keep reviewer notes
+- do not upgrade low-confidence mappings to facts without review

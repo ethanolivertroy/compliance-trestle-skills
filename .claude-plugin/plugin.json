@@ -3,10 +3,10 @@
   "version": "0.2.2",
   "description": "Manage OSCAL compliance packages using Compliance Trestle - a CNCF sandbox project for machine-readable compliance documentation (NIST OSCAL standard)",
   "author": {
-    "name": "ethanolivertroy (independent, not affiliated with oscal-compass or Anthropic)"
+    "name": "oscal-compass-lab contributors (community lab; not the official oscal-compass CNCF project or Anthropic)"
   },
-  "homepage": "https://github.com/ethanolivertroy/compliance-trestle-skills",
-  "repository": "https://github.com/ethanolivertroy/compliance-trestle-skills",
+  "homepage": "https://github.com/oscal-compass-lab/compliance-trestle-skills",
+  "repository": "https://github.com/oscal-compass-lab/compliance-trestle-skills",
   "license": "Apache-2.0",
   "keywords": ["oscal", "compliance", "trestle", "nist", "security", "ssp", "fedramp", "governance", "authorization", "assessment", "poam", "controls", "component-definition", "task", "jinja", "csv", "xlsx", "xccdf", "pipeline", "persona", "c2p"]
 }
